@@ -1,0 +1,6 @@
+query getAssemblies($projectId: String!) {
+  assemblies(projectId: $projectId) {
+    id
+    name
+  }
+}
