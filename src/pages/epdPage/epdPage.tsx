@@ -20,11 +20,11 @@ export const EpdPage = () => {
       <CardTitle title={'EPDs'} size='large' />
       <DataFetchWrapper loading={loading} error={error}>
         <Grid container spacing={2}>
-          <Grid item md={3}>
+          <Grid item md={5} lg={3}>
             <EpdSearchPanel searchKey={searchKey} setSearchKey={setSearchKey} />
             <EpdList epds={data?.projectEpds} searchKey={searchKey} />
           </Grid>
-          <Grid item md={9}>
+          <Grid item md={7} lg={9}>
             <EpdDetail show={!!epdId} />
             <DefaultEpdDetail show={!epdId} />
           </Grid>
