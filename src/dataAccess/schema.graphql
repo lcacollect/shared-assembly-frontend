@@ -4,3 +4,10 @@ query getAssemblies($projectId: String!) {
     name
   }
 }
+
+query getProjectEpds($projectId: String!) {
+  projectEpds(projectId: $projectId) {
+    id
+    name
+  }
+}
