@@ -1,6 +1,6 @@
 {
   "name": "@lcacollect/assembly",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A shared library for assembly related components and pages",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -11,7 +11,7 @@
     "test": "vitest run",
     "codegen": "graphql-codegen --config codegen.yml",
     "build": "tsc -p tsconfig.json && tsc -p tsconfig.cjs.json",
-    "build:watch": "npm run postbuild && tsc --watch",
+    "build:watch": "tsc --watch",
     "lint": "eslint src/**/*.{tsx,ts}",
     "lint:fix": "eslint --fix src/**/*.{tsx,ts}",
     "format:fix": "prettier --write src/",
@@ -57,6 +57,7 @@
     "vitest": "^0.25.8"
   },
   "peerDependencies": {
+    "@lcacollect/components": "^1.1.5",
     "@apollo/react-hooks": "^4.0.0",
     "@azure/msal-browser": "^2.30.0",
     "@azure/msal-react": "^1.4.9",
