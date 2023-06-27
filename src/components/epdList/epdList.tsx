@@ -21,7 +21,7 @@ export const EpdList = (props: EpdListProps) => {
   }
 
   const filteredEpds = useMemo(
-    () => epds.filter((epd) => (searchKey ? epd.name.toLowerCase().includes(searchKey) : epd)),
+    () => epds.filter((epd) => (searchKey ? epd.name.toLowerCase().includes(searchKey.toLowerCase()) : epd)),
     [searchKey],
   )
 
