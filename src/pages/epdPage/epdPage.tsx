@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useGetProjectEpdsQuery } from '../../dataAccess'
 import { CardTitle, DataFetchWrapper, PaperPage } from '@lcacollect/components'
-import { Container, Grid, Typography } from '@mui/material'
-import { EpdDetail, EpdList, EpdSearchPanel } from '../../components'
+import { Grid } from '@mui/material'
+import { DefaultEpdDetail, EpdDetail, EpdList, EpdSearchPanel } from '../../components'
 
 export const EpdPage = () => {
   const { projectId } = useParams()
@@ -22,31 +22,14 @@ export const EpdPage = () => {
         <Grid container spacing={2}>
           <Grid item md={5} lg={3}>
             <EpdSearchPanel searchKey={searchKey} setSearchKey={setSearchKey} />
-            <EpdList epds={data?.projectEpds} searchKey={searchKey} />
+            <EpdList epds={data?.projectEpds} searchKey={searchKey} selectEpdId={selectEpdId} />
           </Grid>
           <Grid item md={7} lg={9}>
-            <EpdDetail show={!!epdId} />
+            <EpdDetail show={!!epdId} epdId={epdId} projectId={projectId as string} />
             <DefaultEpdDetail show={!epdId} />
           </Grid>
         </Grid>
       </DataFetchWrapper>
     </PaperPage>
-  )
-}
-
-interface DefaultEpdDetailProps {
-  show: boolean
-}
-const DefaultEpdDetail = (props: DefaultEpdDetailProps) => {
-  const { show } = props
-
-  if (!show) {
-    return null
-  }
-
-  return (
-    <Container data-testid='epd-default-detail'>
-      <Typography>Select an EPD.</Typography>
-    </Container>
   )
 }

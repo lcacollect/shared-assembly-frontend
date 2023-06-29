@@ -456,7 +456,8 @@ export type Mutation = {
   addComment: GraphQlComment
   /** Add a Project */
   addProject: GraphQlProject
-  addProjectEpd: GraphQlProjectEpd
+  /** Add Global EPDs to a project. */
+  addProjectEpds: Array<GraphQlProjectEpd>
   /** Add a Project Group */
   addProjectGroup: GraphQlProjectGroup
   /** Add a Project Member */
@@ -497,6 +498,7 @@ export type Mutation = {
   deleteComment: Scalars['String']
   /** Delete a project */
   deleteProject: Scalars['String']
+  /** Delete a project EPD */
   deleteProjectEpd: Scalars['String']
   /** Delete a project group */
   deleteProjectGroup: Scalars['String']
@@ -526,7 +528,6 @@ export type Mutation = {
   updateComment: GraphQlComment
   /** Update a Project */
   updateProject: GraphQlProject
-  updateProjectEpd: GraphQlProjectEpd
   /** Update a Project Group */
   updateProjectGroup: GraphQlProjectGroup
   /** Update a Project Source */
@@ -580,8 +581,8 @@ export type MutationAddProjectArgs = {
   stages?: InputMaybe<Array<LifeCycleStageInput>>
 }
 
-export type MutationAddProjectEpdArgs = {
-  originId: Scalars['String']
+export type MutationAddProjectEpdsArgs = {
+  epdIds: Array<Scalars['String']>
   projectId: Scalars['String']
 }
 
@@ -771,13 +772,6 @@ export type MutationUpdateProjectArgs = {
   projectId?: InputMaybe<Scalars['String']>
 }
 
-export type MutationUpdateProjectEpdArgs = {
-  id: Scalars['String']
-  kgPerM2?: InputMaybe<Scalars['Float']>
-  kgPerM3?: InputMaybe<Scalars['Float']>
-  thickness?: InputMaybe<Scalars['Float']>
-}
-
 export type MutationUpdateProjectGroupArgs = {
   id: Scalars['String']
   leadId?: InputMaybe<Scalars['String']>
@@ -857,6 +851,7 @@ export enum ProjectDomain {
 
 export type ProjectEpdFilters = {
   category?: InputMaybe<FilterOptions>
+  id?: InputMaybe<FilterOptions>
   name?: InputMaybe<FilterOptions>
   owner?: InputMaybe<FilterOptions>
   projectId?: InputMaybe<FilterOptions>
@@ -1831,11 +1826,11 @@ export type MutationResolvers<
       | 'stages'
     >
   >
-  addProjectEpd?: Resolver<
-    ResolversTypes['GraphQLProjectEPD'],
+  addProjectEpds?: Resolver<
+    Array<ResolversTypes['GraphQLProjectEPD']>,
     ParentType,
     ContextType,
-    RequireFields<MutationAddProjectEpdArgs, 'originId' | 'projectId'>
+    RequireFields<MutationAddProjectEpdsArgs, 'epdIds' | 'projectId'>
   >
   addProjectGroup?: Resolver<
     ResolversTypes['GraphQLProjectGroup'],
@@ -2036,12 +2031,6 @@ export type MutationResolvers<
       MutationUpdateProjectArgs,
       'address' | 'city' | 'client' | 'country' | 'domain' | 'file' | 'id' | 'metaFields' | 'name' | 'projectId'
     >
-  >
-  updateProjectEpd?: Resolver<
-    ResolversTypes['GraphQLProjectEPD'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateProjectEpdArgs, 'id' | 'kgPerM2' | 'kgPerM3' | 'thickness'>
   >
   updateProjectGroup?: Resolver<
     ResolversTypes['GraphQLProjectGroup'],
@@ -2282,6 +2271,34 @@ export type GetProjectEpdsQuery = {
   projectEpds: Array<{ __typename?: 'GraphQLProjectEPD'; id: string; name: string }>
 }
 
+export type GetProjectEpdQueryVariables = Exact<{
+  projectId: Scalars['String']
+  epdId: Scalars['String']
+}>
+
+export type GetProjectEpdQuery = {
+  __typename?: 'Query'
+  projectEpds: Array<{
+    __typename?: 'GraphQLProjectEPD'
+    id: string
+    name: string
+    source: string
+    version: string
+    validUntil: any
+    publishedDate: any
+    location: string
+    declaredUnit?: string | null
+    subtype: string
+    gwp?: {
+      __typename?: 'GraphQLImpactCategories'
+      a1a3?: number | null
+      c3?: number | null
+      c4?: number | null
+      d?: number | null
+    } | null
+  }>
+}
+
 export const GetAssembliesDocument = gql`
   query getAssemblies($projectId: String!) {
     assemblies(projectId: $projectId) {
@@ -2362,3 +2379,57 @@ export function useGetProjectEpdsLazyQuery(
 export type GetProjectEpdsQueryHookResult = ReturnType<typeof useGetProjectEpdsQuery>
 export type GetProjectEpdsLazyQueryHookResult = ReturnType<typeof useGetProjectEpdsLazyQuery>
 export type GetProjectEpdsQueryResult = Apollo.QueryResult<GetProjectEpdsQuery, GetProjectEpdsQueryVariables>
+export const GetProjectEpdDocument = gql`
+  query getProjectEpd($projectId: String!, $epdId: String!) {
+    projectEpds(projectId: $projectId, filters: { id: { equal: $epdId } }) {
+      id
+      name
+      source
+      gwp {
+        a1a3
+        c3
+        c4
+        d
+      }
+      version
+      validUntil
+      publishedDate
+      location
+      declaredUnit
+      subtype
+    }
+  }
+`
+
+/**
+ * __useGetProjectEpdQuery__
+ *
+ * To run a query within a React component, call `useGetProjectEpdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectEpdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectEpdQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *      epdId: // value for 'epdId'
+ *   },
+ * });
+ */
+export function useGetProjectEpdQuery(
+  baseOptions: Apollo.QueryHookOptions<GetProjectEpdQuery, GetProjectEpdQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetProjectEpdQuery, GetProjectEpdQueryVariables>(GetProjectEpdDocument, options)
+}
+export function useGetProjectEpdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetProjectEpdQuery, GetProjectEpdQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetProjectEpdQuery, GetProjectEpdQueryVariables>(GetProjectEpdDocument, options)
+}
+export type GetProjectEpdQueryHookResult = ReturnType<typeof useGetProjectEpdQuery>
+export type GetProjectEpdLazyQueryHookResult = ReturnType<typeof useGetProjectEpdLazyQuery>
+export type GetProjectEpdQueryResult = Apollo.QueryResult<GetProjectEpdQuery, GetProjectEpdQueryVariables>

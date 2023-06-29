@@ -1,6 +1,6 @@
 {
   "name": "@lcacollect/assembly",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A shared library for assembly related components and pages",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -57,10 +57,11 @@
     "vitest": "^0.25.8"
   },
   "peerDependencies": {
-    "@lcacollect/components": "^1.1.5",
     "@apollo/react-hooks": "^4.0.0",
     "@azure/msal-browser": "^2.30.0",
     "@azure/msal-react": "^1.4.9",
+    "@lcacollect/components": "^1.1.5",
+    "@lcacollect/core": "^1.2.1",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.9",
     "@mui/x-data-grid-pro": "^5.17.7",
