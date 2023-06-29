@@ -1,16 +1,17 @@
 import { InnerPaper } from '@lcacollect/components'
 import { Stack, Typography } from '@mui/material'
-import React, { useMemo } from 'react'
+import React, { Dispatch, SetStateAction, useMemo } from 'react'
 import { GraphQlProjectEpd } from '../../dataAccess'
 import { EpdListItem } from '../epdListItem'
 
 interface EpdListProps {
   epds?: Pick<GraphQlProjectEpd, 'id' | 'name'>[] | null
   searchKey?: string
+  selectEpdId: Dispatch<SetStateAction<string | null>>
 }
 
 export const EpdList = (props: EpdListProps) => {
-  const { epds, searchKey } = props
+  const { epds, searchKey, selectEpdId } = props
 
   if (!epds) {
     return (
@@ -28,7 +29,7 @@ export const EpdList = (props: EpdListProps) => {
   return (
     <Stack style={{ overflowY: 'scroll', maxHeight: '1000px' }} data-testid='epd-list'>
       {filteredEpds.map((epd, index) => (
-        <EpdListItem epd={epd} key={index} />
+        <EpdListItem epd={epd} key={index} selectEpdId={selectEpdId} />
       ))}
     </Stack>
   )

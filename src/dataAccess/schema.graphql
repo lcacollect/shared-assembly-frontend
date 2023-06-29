@@ -11,3 +11,23 @@ query getProjectEpds($projectId: String!) {
     name
   }
 }
+
+query getProjectEpd($projectId: String!, $epdId: String!) {
+  projectEpds(projectId: $projectId, filters: { id: { equal: $epdId } }) {
+    id
+    name
+    source
+    gwp {
+      a1a3
+      c3
+      c4
+      d
+    }
+    version
+    validUntil
+    publishedDate
+    location
+    declaredUnit
+    subtype
+  }
+}

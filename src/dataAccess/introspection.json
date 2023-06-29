@@ -3681,16 +3681,24 @@
             "deprecationReason": null
           },
           {
-            "name": "addProjectEpd",
-            "description": null,
+            "name": "addProjectEpds",
+            "description": "Add Global EPDs to a project.",
             "args": [
               {
-                "name": "originId",
+                "name": "epdIds",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
-                  "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+                  "ofType": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+                    }
+                  }
                 },
                 "defaultValue": null,
                 "isDeprecated": false,
@@ -3712,7 +3720,15 @@
             "type": {
               "kind": "NON_NULL",
               "name": null,
-              "ofType": { "kind": "OBJECT", "name": "GraphQLProjectEPD", "ofType": null }
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "OBJECT", "name": "GraphQLProjectEPD", "ofType": null }
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -4580,7 +4596,7 @@
           },
           {
             "name": "deleteProjectEpd",
-            "description": null,
+            "description": "Delete a project EPD",
             "args": [
               {
                 "name": "id",
@@ -5171,55 +5187,6 @@
             "deprecationReason": null
           },
           {
-            "name": "updateProjectEpd",
-            "description": null,
-            "args": [
-              {
-                "name": "id",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "kgPerM2",
-                "description": null,
-                "type": { "kind": "SCALAR", "name": "Float", "ofType": null },
-                "defaultValue": "null",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "kgPerM3",
-                "description": null,
-                "type": { "kind": "SCALAR", "name": "Float", "ofType": null },
-                "defaultValue": "null",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "thickness",
-                "description": null,
-                "type": { "kind": "SCALAR", "name": "Float", "ofType": null },
-                "defaultValue": "null",
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": { "kind": "OBJECT", "name": "GraphQLProjectEPD", "ofType": null }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "updateProjectGroup",
             "description": "Update a Project Group",
             "args": [
@@ -5739,6 +5706,14 @@
         "inputFields": [
           {
             "name": "category",
+            "description": null,
+            "type": { "kind": "INPUT_OBJECT", "name": "FilterOptions", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
             "description": null,
             "type": { "kind": "INPUT_OBJECT", "name": "FilterOptions", "ofType": null },
             "defaultValue": "null",

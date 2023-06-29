@@ -14,7 +14,13 @@ export const EpdSearchPanel = (props: EpdSearchPanelProps) => {
 
   return (
     <Container data-testid='epd-search-panel'>
-      <Button onClick={() => setClicked(!clicked)} startIcon={<FilterListIcon />}>
+      <Button
+        sx={{
+          color: 'black',
+        }}
+        onClick={() => setClicked(!clicked)}
+        startIcon={<FilterListIcon />}
+      >
         Filters
       </Button>
       {clicked ? (
