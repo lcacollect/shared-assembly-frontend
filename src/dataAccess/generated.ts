@@ -118,6 +118,7 @@ export type GraphQlAssemblyLayer = {
   epdName: Scalars['String']
   id?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
+  projectId: Scalars['ID']
 }
 
 export type GraphQlAssignee = {
@@ -277,6 +278,7 @@ export type GraphQlProjectEpd = {
   penre?: Maybe<GraphQlImpactCategories>
   pere?: Maybe<GraphQlImpactCategories>
   pocp?: Maybe<GraphQlImpactCategories>
+  projectId: Scalars['ID']
   publishedDate: Scalars['Date']
   referenceServiceLife?: Maybe<Scalars['Int']>
   source: Scalars['String']
@@ -367,9 +369,11 @@ export type GraphQlSchemaCategory = {
 
 export type GraphQlSchemaElement = {
   __typename?: 'GraphQLSchemaElement'
+  assembly?: Maybe<GraphQlAssembly>
+  assemblyId?: Maybe<Scalars['String']>
   commits: Array<GraphQlCommit>
   description?: Maybe<Scalars['String']>
-  id: Scalars['String']
+  id: Scalars['ID']
   name: Scalars['String']
   quantity: Scalars['Float']
   result?: Maybe<Scalars['JSON']>
@@ -638,6 +642,7 @@ export type MutationAddSchemaCategoryArgs = {
 }
 
 export type MutationAddSchemaElementArgs = {
+  assemblyId?: InputMaybe<Scalars['String']>
   description: Scalars['String']
   name: Scalars['String']
   quantity: Scalars['Float']
@@ -803,6 +808,7 @@ export type MutationUpdateSchemaCategoryArgs = {
 }
 
 export type MutationUpdateSchemaElementArgs = {
+  assemblyId?: InputMaybe<Scalars['String']>
   description?: InputMaybe<Scalars['String']>
   id: Scalars['String']
   name?: InputMaybe<Scalars['String']>
@@ -1013,6 +1019,7 @@ export type QuerySchemaCategoriesArgs = {
 
 export type QuerySchemaElementsArgs = {
   commitId?: InputMaybe<Scalars['String']>
+  elementId?: InputMaybe<Scalars['String']>
   filters?: InputMaybe<SchemaElementFilters>
   schemaCategoryIds: Array<Scalars['String']>
 }
@@ -1198,9 +1205,9 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>
   GraphQLAssembly: ResolverTypeWrapper<GraphQlAssembly>
   GraphQLAssemblyLayer: ResolverTypeWrapper<GraphQlAssemblyLayer>
+  ID: ResolverTypeWrapper<Scalars['ID']>
   GraphQLAssignee: GraphQlAssignee
   GraphQLComment: ResolverTypeWrapper<GraphQlComment>
-  ID: ResolverTypeWrapper<Scalars['ID']>
   GraphQLCommit: ResolverTypeWrapper<GraphQlCommit>
   GraphQLConversion: ResolverTypeWrapper<GraphQlConversion>
   GraphQLEPD: ResolverTypeWrapper<GraphQlepd>
@@ -1282,9 +1289,9 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']
   GraphQLAssembly: GraphQlAssembly
   GraphQLAssemblyLayer: GraphQlAssemblyLayer
+  ID: Scalars['ID']
   GraphQLAssignee: GraphQlAssignee
   GraphQLComment: GraphQlComment
-  ID: Scalars['ID']
   GraphQLCommit: GraphQlCommit
   GraphQLConversion: GraphQlConversion
   GraphQLEPD: GraphQlepd
@@ -1385,6 +1392,7 @@ export type GraphQlAssemblyLayerResolvers<
   epdName?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  projectId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -1572,6 +1580,7 @@ export type GraphQlProjectEpdResolvers<
   penre?: Resolver<Maybe<ResolversTypes['GraphQLImpactCategories']>, ParentType, ContextType>
   pere?: Resolver<Maybe<ResolversTypes['GraphQLImpactCategories']>, ParentType, ContextType>
   pocp?: Resolver<Maybe<ResolversTypes['GraphQLImpactCategories']>, ParentType, ContextType>
+  projectId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
   publishedDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
   referenceServiceLife?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>
@@ -1691,9 +1700,11 @@ export type GraphQlSchemaElementResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['GraphQLSchemaElement'] = ResolversParentTypes['GraphQLSchemaElement'],
 > = {
+  assembly?: Resolver<Maybe<ResolversTypes['GraphQLAssembly']>, ParentType, ContextType>
+  assemblyId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   commits?: Resolver<Array<ResolversTypes['GraphQLCommit']>, ParentType, ContextType>
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   quantity?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
   result?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>
@@ -1884,7 +1895,10 @@ export type MutationResolvers<
     ResolversTypes['GraphQLSchemaElement'],
     ParentType,
     ContextType,
-    RequireFields<MutationAddSchemaElementArgs, 'description' | 'name' | 'quantity' | 'schemaCategoryId' | 'unit'>
+    RequireFields<
+      MutationAddSchemaElementArgs,
+      'assemblyId' | 'description' | 'name' | 'quantity' | 'schemaCategoryId' | 'unit'
+    >
   >
   addSchemaElementFromSource?: Resolver<
     Array<ResolversTypes['GraphQLSchemaElement']>,
@@ -2065,7 +2079,7 @@ export type MutationResolvers<
     ContextType,
     RequireFields<
       MutationUpdateSchemaElementArgs,
-      'description' | 'id' | 'name' | 'quantity' | 'result' | 'schemaCategoryId' | 'unit'
+      'assemblyId' | 'description' | 'id' | 'name' | 'quantity' | 'result' | 'schemaCategoryId' | 'unit'
     >
   >
   updateSchemaTemplate?: Resolver<
@@ -2190,7 +2204,7 @@ export type QueryResolvers<
     Array<ResolversTypes['GraphQLSchemaElement']>,
     ParentType,
     ContextType,
-    RequireFields<QuerySchemaElementsArgs, 'commitId' | 'filters' | 'schemaCategoryIds'>
+    RequireFields<QuerySchemaElementsArgs, 'commitId' | 'elementId' | 'filters' | 'schemaCategoryIds'>
   >
   schemaTemplates?: Resolver<
     Array<ResolversTypes['GraphQLSchemaTemplate']>,
@@ -2259,7 +2273,25 @@ export type GetAssembliesQueryVariables = Exact<{
 
 export type GetAssembliesQuery = {
   __typename?: 'Query'
-  assemblies: Array<{ __typename?: 'GraphQLAssembly'; id: string; name: string }>
+  assemblies: Array<{
+    __typename?: 'GraphQLAssembly'
+    id: string
+    name: string
+    category: string
+    gwp: number
+    conversionFactor: number
+    lifeTime: number
+    unit: string
+    description: string
+    metaFields: any
+    layers: Array<{
+      __typename?: 'GraphQLAssemblyLayer'
+      id?: string | null
+      name?: string | null
+      epdId: string
+      epdName: string
+    }>
+  }>
 }
 
 export type GetProjectEpdsQueryVariables = Exact<{
@@ -2299,11 +2331,65 @@ export type GetProjectEpdQuery = {
   }>
 }
 
+export type GetProjectMembersQueryVariables = Exact<{
+  projectId: Scalars['String']
+}>
+
+export type GetProjectMembersQuery = {
+  __typename?: 'Query'
+  projectMembers: Array<{
+    __typename?: 'GraphQLProjectMember'
+    id: string
+    userId: string
+    name: string
+    email: string
+    company?: string | null
+    lastLogin?: any | null
+    projectId: string
+    projectGroups?: Array<{ __typename?: 'GraphQLProjectGroup'; id: string; name: string }> | null
+  }>
+}
+
+export type GetAccountQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetAccountQuery = {
+  __typename?: 'Query'
+  account: { __typename?: 'GraphQLUserAccount'; id: string; name: string; email: string }
+}
+
+export type AddAssemblyMutationVariables = Exact<{
+  name: Scalars['String']
+  category: Scalars['String']
+  projectId: Scalars['String']
+  description?: InputMaybe<Scalars['String']>
+  lifeTime?: InputMaybe<Scalars['Float']>
+  metaFields?: InputMaybe<Scalars['JSON']>
+  conversionFactor?: InputMaybe<Scalars['Float']>
+}>
+
+export type AddAssemblyMutation = {
+  __typename?: 'Mutation'
+  addAssembly: { __typename?: 'GraphQLAssembly'; name: string; category: string }
+}
+
 export const GetAssembliesDocument = gql`
   query getAssemblies($projectId: String!) {
     assemblies(projectId: $projectId) {
       id
       name
+      category
+      gwp
+      conversionFactor
+      lifeTime
+      unit
+      layers {
+        id
+        name
+        epdId
+        epdName
+      }
+      description
+      metaFields
     }
   }
 `
@@ -2433,3 +2519,152 @@ export function useGetProjectEpdLazyQuery(
 export type GetProjectEpdQueryHookResult = ReturnType<typeof useGetProjectEpdQuery>
 export type GetProjectEpdLazyQueryHookResult = ReturnType<typeof useGetProjectEpdLazyQuery>
 export type GetProjectEpdQueryResult = Apollo.QueryResult<GetProjectEpdQuery, GetProjectEpdQueryVariables>
+export const GetProjectMembersDocument = gql`
+  query getProjectMembers($projectId: String!) {
+    projectMembers(projectId: $projectId) {
+      id
+      userId
+      name
+      userId
+      email
+      company
+      lastLogin
+      projectId
+      projectGroups {
+        id
+        name
+      }
+    }
+  }
+`
+
+/**
+ * __useGetProjectMembersQuery__
+ *
+ * To run a query within a React component, call `useGetProjectMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectMembersQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useGetProjectMembersQuery(
+  baseOptions: Apollo.QueryHookOptions<GetProjectMembersQuery, GetProjectMembersQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetProjectMembersQuery, GetProjectMembersQueryVariables>(GetProjectMembersDocument, options)
+}
+export function useGetProjectMembersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetProjectMembersQuery, GetProjectMembersQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetProjectMembersQuery, GetProjectMembersQueryVariables>(
+    GetProjectMembersDocument,
+    options,
+  )
+}
+export type GetProjectMembersQueryHookResult = ReturnType<typeof useGetProjectMembersQuery>
+export type GetProjectMembersLazyQueryHookResult = ReturnType<typeof useGetProjectMembersLazyQuery>
+export type GetProjectMembersQueryResult = Apollo.QueryResult<GetProjectMembersQuery, GetProjectMembersQueryVariables>
+export const GetAccountDocument = gql`
+  query getAccount {
+    account {
+      id
+      name
+      email
+    }
+  }
+`
+
+/**
+ * __useGetAccountQuery__
+ *
+ * To run a query within a React component, call `useGetAccountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAccountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAccountQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAccountQuery(baseOptions?: Apollo.QueryHookOptions<GetAccountQuery, GetAccountQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetAccountQuery, GetAccountQueryVariables>(GetAccountDocument, options)
+}
+export function useGetAccountLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetAccountQuery, GetAccountQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetAccountQuery, GetAccountQueryVariables>(GetAccountDocument, options)
+}
+export type GetAccountQueryHookResult = ReturnType<typeof useGetAccountQuery>
+export type GetAccountLazyQueryHookResult = ReturnType<typeof useGetAccountLazyQuery>
+export type GetAccountQueryResult = Apollo.QueryResult<GetAccountQuery, GetAccountQueryVariables>
+export const AddAssemblyDocument = gql`
+  mutation addAssembly(
+    $name: String!
+    $category: String!
+    $projectId: String!
+    $description: String
+    $lifeTime: Float = 50
+    $metaFields: JSON = null
+    $conversionFactor: Float = 1
+  ) {
+    addAssembly(
+      name: $name
+      category: $category
+      projectId: $projectId
+      description: $description
+      lifeTime: $lifeTime
+      metaFields: $metaFields
+      conversionFactor: $conversionFactor
+    ) {
+      name
+      category
+    }
+  }
+`
+export type AddAssemblyMutationFn = Apollo.MutationFunction<AddAssemblyMutation, AddAssemblyMutationVariables>
+
+/**
+ * __useAddAssemblyMutation__
+ *
+ * To run a mutation, you first call `useAddAssemblyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddAssemblyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addAssemblyMutation, { data, loading, error }] = useAddAssemblyMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      category: // value for 'category'
+ *      projectId: // value for 'projectId'
+ *      description: // value for 'description'
+ *      lifeTime: // value for 'lifeTime'
+ *      metaFields: // value for 'metaFields'
+ *      conversionFactor: // value for 'conversionFactor'
+ *   },
+ * });
+ */
+export function useAddAssemblyMutation(
+  baseOptions?: Apollo.MutationHookOptions<AddAssemblyMutation, AddAssemblyMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<AddAssemblyMutation, AddAssemblyMutationVariables>(AddAssemblyDocument, options)
+}
+export type AddAssemblyMutationHookResult = ReturnType<typeof useAddAssemblyMutation>
+export type AddAssemblyMutationResult = Apollo.MutationResult<AddAssemblyMutation>
+export type AddAssemblyMutationOptions = Apollo.BaseMutationOptions<AddAssemblyMutation, AddAssemblyMutationVariables>

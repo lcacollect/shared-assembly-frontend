@@ -2,18 +2,18 @@ import React, { Dispatch, SetStateAction, useState } from 'react'
 import { Button, Container, Input } from '@mui/material'
 import FilterListIcon from '@mui/icons-material/FilterList'
 
-interface EpdSearchPanelProps {
+interface SearchPanelProps {
   searchKey: string
   setSearchKey: Dispatch<SetStateAction<string>>
 }
 
-export const EpdSearchPanel = (props: EpdSearchPanelProps) => {
+export const SearchPanel = (props: SearchPanelProps) => {
   const { searchKey, setSearchKey } = props
 
   const [clicked, setClicked] = useState(false)
 
   return (
-    <Container data-testid='epd-search-panel'>
+    <Container data-testid='search-panel'>
       <Button
         sx={{
           color: 'black',
@@ -25,7 +25,7 @@ export const EpdSearchPanel = (props: EpdSearchPanelProps) => {
       </Button>
       {clicked ? (
         <Input
-          data-testid='epd-search-input'
+          data-testid='search-input'
           sx={{ marginBottom: 1 }}
           fullWidth
           placeholder='Type search key'

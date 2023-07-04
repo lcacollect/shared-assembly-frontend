@@ -678,6 +678,14 @@
             "type": { "kind": "SCALAR", "name": "String", "ofType": null },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "projectId",
+            "description": null,
+            "args": [],
+            "type": { "kind": "NON_NULL", "name": null, "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null } },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -1988,6 +1996,14 @@
             "deprecationReason": null
           },
           {
+            "name": "projectId",
+            "description": null,
+            "args": [],
+            "type": { "kind": "NON_NULL", "name": null, "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null } },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "publishedDate",
             "description": null,
             "args": [],
@@ -2725,6 +2741,22 @@
         "description": null,
         "fields": [
           {
+            "name": "assembly",
+            "description": null,
+            "args": [],
+            "type": { "kind": "OBJECT", "name": "GraphQLAssembly", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "assemblyId",
+            "description": null,
+            "args": [],
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "commits",
             "description": null,
             "args": [],
@@ -2756,11 +2788,7 @@
             "name": "id",
             "description": null,
             "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
-            },
+            "type": { "kind": "NON_NULL", "name": null, "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null } },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -4146,6 +4174,14 @@
             "description": "Add a Schema Element to a Schema Category",
             "args": [
               {
+                "name": "assemblyId",
+                "description": null,
+                "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+                "defaultValue": "null",
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "description",
                 "description": null,
                 "type": {
@@ -5403,6 +5439,14 @@
             "description": "Update a Schema Element",
             "args": [
               {
+                "name": "assemblyId",
+                "description": null,
+                "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+                "defaultValue": "null",
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "description",
                 "description": null,
                 "type": { "kind": "SCALAR", "name": "String", "ofType": null },
@@ -6596,6 +6640,14 @@
                 "deprecationReason": null
               },
               {
+                "name": "elementId",
+                "description": null,
+                "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+                "defaultValue": "null",
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "filters",
                 "description": null,
                 "type": { "kind": "INPUT_OBJECT", "name": "SchemaElementFilters", "ofType": null },
@@ -7619,7 +7671,7 @@
       {
         "kind": "OBJECT",
         "name": "__Type",
-        "description": "The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.\n\nDepending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByURL`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.",
+        "description": "The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.\n\nDepending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByUrl`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.",
         "fields": [
           {
             "name": "kind",
@@ -7650,7 +7702,7 @@
             "deprecationReason": null
           },
           {
-            "name": "specifiedByURL",
+            "name": "specifiedByUrl",
             "description": null,
             "args": [],
             "type": { "kind": "SCALAR", "name": "String", "ofType": null },

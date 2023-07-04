@@ -1,7 +1,7 @@
 import { Container, Typography } from '@mui/material'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { CardTitle, DataFetchWrapper, InnerPaper } from '@lcacollect/components'
-import { useGetProjectEpdQuery } from '../../dataAccess'
+import { useGetProjectEpdQuery, GraphQlProjectEpd } from '../../dataAccess'
 import { ImpactCategoryTable } from '../impactCategoryTable'
 import { EpdInfoGrid } from '../epdInfoGrid'
 
@@ -29,7 +29,7 @@ export const EpdDetail = (props: EpdDetailProps) => {
     <InnerPaper data-testid='epd-detail'>
       <DataFetchWrapper loading={loading} error={error}>
         <CardTitle title={epd?.name as string} size='medium' />
-        <EpdInfoGrid epd={epd} />
+        <EpdInfoGrid epd={epd as GraphQlProjectEpd} />
         <ImpactCategoryTable name={'Global Warming Potential (GWP)'} data={epd?.gwp} />
       </DataFetchWrapper>
     </InnerPaper>

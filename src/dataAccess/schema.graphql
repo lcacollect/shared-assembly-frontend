@@ -2,6 +2,19 @@ query getAssemblies($projectId: String!) {
   assemblies(projectId: $projectId) {
     id
     name
+    category
+    gwp
+    conversionFactor
+    lifeTime
+    unit
+    layers {
+      id
+      name
+      epdId
+      epdName
+    }
+    description
+    metaFields
   }
 }
 
@@ -29,5 +42,53 @@ query getProjectEpd($projectId: String!, $epdId: String!) {
     location
     declaredUnit
     subtype
+  }
+}
+
+query getProjectMembers($projectId: String!) {
+  projectMembers(projectId: $projectId) {
+    id
+    userId
+    name
+    userId
+    email
+    company
+    lastLogin
+    projectId
+    projectGroups {
+      id
+      name
+    }
+  }
+}
+
+query getAccount {
+  account {
+    id
+    name
+    email
+  }
+}
+
+mutation addAssembly(
+  $name: String!
+  $category: String!
+  $projectId: String!
+  $description: String
+  $lifeTime: Float = 50
+  $metaFields: JSON = null
+  $conversionFactor: Float = 1
+) {
+  addAssembly(
+    name: $name
+    category: $category
+    projectId: $projectId
+    description: $description
+    lifeTime: $lifeTime
+    metaFields: $metaFields
+    conversionFactor: $conversionFactor
+  ) {
+    name
+    category
   }
 }

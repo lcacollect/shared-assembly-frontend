@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useGetProjectEpdsQuery } from '../../dataAccess'
 import { CardTitle, DataFetchWrapper, PaperPage } from '@lcacollect/components'
 import { Grid } from '@mui/material'
-import { DefaultEpdDetail, EpdDetail, EpdList, EpdSearchPanel } from '../../components'
+import { DefaultEpdDetail, EpdDetail, EpdList, SearchPanel } from '../../components'
 
 export const EpdPage = () => {
   const { projectId } = useParams()
@@ -21,7 +21,7 @@ export const EpdPage = () => {
       <DataFetchWrapper loading={loading} error={error}>
         <Grid container spacing={2}>
           <Grid item md={5} lg={3}>
-            <EpdSearchPanel searchKey={searchKey} setSearchKey={setSearchKey} />
+            <SearchPanel searchKey={searchKey} setSearchKey={setSearchKey} />
             <EpdList epds={data?.projectEpds} searchKey={searchKey} selectEpdId={selectEpdId} />
           </Grid>
           <Grid item md={7} lg={9}>

@@ -1,6 +1,6 @@
 import { InnerPaper } from '@lcacollect/components'
 import { Stack, Typography } from '@mui/material'
-import React, { Dispatch, SetStateAction, useMemo } from 'react'
+import { Dispatch, SetStateAction, useMemo } from 'react'
 import { GraphQlProjectEpd } from '../../dataAccess'
 import { EpdListItem } from '../epdListItem'
 
@@ -13,7 +13,7 @@ interface EpdListProps {
 export const EpdList = (props: EpdListProps) => {
   const { epds, searchKey, selectEpdId } = props
 
-  if (!epds) {
+  if (!epds?.length) {
     return (
       <InnerPaper sx={{ marginY: 1 }} data-testid='epd-list'>
         <Typography>Add EPDs to project</Typography>
