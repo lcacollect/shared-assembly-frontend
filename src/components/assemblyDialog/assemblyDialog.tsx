@@ -1,4 +1,4 @@
-import { CardTitle, LcaButton } from '@lcacollect/components'
+import { LcaButton } from '@lcacollect/components'
 import {
   Alert,
   AlertProps,
@@ -12,7 +12,12 @@ import {
   Typography,
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { useGetAccountQuery, useGetProjectMembersQuery, useAddAssemblyMutation } from '../../dataAccess'
+import {
+  useAddAssemblyMutation,
+  useUpdateAssemblyMutation,
+  AssemblyUnit,
+  GraphQlAssembly,
+} from '../../dataAccess'
 import { AssemblyForm } from './assemblyForm'
 
 interface AssemblyDialogProps {
@@ -20,55 +25,92 @@ interface AssemblyDialogProps {
   handleDialogClose: () => void
   projectId: string
   refetchAssemblies: () => void
+  assembly: GraphQlAssembly | null
+  isMemberOfProject: boolean | undefined
 }
 
 export const AssemblyDialog: React.FC<AssemblyDialogProps> = (props) => {
-  const { openDialog, handleDialogClose, projectId, refetchAssemblies } = props
-  const [name, setName] = useState('')
-  const [category, setCategory] = useState('')
-  const [description, setDescription] = useState('')
-  const [lifeTime, setLifeTime] = useState(50)
-  const [metaFields, setMetaFields] = useState('')
-  const [conversionFactor, setConversionFactor] = useState(1)
-  const [formError, setFormError] = useState(false)
-  const [isMemberOfProject, setIsMemberOfProject] = useState<boolean>()
+  const { openDialog, handleDialogClose, projectId, refetchAssemblies, assembly, isMemberOfProject } = props
+
+  const [name, setName] = useState<string>('')
+  const [category, setCategory] = useState<string | null | undefined>('')
+  const [description, setDescription] = useState<string | null | undefined>('')
+  const [lifeTime, setLifeTime] = useState<number>(50)
+  const [unit, setUnit] = useState<AssemblyUnit | null | undefined>(AssemblyUnit.M2)
+  const [metaFields, setMetaFields] = useState<string>('')
+  const [conversionFactor, setConversionFactor] = useState<number>(1)
+  const [formError, setFormError] = useState<boolean>(false)
   const [snackbar, setSnackbar] = useState<Pick<AlertProps, 'children' | 'severity'> | null>(null)
 
-  const { data: accountData } = useGetAccountQuery()
-  const { data: projectMemberData } = useGetProjectMembersQuery({
-    variables: {
-      projectId: projectId as string,
-    },
-    skip: !projectId,
-  })
-
   const [addAssemblyMutation] = useAddAssemblyMutation()
+  const [updateAssemblyMutation] = useUpdateAssemblyMutation()
 
   useEffect(() => {
-    if (accountData && projectMemberData) {
-      const isMemberOfProject = projectMemberData?.projectMembers.find(
-        (member) => member.userId === accountData?.account.id,
-      )
-      setIsMemberOfProject(!!isMemberOfProject)
+    if (assembly) {
+      setName(assembly.name)
+      setCategory(assembly.category)
+      setDescription(assembly.description)
+      setConversionFactor(assembly.conversionFactor)
+      setLifeTime(assembly.lifeTime)
+      setUnit(assembly.unit)
+      // const metaFields = ''
+      // if (assembly.metaFields){
+      //   metaFields = JSON.stringify(assembly.metaFields)
+      // }
+      // setMetaFields(metaFields)
+    } else {
+      cleanFormFields()
     }
-  }, [accountData, projectMemberData])
+  }, [assembly])
+
+  const cleanFormFields = () => {
+    setName('')
+    setCategory('')
+    setDescription('')
+    setConversionFactor(1)
+    setLifeTime(50)
+    setMetaFields('')
+    setUnit(AssemblyUnit.M2)
+  }
 
   const handleDialogAdd = async () => {
     if (formError) {
       return
     }
 
-    const response = await addAssemblyMutation({
-      variables: {
-        projectId: projectId as string,
-        name: name,
-        category: category,
-        description: description,
-        lifeTime: lifeTime,
-        metaFields: metaFields,
-        conversionFactor: conversionFactor,
-      },
-    })
+    let metaFieldsJSON = ''
+    if (metaFields) {
+      metaFieldsJSON = JSON.parse(metaFields)
+    }
+
+    let response
+    if (assembly) {
+      response = await updateAssemblyMutation({
+        variables: {
+          id: assembly.id,
+          name: name,
+          category: category as string,
+          description: description,
+          lifeTime: lifeTime,
+          unit: unit as AssemblyUnit,
+          metaFields: metaFieldsJSON,
+          conversionFactor: conversionFactor,
+        },
+      })
+    } else {
+      response = await addAssemblyMutation({
+        variables: {
+          projectId: projectId as string,
+          name: name,
+          category: category as string,
+          description: description,
+          lifeTime: lifeTime,
+          unit: unit as AssemblyUnit,
+          metaFields: metaFieldsJSON,
+          conversionFactor: conversionFactor,
+        },
+      })
+    }
 
     if (response?.errors) {
       response.errors.forEach((error) => console.error(error))
@@ -81,12 +123,7 @@ export const AssemblyDialog: React.FC<AssemblyDialogProps> = (props) => {
   }
 
   const handleClose = () => {
-    setName('')
-    setCategory('')
-    setDescription('')
-    setConversionFactor(1)
-    setLifeTime(50)
-    setMetaFields('')
+    cleanFormFields()
     setFormError(false)
     handleDialogClose()
   }
@@ -100,8 +137,8 @@ export const AssemblyDialog: React.FC<AssemblyDialogProps> = (props) => {
         maxWidth={'xl'}
         PaperProps={{ sx: { borderRadius: 5, paddingX: 3, paddingY: 3 } }}
       >
-        <DialogTitle sx={{ display: 'flex' }}>
-          <CardTitle title='Add Assembly' size='medium' />
+        <DialogTitle sx={{ display: 'flex' }} variant='h3'>
+          {assembly ? 'Edit assembly' : 'Add Assembly'}
         </DialogTitle>
         <DialogContent>
           <AssemblyForm
@@ -117,6 +154,8 @@ export const AssemblyDialog: React.FC<AssemblyDialogProps> = (props) => {
             setMetaFields={setMetaFields}
             conversionFactor={conversionFactor}
             setConversionFactor={setConversionFactor}
+            unit={unit as AssemblyUnit}
+            setUnit={setUnit}
             error={formError}
             setError={setFormError}
           />
@@ -141,7 +180,7 @@ export const AssemblyDialog: React.FC<AssemblyDialogProps> = (props) => {
                 onClick={handleDialogAdd}
                 data-testid='add-project-assembly-button'
               >
-                <Typography>Add</Typography>
+                <Typography>{assembly ? 'Save' : 'Add'}</Typography>
               </LcaButton>
             </Box>
           </Tooltip>

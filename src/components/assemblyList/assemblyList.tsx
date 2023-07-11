@@ -6,12 +6,25 @@ import { AssemblyListItem } from '../assemblyListItem'
 import { SearchPanel } from '../../components'
 
 interface AssemblyListProps {
-  assemblies?: Pick<GraphQlAssembly, 'id' | 'name'>[] | null
-  selectAssemblyId: Dispatch<SetStateAction<string | null>>
+  assemblies?: GraphQlAssembly[] | null | undefined
+  setSelectedAssembly: Dispatch<SetStateAction<GraphQlAssembly | null>>
+  handleEditAssembly: () => void
+  projectId: string
+  refetchAssemblies: () => void
+  selectedAssembly: GraphQlAssembly | null | undefined
+  isMemberOfProject: boolean | undefined
 }
 
 export const AssemblyList = (props: AssemblyListProps) => {
-  const { assemblies, selectAssemblyId } = props
+  const {
+    assemblies,
+    setSelectedAssembly,
+    handleEditAssembly,
+    projectId,
+    refetchAssemblies,
+    selectedAssembly,
+    isMemberOfProject,
+  } = props
   const [searchKey, setSearchKey] = useState('')
 
   const filteredAssemblies = useMemo(
@@ -29,7 +42,16 @@ export const AssemblyList = (props: AssemblyListProps) => {
           <SearchPanel searchKey={searchKey} setSearchKey={setSearchKey} />
           <Stack style={{ overflowY: 'scroll', maxHeight: '1000px' }} data-testid='assembly-list'>
             {filteredAssemblies?.map((assembly, index) => (
-              <AssemblyListItem assembly={assembly} key={index} selectAssemblyId={selectAssemblyId} />
+              <AssemblyListItem
+                assembly={assembly}
+                key={index}
+                setSelectedAssembly={setSelectedAssembly}
+                handleEditAssembly={handleEditAssembly}
+                projectId={projectId}
+                refetchAssemblies={refetchAssemblies}
+                selectedAssembly={selectedAssembly}
+                isMemberOfProject={isMemberOfProject}
+              />
             ))}
           </Stack>
         </>

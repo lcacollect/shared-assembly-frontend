@@ -31,16 +31,28 @@ export type AssemblyLayerDeleteInput = {
 
 export type AssemblyLayerInput = {
   conversionFactor?: InputMaybe<Scalars['Float']>
+  description?: InputMaybe<Scalars['String']>
   epdId: Scalars['String']
   id?: InputMaybe<Scalars['String']>
   name?: InputMaybe<Scalars['String']>
+  referenceServiceLife?: InputMaybe<Scalars['Int']>
 }
 
 export type AssemblyLayerUpdateInput = {
   conversionFactor?: InputMaybe<Scalars['Float']>
+  description?: InputMaybe<Scalars['String']>
   epdId?: InputMaybe<Scalars['String']>
   id: Scalars['String']
   name?: InputMaybe<Scalars['String']>
+  referenceServiceLife?: InputMaybe<Scalars['Int']>
+}
+
+export enum AssemblyUnit {
+  Kg = 'kg',
+  M = 'm',
+  M2 = 'm2',
+  M3 = 'm3',
+  Pcs = 'pcs',
 }
 
 export enum AssigneeType {
@@ -95,16 +107,17 @@ export type FilterOptions = {
 
 export type GraphQlAssembly = {
   __typename?: 'GraphQLAssembly'
-  category: Scalars['String']
+  category?: Maybe<Scalars['String']>
   conversionFactor: Scalars['Float']
-  description: Scalars['String']
+  description?: Maybe<Scalars['String']>
   gwp: Scalars['Float']
   id: Scalars['String']
-  layers: Array<GraphQlAssemblyLayer>
+  layers?: Maybe<Array<GraphQlAssemblyLayer>>
   lifeTime: Scalars['Float']
-  metaFields: Scalars['JSON']
+  metaFields?: Maybe<Scalars['JSON']>
   name: Scalars['String']
-  unit: Scalars['String']
+  projectId: Scalars['String']
+  unit?: Maybe<AssemblyUnit>
 }
 
 export type GraphQlAssemblyGwpArgs = {
@@ -114,11 +127,12 @@ export type GraphQlAssemblyGwpArgs = {
 export type GraphQlAssemblyLayer = {
   __typename?: 'GraphQLAssemblyLayer'
   conversionFactor?: Maybe<Scalars['Float']>
+  description?: Maybe<Scalars['String']>
   epdId: Scalars['String']
   epdName: Scalars['String']
   id?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
-  projectId: Scalars['ID']
+  referenceServiceLife?: Maybe<Scalars['Int']>
 }
 
 export type GraphQlAssignee = {
@@ -360,7 +374,7 @@ export type GraphQlSchemaCategory = {
   depth: Scalars['Int']
   description?: Maybe<Scalars['String']>
   elements?: Maybe<Array<GraphQlSchemaElement>>
-  id: Scalars['String']
+  id: Scalars['ID']
   name: Scalars['String']
   path: Scalars['String']
   reportingSchema: GraphQlReportingSchema
@@ -558,6 +572,7 @@ export type MutationAddAssemblyArgs = {
   metaFields?: InputMaybe<Scalars['JSON']>
   name: Scalars['String']
   projectId: Scalars['String']
+  unit: AssemblyUnit
 }
 
 export type MutationAddAssemblyLayersArgs = {
@@ -653,7 +668,7 @@ export type MutationAddSchemaElementArgs = {
 export type MutationAddSchemaElementFromSourceArgs = {
   objectIds: Array<Scalars['String']>
   quantities?: InputMaybe<Array<Scalars['Float']>>
-  schemaCategoryId: Scalars['String']
+  schemaCategoryIds: Array<Scalars['String']>
   sourceId: Scalars['String']
   units?: InputMaybe<Array<Unit>>
 }
@@ -752,6 +767,7 @@ export type MutationUpdateAssemblyArgs = {
   lifeTime?: InputMaybe<Scalars['Float']>
   metaFields?: InputMaybe<Scalars['JSON']>
   name?: InputMaybe<Scalars['String']>
+  unit?: InputMaybe<AssemblyUnit>
 }
 
 export type MutationUpdateAssemblyLayersArgs = {
@@ -1193,7 +1209,9 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>
   AssemblyLayerInput: AssemblyLayerInput
   Float: ResolverTypeWrapper<Scalars['Float']>
+  Int: ResolverTypeWrapper<Scalars['Int']>
   AssemblyLayerUpdateInput: AssemblyLayerUpdateInput
+  AssemblyUnit: AssemblyUnit
   AssigneeType: AssigneeType
   CommentFilters: CommentFilters
   CommitFilters: CommitFilters
@@ -1205,13 +1223,12 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>
   GraphQLAssembly: ResolverTypeWrapper<GraphQlAssembly>
   GraphQLAssemblyLayer: ResolverTypeWrapper<GraphQlAssemblyLayer>
-  ID: ResolverTypeWrapper<Scalars['ID']>
   GraphQLAssignee: GraphQlAssignee
   GraphQLComment: ResolverTypeWrapper<GraphQlComment>
+  ID: ResolverTypeWrapper<Scalars['ID']>
   GraphQLCommit: ResolverTypeWrapper<GraphQlCommit>
   GraphQLConversion: ResolverTypeWrapper<GraphQlConversion>
   GraphQLEPD: ResolverTypeWrapper<GraphQlepd>
-  Int: ResolverTypeWrapper<Scalars['Int']>
   GraphQLEPDBase: ResolverTypeWrapper<GraphQlepdBase>
   GraphQLEPDConnection: ResolverTypeWrapper<GraphQlepdConnection>
   GraphQLEPDEdge: ResolverTypeWrapper<GraphQlepdEdge>
@@ -1278,6 +1295,7 @@ export type ResolversParentTypes = {
   String: Scalars['String']
   AssemblyLayerInput: AssemblyLayerInput
   Float: Scalars['Float']
+  Int: Scalars['Int']
   AssemblyLayerUpdateInput: AssemblyLayerUpdateInput
   CommentFilters: CommentFilters
   CommitFilters: CommitFilters
@@ -1289,13 +1307,12 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']
   GraphQLAssembly: GraphQlAssembly
   GraphQLAssemblyLayer: GraphQlAssemblyLayer
-  ID: Scalars['ID']
   GraphQLAssignee: GraphQlAssignee
   GraphQLComment: GraphQlComment
+  ID: Scalars['ID']
   GraphQLCommit: GraphQlCommit
   GraphQLConversion: GraphQlConversion
   GraphQLEPD: GraphQlepd
-  Int: Scalars['Int']
   GraphQLEPDBase: GraphQlepdBase
   GraphQLEPDConnection: GraphQlepdConnection
   GraphQLEPDEdge: GraphQlepdEdge
@@ -1370,16 +1387,17 @@ export type GraphQlAssemblyResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['GraphQLAssembly'] = ResolversParentTypes['GraphQLAssembly'],
 > = {
-  category?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  category?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   conversionFactor?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
-  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   gwp?: Resolver<ResolversTypes['Float'], ParentType, ContextType, RequireFields<GraphQlAssemblyGwpArgs, 'phases'>>
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  layers?: Resolver<Array<ResolversTypes['GraphQLAssemblyLayer']>, ParentType, ContextType>
+  layers?: Resolver<Maybe<Array<ResolversTypes['GraphQLAssemblyLayer']>>, ParentType, ContextType>
   lifeTime?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
-  metaFields?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>
+  metaFields?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  unit?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  projectId?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  unit?: Resolver<Maybe<ResolversTypes['AssemblyUnit']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -1388,11 +1406,12 @@ export type GraphQlAssemblyLayerResolvers<
   ParentType extends ResolversParentTypes['GraphQLAssemblyLayer'] = ResolversParentTypes['GraphQLAssemblyLayer'],
 > = {
   conversionFactor?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   epdId?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   epdName?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  projectId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
+  referenceServiceLife?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -1688,7 +1707,7 @@ export type GraphQlSchemaCategoryResolvers<
   depth?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   elements?: Resolver<Maybe<Array<ResolversTypes['GraphQLSchemaElement']>>, ParentType, ContextType>
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   path?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   reportingSchema?: Resolver<ResolversTypes['GraphQLReportingSchema'], ParentType, ContextType>
@@ -1802,7 +1821,7 @@ export type MutationResolvers<
     ContextType,
     RequireFields<
       MutationAddAssemblyArgs,
-      'category' | 'conversionFactor' | 'lifeTime' | 'metaFields' | 'name' | 'projectId'
+      'category' | 'conversionFactor' | 'lifeTime' | 'metaFields' | 'name' | 'projectId' | 'unit'
     >
   >
   addAssemblyLayers?: Resolver<
@@ -1906,7 +1925,7 @@ export type MutationResolvers<
     ContextType,
     RequireFields<
       MutationAddSchemaElementFromSourceArgs,
-      'objectIds' | 'quantities' | 'schemaCategoryId' | 'sourceId' | 'units'
+      'objectIds' | 'quantities' | 'schemaCategoryIds' | 'sourceId' | 'units'
     >
   >
   addSchemaTemplate?: Resolver<
@@ -2022,7 +2041,7 @@ export type MutationResolvers<
     ContextType,
     RequireFields<
       MutationUpdateAssemblyArgs,
-      'category' | 'conversionFactor' | 'description' | 'id' | 'lifeTime' | 'metaFields' | 'name'
+      'category' | 'conversionFactor' | 'description' | 'id' | 'lifeTime' | 'metaFields' | 'name' | 'unit'
     >
   >
   updateAssemblyLayers?: Resolver<
@@ -2277,20 +2296,24 @@ export type GetAssembliesQuery = {
     __typename?: 'GraphQLAssembly'
     id: string
     name: string
-    category: string
+    category?: string | null
     gwp: number
     conversionFactor: number
     lifeTime: number
-    unit: string
-    description: string
-    metaFields: any
-    layers: Array<{
+    unit?: AssemblyUnit | null
+    projectId: string
+    description?: string | null
+    metaFields?: any | null
+    layers?: Array<{
       __typename?: 'GraphQLAssemblyLayer'
       id?: string | null
       name?: string | null
       epdId: string
       epdName: string
-    }>
+      description?: string | null
+      conversionFactor?: number | null
+      referenceServiceLife?: number | null
+    }> | null
   }>
 }
 
@@ -2300,7 +2323,13 @@ export type GetProjectEpdsQueryVariables = Exact<{
 
 export type GetProjectEpdsQuery = {
   __typename?: 'Query'
-  projectEpds: Array<{ __typename?: 'GraphQLProjectEPD'; id: string; name: string }>
+  projectEpds: Array<{
+    __typename?: 'GraphQLProjectEPD'
+    id: string
+    name: string
+    declaredUnit?: string | null
+    referenceServiceLife?: number | null
+  }>
 }
 
 export type GetProjectEpdQueryVariables = Exact<{
@@ -2362,6 +2391,7 @@ export type AddAssemblyMutationVariables = Exact<{
   category: Scalars['String']
   projectId: Scalars['String']
   description?: InputMaybe<Scalars['String']>
+  unit: AssemblyUnit
   lifeTime?: InputMaybe<Scalars['Float']>
   metaFields?: InputMaybe<Scalars['JSON']>
   conversionFactor?: InputMaybe<Scalars['Float']>
@@ -2369,8 +2399,67 @@ export type AddAssemblyMutationVariables = Exact<{
 
 export type AddAssemblyMutation = {
   __typename?: 'Mutation'
-  addAssembly: { __typename?: 'GraphQLAssembly'; name: string; category: string }
+  addAssembly: { __typename?: 'GraphQLAssembly'; name: string; category?: string | null }
 }
+
+export type UpdateAssemblyMutationVariables = Exact<{
+  id: Scalars['String']
+  name: Scalars['String']
+  category: Scalars['String']
+  description?: InputMaybe<Scalars['String']>
+  unit: AssemblyUnit
+  lifeTime?: InputMaybe<Scalars['Float']>
+  metaFields?: InputMaybe<Scalars['JSON']>
+  conversionFactor?: InputMaybe<Scalars['Float']>
+}>
+
+export type UpdateAssemblyMutation = {
+  __typename?: 'Mutation'
+  updateAssembly: { __typename?: 'GraphQLAssembly'; name: string }
+}
+
+export type DeleteAssemblyMutationVariables = Exact<{
+  id: Scalars['String']
+}>
+
+export type DeleteAssemblyMutation = { __typename?: 'Mutation'; deleteAssembly: string }
+
+export type AddAssemblyLayersMutationVariables = Exact<{
+  id: Scalars['String']
+  layers: Array<AssemblyLayerInput> | AssemblyLayerInput
+}>
+
+export type AddAssemblyLayersMutation = {
+  __typename?: 'Mutation'
+  addAssemblyLayers: Array<{
+    __typename?: 'GraphQLAssemblyLayer'
+    id?: string | null
+    name?: string | null
+    epdId: string
+  }>
+}
+
+export type UpdateAssemblyLayersMutationVariables = Exact<{
+  id: Scalars['String']
+  layers: Array<AssemblyLayerUpdateInput> | AssemblyLayerUpdateInput
+}>
+
+export type UpdateAssemblyLayersMutation = {
+  __typename?: 'Mutation'
+  updateAssemblyLayers: Array<{
+    __typename?: 'GraphQLAssemblyLayer'
+    id?: string | null
+    name?: string | null
+    epdId: string
+  }>
+}
+
+export type DeleteAssemblyLayersMutationVariables = Exact<{
+  id: Scalars['String']
+  layers: Array<AssemblyLayerDeleteInput> | AssemblyLayerDeleteInput
+}>
+
+export type DeleteAssemblyLayersMutation = { __typename?: 'Mutation'; deleteAssemblyLayers: Array<string> }
 
 export const GetAssembliesDocument = gql`
   query getAssemblies($projectId: String!) {
@@ -2382,11 +2471,15 @@ export const GetAssembliesDocument = gql`
       conversionFactor
       lifeTime
       unit
+      projectId
       layers {
         id
         name
         epdId
         epdName
+        description
+        conversionFactor
+        referenceServiceLife
       }
       description
       metaFields
@@ -2430,6 +2523,8 @@ export const GetProjectEpdsDocument = gql`
     projectEpds(projectId: $projectId) {
       id
       name
+      declaredUnit
+      referenceServiceLife
     }
   }
 `
@@ -2616,6 +2711,7 @@ export const AddAssemblyDocument = gql`
     $category: String!
     $projectId: String!
     $description: String
+    $unit: AssemblyUnit!
     $lifeTime: Float = 50
     $metaFields: JSON = null
     $conversionFactor: Float = 1
@@ -2626,6 +2722,7 @@ export const AddAssemblyDocument = gql`
       projectId: $projectId
       description: $description
       lifeTime: $lifeTime
+      unit: $unit
       metaFields: $metaFields
       conversionFactor: $conversionFactor
     ) {
@@ -2653,6 +2750,7 @@ export type AddAssemblyMutationFn = Apollo.MutationFunction<AddAssemblyMutation,
  *      category: // value for 'category'
  *      projectId: // value for 'projectId'
  *      description: // value for 'description'
+ *      unit: // value for 'unit'
  *      lifeTime: // value for 'lifeTime'
  *      metaFields: // value for 'metaFields'
  *      conversionFactor: // value for 'conversionFactor'
@@ -2668,3 +2766,239 @@ export function useAddAssemblyMutation(
 export type AddAssemblyMutationHookResult = ReturnType<typeof useAddAssemblyMutation>
 export type AddAssemblyMutationResult = Apollo.MutationResult<AddAssemblyMutation>
 export type AddAssemblyMutationOptions = Apollo.BaseMutationOptions<AddAssemblyMutation, AddAssemblyMutationVariables>
+export const UpdateAssemblyDocument = gql`
+  mutation updateAssembly(
+    $id: String!
+    $name: String!
+    $category: String!
+    $description: String
+    $unit: AssemblyUnit!
+    $lifeTime: Float = 50
+    $metaFields: JSON = null
+    $conversionFactor: Float = 1
+  ) {
+    updateAssembly(
+      id: $id
+      name: $name
+      category: $category
+      description: $description
+      lifeTime: $lifeTime
+      unit: $unit
+      metaFields: $metaFields
+      conversionFactor: $conversionFactor
+    ) {
+      name
+    }
+  }
+`
+export type UpdateAssemblyMutationFn = Apollo.MutationFunction<UpdateAssemblyMutation, UpdateAssemblyMutationVariables>
+
+/**
+ * __useUpdateAssemblyMutation__
+ *
+ * To run a mutation, you first call `useUpdateAssemblyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAssemblyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAssemblyMutation, { data, loading, error }] = useUpdateAssemblyMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *      category: // value for 'category'
+ *      description: // value for 'description'
+ *      unit: // value for 'unit'
+ *      lifeTime: // value for 'lifeTime'
+ *      metaFields: // value for 'metaFields'
+ *      conversionFactor: // value for 'conversionFactor'
+ *   },
+ * });
+ */
+export function useUpdateAssemblyMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateAssemblyMutation, UpdateAssemblyMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<UpdateAssemblyMutation, UpdateAssemblyMutationVariables>(UpdateAssemblyDocument, options)
+}
+export type UpdateAssemblyMutationHookResult = ReturnType<typeof useUpdateAssemblyMutation>
+export type UpdateAssemblyMutationResult = Apollo.MutationResult<UpdateAssemblyMutation>
+export type UpdateAssemblyMutationOptions = Apollo.BaseMutationOptions<
+  UpdateAssemblyMutation,
+  UpdateAssemblyMutationVariables
+>
+export const DeleteAssemblyDocument = gql`
+  mutation deleteAssembly($id: String!) {
+    deleteAssembly(id: $id)
+  }
+`
+export type DeleteAssemblyMutationFn = Apollo.MutationFunction<DeleteAssemblyMutation, DeleteAssemblyMutationVariables>
+
+/**
+ * __useDeleteAssemblyMutation__
+ *
+ * To run a mutation, you first call `useDeleteAssemblyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAssemblyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAssemblyMutation, { data, loading, error }] = useDeleteAssemblyMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteAssemblyMutation(
+  baseOptions?: Apollo.MutationHookOptions<DeleteAssemblyMutation, DeleteAssemblyMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<DeleteAssemblyMutation, DeleteAssemblyMutationVariables>(DeleteAssemblyDocument, options)
+}
+export type DeleteAssemblyMutationHookResult = ReturnType<typeof useDeleteAssemblyMutation>
+export type DeleteAssemblyMutationResult = Apollo.MutationResult<DeleteAssemblyMutation>
+export type DeleteAssemblyMutationOptions = Apollo.BaseMutationOptions<
+  DeleteAssemblyMutation,
+  DeleteAssemblyMutationVariables
+>
+export const AddAssemblyLayersDocument = gql`
+  mutation addAssemblyLayers($id: String!, $layers: [AssemblyLayerInput!]!) {
+    addAssemblyLayers(id: $id, layers: $layers) {
+      id
+      name
+      epdId
+    }
+  }
+`
+export type AddAssemblyLayersMutationFn = Apollo.MutationFunction<
+  AddAssemblyLayersMutation,
+  AddAssemblyLayersMutationVariables
+>
+
+/**
+ * __useAddAssemblyLayersMutation__
+ *
+ * To run a mutation, you first call `useAddAssemblyLayersMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddAssemblyLayersMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addAssemblyLayersMutation, { data, loading, error }] = useAddAssemblyLayersMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      layers: // value for 'layers'
+ *   },
+ * });
+ */
+export function useAddAssemblyLayersMutation(
+  baseOptions?: Apollo.MutationHookOptions<AddAssemblyLayersMutation, AddAssemblyLayersMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<AddAssemblyLayersMutation, AddAssemblyLayersMutationVariables>(
+    AddAssemblyLayersDocument,
+    options,
+  )
+}
+export type AddAssemblyLayersMutationHookResult = ReturnType<typeof useAddAssemblyLayersMutation>
+export type AddAssemblyLayersMutationResult = Apollo.MutationResult<AddAssemblyLayersMutation>
+export type AddAssemblyLayersMutationOptions = Apollo.BaseMutationOptions<
+  AddAssemblyLayersMutation,
+  AddAssemblyLayersMutationVariables
+>
+export const UpdateAssemblyLayersDocument = gql`
+  mutation updateAssemblyLayers($id: String!, $layers: [AssemblyLayerUpdateInput!]!) {
+    updateAssemblyLayers(id: $id, layers: $layers) {
+      id
+      name
+      epdId
+    }
+  }
+`
+export type UpdateAssemblyLayersMutationFn = Apollo.MutationFunction<
+  UpdateAssemblyLayersMutation,
+  UpdateAssemblyLayersMutationVariables
+>
+
+/**
+ * __useUpdateAssemblyLayersMutation__
+ *
+ * To run a mutation, you first call `useUpdateAssemblyLayersMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAssemblyLayersMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAssemblyLayersMutation, { data, loading, error }] = useUpdateAssemblyLayersMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      layers: // value for 'layers'
+ *   },
+ * });
+ */
+export function useUpdateAssemblyLayersMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateAssemblyLayersMutation, UpdateAssemblyLayersMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<UpdateAssemblyLayersMutation, UpdateAssemblyLayersMutationVariables>(
+    UpdateAssemblyLayersDocument,
+    options,
+  )
+}
+export type UpdateAssemblyLayersMutationHookResult = ReturnType<typeof useUpdateAssemblyLayersMutation>
+export type UpdateAssemblyLayersMutationResult = Apollo.MutationResult<UpdateAssemblyLayersMutation>
+export type UpdateAssemblyLayersMutationOptions = Apollo.BaseMutationOptions<
+  UpdateAssemblyLayersMutation,
+  UpdateAssemblyLayersMutationVariables
+>
+export const DeleteAssemblyLayersDocument = gql`
+  mutation deleteAssemblyLayers($id: String!, $layers: [AssemblyLayerDeleteInput!]!) {
+    deleteAssemblyLayers(id: $id, layers: $layers)
+  }
+`
+export type DeleteAssemblyLayersMutationFn = Apollo.MutationFunction<
+  DeleteAssemblyLayersMutation,
+  DeleteAssemblyLayersMutationVariables
+>
+
+/**
+ * __useDeleteAssemblyLayersMutation__
+ *
+ * To run a mutation, you first call `useDeleteAssemblyLayersMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAssemblyLayersMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAssemblyLayersMutation, { data, loading, error }] = useDeleteAssemblyLayersMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      layers: // value for 'layers'
+ *   },
+ * });
+ */
+export function useDeleteAssemblyLayersMutation(
+  baseOptions?: Apollo.MutationHookOptions<DeleteAssemblyLayersMutation, DeleteAssemblyLayersMutationVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<DeleteAssemblyLayersMutation, DeleteAssemblyLayersMutationVariables>(
+    DeleteAssemblyLayersDocument,
+    options,
+  )
+}
+export type DeleteAssemblyLayersMutationHookResult = ReturnType<typeof useDeleteAssemblyLayersMutation>
+export type DeleteAssemblyLayersMutationResult = Apollo.MutationResult<DeleteAssemblyLayersMutation>
+export type DeleteAssemblyLayersMutationOptions = Apollo.BaseMutationOptions<
+  DeleteAssemblyLayersMutation,
+  DeleteAssemblyLayersMutationVariables
+>

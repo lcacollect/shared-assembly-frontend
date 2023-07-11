@@ -1,19 +1,22 @@
-import { Grid, TextField } from '@mui/material'
-import React, { Dispatch, SetStateAction, useRef, useState } from 'react'
+import { Grid, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
+import { AssemblyUnit } from '../../dataAccess'
+import React, { Dispatch, SetStateAction } from 'react'
 
 interface AssemblyFormProps {
   name: string
   setName: Dispatch<SetStateAction<string>>
-  category: string
-  setCategory: Dispatch<SetStateAction<string>>
-  description: string
-  setDescription: Dispatch<SetStateAction<string>>
+  category: string | null | undefined
+  setCategory: Dispatch<SetStateAction<string | null | undefined>>
+  description: string | null | undefined
+  setDescription: Dispatch<SetStateAction<string | null | undefined>>
   lifeTime: number
   setLifeTime: Dispatch<SetStateAction<number>>
   metaFields: string
   setMetaFields: Dispatch<SetStateAction<string>>
   conversionFactor: number
   setConversionFactor: Dispatch<SetStateAction<number>>
+  unit: AssemblyUnit
+  setUnit: Dispatch<SetStateAction<AssemblyUnit | null | undefined>>
   error: boolean
   setError: Dispatch<SetStateAction<boolean>>
 }
@@ -31,9 +34,19 @@ export const AssemblyForm: React.FC<AssemblyFormProps> = (props) => {
     setMetaFields,
     conversionFactor,
     setConversionFactor,
+    unit,
+    setUnit,
     error,
     setError,
   } = props
+
+  const unitMenuItems = Object.values(AssemblyUnit).map((value, index) => {
+    return (
+      <MenuItem value={value} key={index} data-testid={value}>
+        {value.toUpperCase()}
+      </MenuItem>
+    )
+  })
 
   return (
     <Grid container spacing={2} sx={{ paddingTop: 5, paddingBottom: 2 }} data-testid='assembly-form'>
@@ -80,6 +93,20 @@ export const AssemblyForm: React.FC<AssemblyFormProps> = (props) => {
         />
       </Grid>
       <Grid item xs={true}>
+        <FormControl fullWidth data-testid='form-control-select'>
+          <InputLabel id='unit-select-label'>Unit</InputLabel>
+          <Select
+            labelId='unit-select-label'
+            data-testid='unit-type'
+            value={unit}
+            label='Unit'
+            onChange={(event) => setUnit(event.target.value as AssemblyUnit)}
+          >
+            {unitMenuItems}
+          </Select>
+        </FormControl>
+      </Grid>
+      {/* <Grid item xs={true}>
         <TextField
           error={error}
           data-testid='assembly-metaFields'
@@ -102,7 +129,7 @@ export const AssemblyForm: React.FC<AssemblyFormProps> = (props) => {
             }
           }}
         />
-      </Grid>
+      </Grid> */}
       <Grid item xs={true}>
         <TextField
           data-testid='assembly-conversionFactor'

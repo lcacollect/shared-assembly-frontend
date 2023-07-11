@@ -7,11 +7,15 @@ query getAssemblies($projectId: String!) {
     conversionFactor
     lifeTime
     unit
+    projectId
     layers {
       id
       name
       epdId
       epdName
+      description
+      conversionFactor
+      referenceServiceLife
     }
     description
     metaFields
@@ -22,6 +26,8 @@ query getProjectEpds($projectId: String!) {
   projectEpds(projectId: $projectId) {
     id
     name
+    declaredUnit
+    referenceServiceLife
   }
 }
 
@@ -70,11 +76,21 @@ query getAccount {
   }
 }
 
+enum AssemblyUnit {
+  M
+  M2
+  M3
+  KG
+  PCS
+  NONE
+}
+
 mutation addAssembly(
   $name: String!
   $category: String!
   $projectId: String!
   $description: String
+  $unit: AssemblyUnit!
   $lifeTime: Float = 50
   $metaFields: JSON = null
   $conversionFactor: Float = 1
@@ -85,10 +101,81 @@ mutation addAssembly(
     projectId: $projectId
     description: $description
     lifeTime: $lifeTime
+    unit: $unit
     metaFields: $metaFields
     conversionFactor: $conversionFactor
   ) {
     name
     category
   }
+}
+
+mutation updateAssembly(
+  $id: String!
+  $name: String!
+  $category: String!
+  $description: String
+  $unit: AssemblyUnit!
+  $lifeTime: Float = 50
+  $metaFields: JSON = null
+  $conversionFactor: Float = 1
+) {
+  updateAssembly(
+    id: $id
+    name: $name
+    category: $category
+    description: $description
+    lifeTime: $lifeTime
+    unit: $unit
+    metaFields: $metaFields
+    conversionFactor: $conversionFactor
+  ) {
+    name
+  }
+}
+
+mutation deleteAssembly($id: String!) {
+  deleteAssembly(id: $id)
+}
+
+input AssemblyLayerInput {
+  epdId: String!
+  id: String
+  name: String
+  conversionFactor: Float
+  referenceServiceLife: Int
+  description: String
+}
+
+input AssemblyLayerUpdateInput {
+  id: String!
+  epdId: String
+  name: String
+  conversionFactor: Float
+  referenceServiceLife: Int
+  description: String
+}
+
+input AssemblyLayerDeleteInput {
+  id: String!
+}
+
+mutation addAssemblyLayers($id: String!, $layers: [AssemblyLayerInput!]!) {
+  addAssemblyLayers(id: $id, layers: $layers) {
+    id
+    name
+    epdId
+  }
+}
+
+mutation updateAssemblyLayers($id: String!, $layers: [AssemblyLayerUpdateInput!]!) {
+  updateAssemblyLayers(id: $id, layers: $layers) {
+    id
+    name
+    epdId
+  }
+}
+
+mutation deleteAssemblyLayers($id: String!, $layers: [AssemblyLayerDeleteInput!]!) {
+  deleteAssemblyLayers(id: $id, layers: $layers)
 }
