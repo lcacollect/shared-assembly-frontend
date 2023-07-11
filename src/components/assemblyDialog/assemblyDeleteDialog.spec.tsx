@@ -19,6 +19,8 @@ describe('Assemblies Delete Dialog', () => {
     )
 
     expect(await screen.findByTestId('assembly-delete-dialog')).toBeInTheDocument()
-    expect(await screen.findByText("Are you sure you want to delete 'test' assembly?")).toBeInTheDocument()
+    expect(
+      await screen.findByText(`Are you sure you want to delete '${assemblies.data.assemblies[0].name}' assembly?`),
+    ).toBeInTheDocument()
   })
 })
