@@ -11,7 +11,7 @@ describe('Assemblies Delete Dialog', () => {
       <MockedProvider mocks={[]} addTypename={false}>
         <AssemblyDeleteDialog
           openDialog={true}
-          assembly={assemblies.data.assemblies[0] as GraphQlAssembly}
+          assembly={assemblies.data.assemblies[0] as unknown as GraphQlAssembly}
           projectId={'acfa456f-6628-4c0d-a0c8-1a53b1a46785'}
           isMemberOfProject={true}
         />
@@ -19,6 +19,6 @@ describe('Assemblies Delete Dialog', () => {
     )
 
     expect(await screen.findByTestId('assembly-delete-dialog')).toBeInTheDocument()
-    expect(await screen.findByText('Are you sure you want to delete assembly?')).toBeInTheDocument()
+    expect(await screen.findByText("Are you sure you want to delete 'test' assembly?")).toBeInTheDocument()
   })
 })

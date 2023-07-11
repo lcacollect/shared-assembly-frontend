@@ -65,7 +65,7 @@ export const AssemblyDeleteDialog: React.FC<AssemblyDeleteDialogProps> = (props)
         PaperProps={{ sx: { borderRadius: 5, paddingX: 3, paddingY: 3 } }}
       >
         <DialogTitle sx={{ display: 'flex' }} variant='h3'>
-          Are you sure you want to delete assembly?
+          Are you sure you want to delete &apos;{assembly?.name}&apos; assembly?
         </DialogTitle>
         <DialogActions sx={{ paddingX: 3 }}>
           <LcaButton onClick={handleDialogClose} data-testid='cancel-project-source-button'>

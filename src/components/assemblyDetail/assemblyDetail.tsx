@@ -359,6 +359,10 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
   return assembly ? (
     <>
       <Typography variant='h4'>{assembly.name}</Typography>
+      <Typography variant='h6' sx={{ fontSize: '1rem', marginBottom: '10px' }}>
+        category: <b>{assembly.category}</b>&nbsp;&nbsp; description: <b>{assembly.description}</b>&nbsp;&nbsp; life
+        time: <b>{assembly.lifeTime}</b>&nbsp;&nbsp; conversion factor: <b>{assembly.conversionFactor}</b>&nbsp;&nbsp;
+      </Typography>
       <DataGridPro
         autoHeight={true}
         columns={columns}
@@ -400,7 +404,6 @@ const ElementToolbar = ({ handleAddRow, isMemberOfProject }: ElementToolbarProps
           fontWeight,
         }}
       />
-      <GridToolbarFilterButton sx={{ color, fontWeight }} />
       <Tooltip title='Add new assembly layer'>
         <IconButton
           aria-label='addSource'
