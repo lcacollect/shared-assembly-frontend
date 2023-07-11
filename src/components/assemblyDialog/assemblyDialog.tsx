@@ -12,12 +12,7 @@ import {
   Typography,
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import {
-  useAddAssemblyMutation,
-  useUpdateAssemblyMutation,
-  AssemblyUnit,
-  GraphQlAssembly,
-} from '../../dataAccess'
+import { useAddAssemblyMutation, useUpdateAssemblyMutation, AssemblyUnit, GraphQlAssembly } from '../../dataAccess'
 import { AssemblyForm } from './assemblyForm'
 
 interface AssemblyDialogProps {
