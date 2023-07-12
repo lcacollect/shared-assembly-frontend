@@ -16,7 +16,7 @@ describe('EPD Page', () => {
     )
 
     expect(await screen.findByTestId('epd-page')).toBeInTheDocument()
-    expect(await screen.findByTestId('epd-search-panel')).toBeInTheDocument()
+    expect(await screen.findByTestId('search-panel')).toBeInTheDocument()
     expect(await screen.findByTestId('epd-list')).toBeInTheDocument()
     expect(await screen.findByTestId('epd-default-detail')).toBeInTheDocument()
   })

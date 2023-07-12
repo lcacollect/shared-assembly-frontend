@@ -42,6 +42,14 @@
             "deprecationReason": null
           },
           {
+            "name": "description",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "epdId",
             "description": null,
             "type": {
@@ -65,6 +73,14 @@
             "name": "name",
             "description": null,
             "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "referenceServiceLife",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "Int", "ofType": null },
             "defaultValue": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -89,6 +105,14 @@
             "deprecationReason": null
           },
           {
+            "name": "description",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "epdId",
             "description": null,
             "type": { "kind": "SCALAR", "name": "String", "ofType": null },
@@ -115,10 +139,34 @@
             "defaultValue": null,
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "referenceServiceLife",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "Int", "ofType": null },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "interfaces": null,
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "AssemblyUnit",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          { "name": "kg", "description": null, "isDeprecated": false, "deprecationReason": null },
+          { "name": "m", "description": null, "isDeprecated": false, "deprecationReason": null },
+          { "name": "m2", "description": null, "isDeprecated": false, "deprecationReason": null },
+          { "name": "m3", "description": null, "isDeprecated": false, "deprecationReason": null },
+          { "name": "pcs", "description": null, "isDeprecated": false, "deprecationReason": null }
+        ],
         "possibleTypes": null
       },
       {
@@ -479,11 +527,7 @@
             "name": "category",
             "description": null,
             "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
-            },
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -503,11 +547,7 @@
             "name": "description",
             "description": null,
             "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
-            },
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -557,16 +597,12 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
+              "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "LIST",
+                "kind": "NON_NULL",
                 "name": null,
-                "ofType": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": { "kind": "OBJECT", "name": "GraphQLAssemblyLayer", "ofType": null }
-                }
+                "ofType": { "kind": "OBJECT", "name": "GraphQLAssemblyLayer", "ofType": null }
               }
             },
             "isDeprecated": false,
@@ -588,11 +624,7 @@
             "name": "metaFields",
             "description": null,
             "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": { "kind": "SCALAR", "name": "JSON", "ofType": null }
-            },
+            "type": { "kind": "SCALAR", "name": "JSON", "ofType": null },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -609,7 +641,7 @@
             "deprecationReason": null
           },
           {
-            "name": "unit",
+            "name": "projectId",
             "description": null,
             "args": [],
             "type": {
@@ -617,6 +649,14 @@
               "name": null,
               "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
             },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "unit",
+            "description": null,
+            "args": [],
+            "type": { "kind": "ENUM", "name": "AssemblyUnit", "ofType": null },
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -636,6 +676,14 @@
             "description": null,
             "args": [],
             "type": { "kind": "SCALAR", "name": "Float", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "description",
+            "description": null,
+            "args": [],
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -676,6 +724,14 @@
             "description": null,
             "args": [],
             "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "referenceServiceLife",
+            "description": null,
+            "args": [],
+            "type": { "kind": "SCALAR", "name": "Int", "ofType": null },
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -1988,6 +2044,14 @@
             "deprecationReason": null
           },
           {
+            "name": "projectId",
+            "description": null,
+            "args": [],
+            "type": { "kind": "NON_NULL", "name": null, "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null } },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "publishedDate",
             "description": null,
             "args": [],
@@ -2661,11 +2725,7 @@
             "name": "id",
             "description": null,
             "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
-            },
+            "type": { "kind": "NON_NULL", "name": null, "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null } },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -2725,6 +2785,22 @@
         "description": null,
         "fields": [
           {
+            "name": "assembly",
+            "description": null,
+            "args": [],
+            "type": { "kind": "OBJECT", "name": "GraphQLAssembly", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "assemblyId",
+            "description": null,
+            "args": [],
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "commits",
             "description": null,
             "args": [],
@@ -2756,11 +2832,7 @@
             "name": "id",
             "description": null,
             "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
-            },
+            "type": { "kind": "NON_NULL", "name": null, "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null } },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -3439,6 +3511,18 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "unit",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "ENUM", "name": "AssemblyUnit", "ofType": null }
                 },
                 "defaultValue": null,
                 "isDeprecated": false,
@@ -4146,6 +4230,14 @@
             "description": "Add a Schema Element to a Schema Category",
             "args": [
               {
+                "name": "assemblyId",
+                "description": null,
+                "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+                "defaultValue": "null",
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "description",
                 "description": null,
                 "type": {
@@ -4255,12 +4347,20 @@
                 "deprecationReason": null
               },
               {
-                "name": "schemaCategoryId",
+                "name": "schemaCategoryIds",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
-                  "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+                  "ofType": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+                    }
+                  }
                 },
                 "defaultValue": null,
                 "isDeprecated": false,
@@ -4989,6 +5089,14 @@
                 "defaultValue": "null",
                 "isDeprecated": false,
                 "deprecationReason": null
+              },
+              {
+                "name": "unit",
+                "description": null,
+                "type": { "kind": "ENUM", "name": "AssemblyUnit", "ofType": null },
+                "defaultValue": "null",
+                "isDeprecated": false,
+                "deprecationReason": null
               }
             ],
             "type": {
@@ -5402,6 +5510,14 @@
             "name": "updateSchemaElement",
             "description": "Update a Schema Element",
             "args": [
+              {
+                "name": "assemblyId",
+                "description": null,
+                "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+                "defaultValue": "null",
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
               {
                 "name": "description",
                 "description": null,
@@ -6596,6 +6712,14 @@
                 "deprecationReason": null
               },
               {
+                "name": "elementId",
+                "description": null,
+                "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+                "defaultValue": "null",
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "filters",
                 "description": null,
                 "type": { "kind": "INPUT_OBJECT", "name": "SchemaElementFilters", "ofType": null },
@@ -7619,7 +7743,7 @@
       {
         "kind": "OBJECT",
         "name": "__Type",
-        "description": "The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.\n\nDepending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByURL`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.",
+        "description": "The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.\n\nDepending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByUrl`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.",
         "fields": [
           {
             "name": "kind",
@@ -7650,7 +7774,7 @@
             "deprecationReason": null
           },
           {
-            "name": "specifiedByURL",
+            "name": "specifiedByUrl",
             "description": null,
             "args": [],
             "type": { "kind": "SCALAR", "name": "String", "ofType": null },

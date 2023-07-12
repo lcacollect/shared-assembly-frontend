@@ -1,6 +1,6 @@
 import { InnerPaper } from '@lcacollect/components'
 import { Button, Typography } from '@mui/material'
-import React, { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import { GraphQlProjectEpd } from '../../dataAccess'
 
 interface EpdListItemProps {
