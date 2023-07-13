@@ -12,7 +12,6 @@ query getAssemblies($projectId: String!) {
       id
       name
       epdId
-      epdName
       description
       conversionFactor
       referenceServiceLife
@@ -164,7 +163,6 @@ mutation addAssemblyLayers($id: String!, $layers: [AssemblyLayerInput!]!) {
   addAssemblyLayers(id: $id, layers: $layers) {
     id
     name
-    epdId
   }
 }
 
@@ -172,7 +170,6 @@ mutation updateAssemblyLayers($id: String!, $layers: [AssemblyLayerUpdateInput!]
   updateAssemblyLayers(id: $id, layers: $layers) {
     id
     name
-    epdId
   }
 }
 
