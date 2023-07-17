@@ -42,7 +42,7 @@ export const AssemblyPage = () => {
   const assemblies = data?.assemblies
 
   useEffect(() => {
-    if (assemblies && assemblies.length) setSelectedAssembly(assemblies[0])
+    if (assemblies && assemblies.length) setSelectedAssembly(assemblies[0] as GraphQlAssembly)
   }, [assemblies])
 
   const handleAddAssembly = () => {

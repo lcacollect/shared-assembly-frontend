@@ -128,8 +128,8 @@ export type GraphQlAssemblyLayer = {
   __typename?: 'GraphQLAssemblyLayer'
   conversionFactor?: Maybe<Scalars['Float']>
   description?: Maybe<Scalars['String']>
+  epd: GraphQlProjectEpd
   epdId: Scalars['String']
-  epdName: Scalars['String']
   id?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
   referenceServiceLife?: Maybe<Scalars['Int']>
@@ -1126,6 +1126,7 @@ export enum Unit {
 export enum ExportFormat {
   Csv = 'CSV',
   Lcabyg = 'LCABYG',
+  Lcax = 'LCAX',
 }
 
 export type TaskItem = {
@@ -1407,8 +1408,8 @@ export type GraphQlAssemblyLayerResolvers<
 > = {
   conversionFactor?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  epd?: Resolver<ResolversTypes['GraphQLProjectEPD'], ParentType, ContextType>
   epdId?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  epdName?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   referenceServiceLife?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
@@ -2309,7 +2310,6 @@ export type GetAssembliesQuery = {
       id?: string | null
       name?: string | null
       epdId: string
-      epdName: string
       description?: string | null
       conversionFactor?: number | null
       referenceServiceLife?: number | null
@@ -2431,12 +2431,7 @@ export type AddAssemblyLayersMutationVariables = Exact<{
 
 export type AddAssemblyLayersMutation = {
   __typename?: 'Mutation'
-  addAssemblyLayers: Array<{
-    __typename?: 'GraphQLAssemblyLayer'
-    id?: string | null
-    name?: string | null
-    epdId: string
-  }>
+  addAssemblyLayers: Array<{ __typename?: 'GraphQLAssemblyLayer'; id?: string | null; name?: string | null }>
 }
 
 export type UpdateAssemblyLayersMutationVariables = Exact<{
@@ -2446,12 +2441,7 @@ export type UpdateAssemblyLayersMutationVariables = Exact<{
 
 export type UpdateAssemblyLayersMutation = {
   __typename?: 'Mutation'
-  updateAssemblyLayers: Array<{
-    __typename?: 'GraphQLAssemblyLayer'
-    id?: string | null
-    name?: string | null
-    epdId: string
-  }>
+  updateAssemblyLayers: Array<{ __typename?: 'GraphQLAssemblyLayer'; id?: string | null; name?: string | null }>
 }
 
 export type DeleteAssemblyLayersMutationVariables = Exact<{
@@ -2476,7 +2466,6 @@ export const GetAssembliesDocument = gql`
         id
         name
         epdId
-        epdName
         description
         conversionFactor
         referenceServiceLife
@@ -2870,7 +2859,6 @@ export const AddAssemblyLayersDocument = gql`
     addAssemblyLayers(id: $id, layers: $layers) {
       id
       name
-      epdId
     }
   }
 `
@@ -2917,7 +2905,6 @@ export const UpdateAssemblyLayersDocument = gql`
     updateAssemblyLayers(id: $id, layers: $layers) {
       id
       name
-      epdId
     }
   }
 `
