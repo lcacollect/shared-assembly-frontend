@@ -10,7 +10,6 @@ import {
   GridRowParams,
   GridToolbarColumnsButton,
   GridToolbarContainer,
-  GridToolbarFilterButton,
   MuiEvent,
   GridEditSingleSelectCell,
   GridEditSingleSelectCellProps,
@@ -29,7 +28,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import SaveIcon from '@mui/icons-material/Save'
 import CancelIcon from '@mui/icons-material/Cancel'
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined'
-import { AlertProps, IconButton, LinearProgress, Tooltip, Typography } from '@mui/material'
+import { AlertProps, IconButton, LinearProgress, Tooltip, Typography, Autocomplete, TextField } from '@mui/material'
 import { EditTextArea } from './multilineTextEdit'
 import { NoRowsOverlay } from '@lcacollect/components'
 import { getDifference } from '@lcacollect/core'
@@ -193,6 +192,7 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
 
   const updateRow = async (newRow: AssemblyLayer, oldRow: GridRowModel) => {
     const changeObject = getDifference(oldRow, newRow)
+    delete changeObject.conversion
 
     const { errors, data } = await updateAssemblyLayer({
       variables: {
@@ -236,8 +236,14 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
   const CustomTypeEditComponent = (props: GridEditSingleSelectCellProps) => {
     const apiRef = useGridApiContext()
 
-    const handleValueChange = async (event: any) => {
-      const epd = projectEpds.find((epd) => epd.id === event.target.value)
+    const handleValueChange = async (event: any, value: { value: string; label: string } | null) => {
+      const epd = projectEpds.find((epd) => epd.id === value?.value)
+
+      await apiRef.current.setEditCellValue({
+        id: props.id,
+        field: 'epdId',
+        value: epd?.id,
+      })
       await apiRef.current.setEditCellValue({
         id: props.id,
         field: 'conversion',
@@ -250,7 +256,15 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
       })
     }
 
-    return <GridEditSingleSelectCell onValueChange={handleValueChange} {...props} />
+    return (
+      <Autocomplete
+        id='EPD box'
+        options={projectEpds.map((epd) => ({ value: epd.id, label: epd.name }))}
+        fullWidth
+        onChange={handleValueChange}
+        renderInput={(params) => <TextField {...params} label='EPD' />}
+      />
+    )
   }
 
   const columns: GridColumns = [
@@ -278,8 +292,6 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
       headerName: 'Environmental Data',
       editable: true,
       flex: 2,
-      type: 'singleSelect',
-      valueOptions: projectEpds.map((epd) => ({ value: epd.id, label: epd.name })),
       renderEditCell: (params) => <CustomTypeEditComponent {...params} />,
       valueFormatter: (params) => {
         return projectEpds.find((epd) => epd.id == params.value)?.name
