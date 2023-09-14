@@ -11,7 +11,6 @@ import {
   GridToolbarColumnsButton,
   GridToolbarContainer,
   MuiEvent,
-  GridEditSingleSelectCell,
   GridEditSingleSelectCellProps,
   useGridApiContext,
 } from '@mui/x-data-grid-pro'
@@ -28,7 +27,17 @@ import EditIcon from '@mui/icons-material/Edit'
 import SaveIcon from '@mui/icons-material/Save'
 import CancelIcon from '@mui/icons-material/Cancel'
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined'
-import { AlertProps, IconButton, LinearProgress, Tooltip, Typography, Autocomplete, TextField } from '@mui/material'
+import {
+  Alert,
+  AlertProps,
+  IconButton,
+  LinearProgress,
+  Tooltip,
+  Typography,
+  Autocomplete,
+  TextField,
+  Snackbar,
+} from '@mui/material'
 import { EditTextArea } from './multilineTextEdit'
 import { NoRowsOverlay } from '@lcacollect/components'
 import { getDifference } from '@lcacollect/core'
@@ -60,11 +69,7 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
   const [updateAssemblyLayer] = useUpdateAssemblyLayersMutation()
   const [deleteAssemblyLayer] = useDeleteAssemblyLayersMutation()
 
-  const {
-    data: epdsData,
-    loading,
-    error,
-  } = useGetProjectEpdsQuery({
+  const { data: epdsData, loading } = useGetProjectEpdsQuery({
     variables: { projectId: projectId as string },
     skip: !projectId,
   })
@@ -194,7 +199,7 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
     const changeObject = getDifference(oldRow, newRow)
     delete changeObject.conversion
 
-    const { errors, data } = await updateAssemblyLayer({
+    const { errors } = await updateAssemblyLayer({
       variables: {
         id: assembly?.id as string,
         layers: [
@@ -236,7 +241,10 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
   const CustomTypeEditComponent = (props: GridEditSingleSelectCellProps) => {
     const apiRef = useGridApiContext()
 
-    const handleValueChange = async (event: any, value: { value: string; label: string } | null) => {
+    const handleValueChange = async (
+      event: MuiEvent<SyntheticEvent>,
+      value: { value: string; label: string } | null,
+    ) => {
       const epd = projectEpds.find((epd) => epd.id === value?.value)
 
       await apiRef.current.setEditCellValue({
@@ -395,6 +403,14 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
         onProcessRowUpdateError={handleProcessRowUpdateError}
         getRowHeight={(params) => (rowModesModel[params.id]?.mode === GridRowModes.Edit ? 'auto' : null)}
       />
+      <Snackbar
+        open={!!snackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        onClose={() => setSnackbar(null)}
+        autoHideDuration={6000}
+      >
+        <Alert {...snackbar} onClose={() => setSnackbar(null)} />
+      </Snackbar>
     </>
   ) : null
 }
