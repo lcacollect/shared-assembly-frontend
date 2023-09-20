@@ -46,8 +46,6 @@ describe('Assemblies list', () => {
 
     expect(await screen.findByTestId('assembly-list')).toBeInTheDocument()
     expect(await screen.findAllByTestId('assembly-list-item')).toBeDefined()
-
-    fireEvent.click(await screen.findByText('Filters'))
     expect(await screen.findByTestId('search-input')).toBeInTheDocument()
 
     const input = await (await screen.findByTestId('search-input')).querySelector('input')

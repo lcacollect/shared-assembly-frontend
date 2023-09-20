@@ -1,6 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
-import { useGetAssembliesQuery, GraphQlAssembly, useGetAccountQuery, useGetProjectMembersQuery } from '../../dataAccess'
+import {
+  useGetAssembliesQuery,
+  GraphQlAssembly,
+  useGetAccountQuery,
+  useGetProjectMembersQuery,
+  useGetprojectStagesQuery,
+} from '../../dataAccess'
 import { CardTitle, DataFetchWrapper, PaperPage } from '@lcacollect/components'
 import { Grid } from '@mui/material'
 import { AssemblyList, AssemblyDialog, AssemblyDetail } from '../../components'
@@ -29,6 +35,19 @@ export const AssemblyPage = () => {
     },
     skip: !projectId,
   })
+
+  const { data: projectStageData } = useGetprojectStagesQuery({
+    variables: { projectId: projectId as string },
+    skip: !projectId,
+  })
+
+  const isTransportStage = useMemo(
+    () =>
+      projectStageData?.projectStages.find((stage) => {
+        return stage.phase.toLowerCase() == 'a4'
+      }),
+    [projectStageData],
+  )
 
   useEffect(() => {
     if (accountData && projectMemberData) {
@@ -87,6 +106,7 @@ export const AssemblyPage = () => {
               assembly={selectedAssembly}
               projectId={projectId as string}
               isMemberOfProject={isMemberOfProject}
+              isTransportStage={!!isTransportStage}
             />
           </Grid>
         </Grid>
