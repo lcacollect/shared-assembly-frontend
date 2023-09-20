@@ -349,7 +349,7 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
     {
       field: 'referenceServiceLife',
       headerName: 'RSL',
-      flex: 0.7,
+      flex: 0.5,
       editable: true,
       type: 'number',
     },
@@ -375,7 +375,7 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
       headerName: 'Transport Length',
       flex: 0.7,
       editable: true,
-      type: 'string',
+      type: 'number',
       valueFormatter: (params) => {
         return (params.value || '0') + ' km'
       },
