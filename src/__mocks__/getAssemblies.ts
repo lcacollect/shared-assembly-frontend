@@ -4,7 +4,7 @@ export default {
       {
         category: 'test',
         conversionFactor: 1,
-        description: 'test',
+        description: 'testing',
         gwp: 0,
         id: 'e82ad687-cba4-4671-902c-26c32b1b215c',
         layers: [],
@@ -18,7 +18,7 @@ export default {
       {
         category: 'test2',
         conversionFactor: 1,
-        description: 'test2',
+        description: 'testing2',
         gwp: 0,
         id: 'e82ad687-cba4-4671-902c-26c32b1b215q',
         layers: [

@@ -23,7 +23,7 @@ describe('Assemblies Edit, Create Dialog', () => {
 
     expect((await screen.findByTestId('assembly-name')).querySelector('input')).toHaveValue('test')
     expect((await screen.findByTestId('assembly-category')).querySelector('input')).toHaveValue('test')
-    expect((await screen.findByTestId('assembly-description')).querySelector('input')).toHaveValue('test')
+    expect((await screen.findByTestId('assembly-description')).querySelector('input')).toHaveValue('testing')
     expect((await screen.findByTestId('assembly-lifeTime')).querySelector('input')).toHaveValue(50)
     expect((await screen.findByTestId('form-control-select')).querySelector('input')).toHaveValue('m2')
     expect((await screen.findByTestId('assembly-conversionFactor')).querySelector('input')).toHaveValue(1)

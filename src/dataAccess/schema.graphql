@@ -15,6 +15,9 @@ query getAssemblies($projectId: String!) {
       description
       conversionFactor
       referenceServiceLife
+      transportType
+      transportDistance
+      transportUnit
     }
     description
     metaFields
@@ -72,6 +75,16 @@ query getAccount {
     id
     name
     email
+  }
+}
+
+query getprojectStages($projectId: String!) {
+  projectStages(projectId: $projectId) {
+    stageId
+    projectId
+    name
+    category
+    phase
   }
 }
 
@@ -137,6 +150,13 @@ mutation deleteAssembly($id: String!) {
   deleteAssembly(id: $id)
 }
 
+enum TransportType {
+  truck
+  train
+  ship
+  plane
+}
+
 input AssemblyLayerInput {
   epdId: String!
   id: String
@@ -144,15 +164,21 @@ input AssemblyLayerInput {
   conversionFactor: Float
   referenceServiceLife: Int
   description: String
+  transportType: TransportType
+  transportDistance: Float
+  transportUnit: String
 }
 
 input AssemblyLayerUpdateInput {
   id: String!
-  epdId: String
+  epdId: String!
   name: String
   conversionFactor: Float
   referenceServiceLife: Int
   description: String
+  transportType: TransportType
+  transportDistance: Float
+  transportUnit: String
 }
 
 input AssemblyLayerDeleteInput {

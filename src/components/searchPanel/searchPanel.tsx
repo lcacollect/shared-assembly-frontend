@@ -1,6 +1,5 @@
-import React, { Dispatch, SetStateAction, useState } from 'react'
-import { Button, Container, Input } from '@mui/material'
-import FilterListIcon from '@mui/icons-material/FilterList'
+import React, { Dispatch, SetStateAction } from 'react'
+import { Container, Input } from '@mui/material'
 
 interface SearchPanelProps {
   searchKey: string
@@ -10,31 +9,18 @@ interface SearchPanelProps {
 export const SearchPanel = (props: SearchPanelProps) => {
   const { searchKey, setSearchKey } = props
 
-  const [clicked, setClicked] = useState(false)
-
   return (
     <Container data-testid='search-panel'>
-      <Button
-        sx={{
-          color: 'black',
+      <Input
+        data-testid='search-input'
+        sx={{ marginBottom: 1 }}
+        fullWidth
+        placeholder='Type search key'
+        value={searchKey}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          setSearchKey(event.target.value)
         }}
-        onClick={() => setClicked(!clicked)}
-        startIcon={<FilterListIcon />}
-      >
-        Filters
-      </Button>
-      {clicked ? (
-        <Input
-          data-testid='search-input'
-          sx={{ marginBottom: 1 }}
-          fullWidth
-          placeholder='Type search key'
-          value={searchKey}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setSearchKey(event.target.value)
-          }}
-        />
-      ) : null}
+      />
     </Container>
   )
 }

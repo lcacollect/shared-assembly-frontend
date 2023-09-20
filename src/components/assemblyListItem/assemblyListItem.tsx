@@ -52,7 +52,7 @@ export const AssemblyListItem = (props: AssemblyListItemProps) => {
           marginBottom: '4px',
           backgroundColor: isActive ? 'rgba(151, 166, 180, 0.04)' : '#FFFFFF',
           color: 'rgba(0, 0, 0, 0.87)',
-          '-WebkitTransition': 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+          WebkitTransition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
           transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
           textAlign: 'center',
           wordWrap: 'break-word',
@@ -72,7 +72,8 @@ export const AssemblyListItem = (props: AssemblyListItemProps) => {
         >
           <EditOutlined sx={{ fontSize: '1.2rem' }} />
         </IconButton>
-        <Typography>{assembly.name}</Typography>
+        <Typography variant='h3'>{assembly.name}</Typography>
+        <Typography>{assembly.description}</Typography>
         <IconButton
           aria-label='delete'
           onClick={handleOpenDialog}

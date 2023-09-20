@@ -21,6 +21,7 @@ import {
   useAddAssemblyLayersMutation,
   useUpdateAssemblyLayersMutation,
   useDeleteAssemblyLayersMutation,
+  TransportType,
 } from '../../dataAccess'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
@@ -46,6 +47,7 @@ interface AssemblyDetailProps {
   projectId: string | null
   assembly: GraphQlAssembly | null
   isMemberOfProject: boolean | undefined
+  isTransportStage: boolean | undefined
 }
 
 interface AssemblyLayer {
@@ -56,10 +58,20 @@ interface AssemblyLayer {
   epdId: string
   referenceServiceLife: number | null
   description: string
+  transportType: TransportType | null
+  transportUnit: string | null
+  transportDistance: number | null
+}
+
+export type TransportTypeOptions = {
+  [TransportType.Plane]: string
+  [TransportType.Ship]: string
+  [TransportType.Train]: string
+  [TransportType.Truck]: string
 }
 
 export const AssemblyDetail = (props: AssemblyDetailProps) => {
-  const { assembly, projectId, isMemberOfProject } = props
+  const { assembly, projectId, isMemberOfProject, isTransportStage } = props
 
   const [rows, setRows] = useState<GridRowModel<AssemblyLayer[]>>([])
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
@@ -74,6 +86,13 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
     skip: !projectId,
   })
   const projectEpds = epdsData?.projectEpds || []
+
+  const transportTypeOptions: TransportTypeOptions = {
+    [TransportType.Plane]: 'plane',
+    [TransportType.Ship]: 'ship',
+    [TransportType.Train]: 'train',
+    [TransportType.Truck]: 'truck',
+  }
 
   useEffect(() => {
     if (assembly && assembly.layers) setRows(assembly.layers as unknown as AssemblyLayer[])
@@ -95,6 +114,9 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
         epdId: '',
         referenceServiceLife: null,
         description: '',
+        transportType: null,
+        transportUnit: 'km',
+        transportDistance: null,
       } as AssemblyLayer,
     ])
     setRowModesModel((oldModel) => ({
@@ -160,6 +182,12 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
   }
 
   const saveRow = async (newRow: AssemblyLayer) => {
+    if (!newRow.epdId) {
+      setSnackbar({ children: 'You must select EPD', severity: 'error' })
+      setRows(rows?.filter((row: GridRowModel) => row.id !== ''))
+      return newRow
+    }
+
     const { errors, data } = await addAssemblyLayer({
       variables: {
         id: assembly?.id as string,
@@ -171,6 +199,9 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
             epdId: newRow.epdId,
             referenceServiceLife: newRow.referenceServiceLife,
             description: newRow.description,
+            transportType: newRow.transportType,
+            transportUnit: newRow.transportUnit,
+            transportDistance: newRow.transportDistance,
           },
         ],
       },
@@ -196,6 +227,11 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
   }
 
   const updateRow = async (newRow: AssemblyLayer, oldRow: GridRowModel) => {
+    if (!newRow.epdId) {
+      setSnackbar({ children: 'You must select EPD', severity: 'error' })
+      return oldRow
+    }
+
     const changeObject = getDifference(oldRow, newRow)
     delete changeObject.conversion
 
@@ -206,6 +242,7 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
           {
             ...changeObject,
             id: oldRow.id,
+            epdId: newRow.epdId,
           },
         ],
       },
@@ -266,6 +303,8 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
 
     return (
       <Autocomplete
+        value={props.value || ''}
+        inputValue={props.valueLabel || ''}
         id='EPD box'
         options={projectEpds.map((epd) => ({ value: epd.id, label: epd.name }))}
         fullWidth
@@ -279,6 +318,13 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
     { field: 'id', headerName: 'ID', flex: 0.5, editable: false, hide: true },
     { field: 'name', headerName: 'Part', flex: 1, editable: true },
     {
+      field: 'conversionFactor',
+      headerName: 'Quantity',
+      flex: 0.5,
+      type: 'number',
+      editable: true,
+    },
+    {
       field: 'conversion',
       headerName: 'Conversion',
       flex: 1,
@@ -289,18 +335,13 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
       },
     },
     {
-      field: 'conversionFactor',
-      headerName: 'Factor',
-      flex: 0.5,
-      type: 'number',
-      editable: true,
-    },
-    {
       field: 'epdId',
       headerName: 'Environmental Data',
       editable: true,
       flex: 2,
-      renderEditCell: (params) => <CustomTypeEditComponent {...params} />,
+      renderEditCell: (params) => (
+        <CustomTypeEditComponent {...params} valueLabel={projectEpds.find((epd) => epd.id == params.value)?.name} />
+      ),
       valueFormatter: (params) => {
         return projectEpds.find((epd) => epd.id == params.value)?.name
       },
@@ -308,7 +349,7 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
     {
       field: 'referenceServiceLife',
       headerName: 'RSL',
-      flex: 0.7,
+      flex: 0.5,
       editable: true,
       type: 'number',
     },
@@ -319,6 +360,34 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
       editable: true,
       type: 'string',
       renderEditCell: (params) => <EditTextArea {...params} />,
+    },
+    {
+      field: 'transportType',
+      headerName: 'Transport Type',
+      flex: 1.0,
+      editable: true,
+      type: 'singleSelect',
+      valueOptions: Object.entries(transportTypeOptions).map(([key, value]) => ({ value: key, label: value })),
+      hide: !isTransportStage,
+    },
+    {
+      field: 'transportDistance',
+      headerName: 'Transport Length',
+      flex: 0.7,
+      editable: true,
+      type: 'number',
+      valueFormatter: (params) => {
+        return (params.value || '0') + ' km'
+      },
+      hide: !isTransportStage,
+    },
+    {
+      field: 'transportUnit',
+      headerName: 'Transport Unit',
+      flex: 0.5,
+      editable: false,
+      type: 'string',
+      hide: true,
     },
     {
       field: 'actions',
@@ -380,9 +449,9 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
     <>
       <Typography variant='h4'>{assembly.name}</Typography>
       <Typography variant='h6' sx={{ fontSize: '1rem', marginBottom: '10px' }}>
-        category: <b>{assembly.category}</b>&nbsp;&nbsp; description: <b>{assembly.description}</b>&nbsp;&nbsp; life
-        time: <b>{assembly.lifeTime}</b>&nbsp;&nbsp; conversion factor: <b>{assembly.conversionFactor}</b>&nbsp;&nbsp;
+        Category: <b>{assembly.category}</b>&nbsp;&nbsp; Unit: <b>{assembly.unit}</b>&nbsp;&nbsp;
       </Typography>
+      <Typography>{assembly.description}</Typography>
       <DataGridPro
         autoHeight={true}
         columns={columns}
@@ -405,7 +474,7 @@ export const AssemblyDetail = (props: AssemblyDetailProps) => {
       />
       <Snackbar
         open={!!snackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setSnackbar(null)}
         autoHideDuration={6000}
       >
@@ -433,15 +502,17 @@ const ElementToolbar = ({ handleAddRow, isMemberOfProject }: ElementToolbarProps
         }}
       />
       <Tooltip title='Add new assembly layer'>
-        <IconButton
-          aria-label='addSource'
-          onClick={handleAddRow}
-          sx={{ color }}
-          disabled={!isMemberOfProject}
-          data-testid='layer-add'
-        >
-          <AddCircleOutlineOutlinedIcon />
-        </IconButton>
+        <span>
+          <IconButton
+            aria-label='addSource'
+            onClick={handleAddRow}
+            sx={{ color }}
+            disabled={!isMemberOfProject}
+            data-testid='layer-add'
+          >
+            <AddCircleOutlineOutlinedIcon />
+          </IconButton>
+        </span>
       </Tooltip>
     </GridToolbarContainer>
   )
