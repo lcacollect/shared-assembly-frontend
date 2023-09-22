@@ -12,7 +12,12 @@ import {
   Typography,
 } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { useAddAssemblyMutation, useUpdateAssemblyMutation, AssemblyUnit, GraphQlAssembly } from '../../dataAccess'
+import {
+  useAddProjectAssembliesMutation,
+  useUpdateProjectAssembliesMutation,
+  GraphQlAssemblyUnit,
+  GraphQlProjectAssembly,
+} from '../../dataAccess'
 import { AssemblyForm } from './assemblyForm'
 
 interface AssemblyDialogProps {
@@ -20,7 +25,7 @@ interface AssemblyDialogProps {
   handleDialogClose: () => void
   projectId: string
   refetchAssemblies: () => void
-  assembly: GraphQlAssembly | null
+  assembly: GraphQlProjectAssembly | null
   isMemberOfProject: boolean | undefined
 }
 
@@ -31,14 +36,13 @@ export const AssemblyDialog: React.FC<AssemblyDialogProps> = (props) => {
   const [category, setCategory] = useState<string | null | undefined>('')
   const [description, setDescription] = useState<string | null | undefined>('')
   const [lifeTime, setLifeTime] = useState<number>(50)
-  const [unit, setUnit] = useState<AssemblyUnit | null | undefined>(AssemblyUnit.M2)
-  const [metaFields, setMetaFields] = useState<string>('')
+  const [unit, setUnit] = useState<GraphQlAssemblyUnit | null | undefined>(GraphQlAssemblyUnit.M2)
   const [conversionFactor, setConversionFactor] = useState<number>(1)
   const [formError, setFormError] = useState<boolean>(false)
   const [snackbar, setSnackbar] = useState<Pick<AlertProps, 'children' | 'severity'> | null>(null)
 
-  const [addAssemblyMutation] = useAddAssemblyMutation()
-  const [updateAssemblyMutation] = useUpdateAssemblyMutation()
+  const [addAssembliesMutation] = useAddProjectAssembliesMutation()
+  const [updateAssembliesMutation] = useUpdateProjectAssembliesMutation()
 
   useEffect(() => {
     if (assembly) {
@@ -48,11 +52,6 @@ export const AssemblyDialog: React.FC<AssemblyDialogProps> = (props) => {
       setConversionFactor(assembly.conversionFactor)
       setLifeTime(assembly.lifeTime)
       setUnit(assembly.unit)
-      // const metaFields = ''
-      // if (assembly.metaFields){
-      //   metaFields = JSON.stringify(assembly.metaFields)
-      // }
-      // setMetaFields(metaFields)
     } else {
       cleanFormFields()
     }
@@ -64,8 +63,7 @@ export const AssemblyDialog: React.FC<AssemblyDialogProps> = (props) => {
     setDescription('')
     setConversionFactor(1)
     setLifeTime(50)
-    setMetaFields('')
-    setUnit(AssemblyUnit.M2)
+    setUnit(GraphQlAssemblyUnit.M2)
   }
 
   const handleDialogAdd = async () => {
@@ -73,43 +71,46 @@ export const AssemblyDialog: React.FC<AssemblyDialogProps> = (props) => {
       return
     }
 
-    let metaFieldsJSON = ''
-    if (metaFields) {
-      metaFieldsJSON = JSON.parse(metaFields)
-    }
-
     let response
     if (assembly) {
-      response = await updateAssemblyMutation({
+      response = await updateAssembliesMutation({
         variables: {
-          id: assembly.id,
-          name: name,
-          category: category as string,
-          description: description,
-          lifeTime: lifeTime,
-          unit: unit as AssemblyUnit,
-          metaFields: metaFieldsJSON,
-          conversionFactor: conversionFactor,
+          assemblies: [
+            {
+              id: assembly.id,
+              name: name,
+              category: category as string,
+              description: description,
+              lifeTime: lifeTime,
+              unit: unit as GraphQlAssemblyUnit,
+              conversionFactor: conversionFactor,
+            },
+          ],
         },
       })
     } else {
-      response = await addAssemblyMutation({
+      response = await addAssembliesMutation({
         variables: {
-          projectId: projectId as string,
-          name: name,
-          category: category as string,
-          description: description,
-          lifeTime: lifeTime,
-          unit: unit as AssemblyUnit,
-          metaFields: metaFieldsJSON,
-          conversionFactor: conversionFactor,
+          assemblies: [
+            {
+              projectId: projectId as string,
+              name: name,
+              category: category as string,
+              description: description,
+              lifeTime: lifeTime,
+              unit: unit as GraphQlAssemblyUnit,
+              conversionFactor: conversionFactor,
+            },
+          ],
         },
       })
     }
 
     if (response?.errors) {
-      response.errors.forEach((error) => console.error(error))
-      setSnackbar({ children: response.errors[0].message, severity: 'error' })
+      response.errors.forEach((error: { message: string }) => {
+        console.error(error)
+        setSnackbar({ children: error.message, severity: 'error' })
+      })
     } else {
       handleClose()
       setSnackbar({ children: 'Assembly saved!', severity: 'success' })
@@ -145,14 +146,10 @@ export const AssemblyDialog: React.FC<AssemblyDialogProps> = (props) => {
             setDescription={setDescription}
             lifeTime={lifeTime}
             setLifeTime={setLifeTime}
-            metaFields={metaFields}
-            setMetaFields={setMetaFields}
             conversionFactor={conversionFactor}
             setConversionFactor={setConversionFactor}
-            unit={unit as AssemblyUnit}
+            unit={unit as GraphQlAssemblyUnit}
             setUnit={setUnit}
-            error={formError}
-            setError={setFormError}
           />
         </DialogContent>
         <DialogActions sx={{ paddingX: 3 }}>

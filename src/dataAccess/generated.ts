@@ -55,14 +55,6 @@ export type AssemblyLayerUpdateInput = {
   transportUnit?: InputMaybe<Scalars['String']>
 }
 
-export enum AssemblyUnit {
-  Kg = 'kg',
-  M = 'm',
-  M2 = 'm2',
-  M3 = 'm3',
-  Pcs = 'pcs',
-}
-
 export enum AssigneeType {
   ProjectGroup = 'PROJECT_GROUP',
   ProjectMember = 'PROJECT_MEMBER',
@@ -113,6 +105,29 @@ export type FilterOptions = {
   startsWith?: InputMaybe<Scalars['String']>
 }
 
+export type GraphQlAddEpdInput = {
+  ap?: InputMaybe<Scalars['JSON']>
+  comment?: InputMaybe<Scalars['String']>
+  conversions?: InputMaybe<Scalars['JSON']>
+  declaredUnit: GraphQlUnit
+  ep?: InputMaybe<Scalars['JSON']>
+  gwp?: InputMaybe<Scalars['JSON']>
+  id?: InputMaybe<Scalars['String']>
+  location: Scalars['String']
+  metaFields?: InputMaybe<Scalars['JSON']>
+  name: Scalars['String']
+  odp?: InputMaybe<Scalars['JSON']>
+  penre?: InputMaybe<Scalars['JSON']>
+  pere?: InputMaybe<Scalars['JSON']>
+  pocp?: InputMaybe<Scalars['JSON']>
+  publishedDate: Scalars['Date']
+  referenceServiceLife?: InputMaybe<Scalars['Int']>
+  source: Scalars['JSON']
+  subtype: Scalars['String']
+  validUntil: Scalars['Date']
+  version: Scalars['String']
+}
+
 export type GraphQlAddSiteInput = {
   defaultValues?: InputMaybe<Scalars['JSON']>
   description: Scalars['String']
@@ -122,25 +137,6 @@ export type GraphQlAddSiteInput = {
   name: Scalars['String']
   projectStages?: InputMaybe<Array<Scalars['String']>>
   url: Scalars['String']
-}
-
-export type GraphQlAssembly = {
-  __typename?: 'GraphQLAssembly'
-  category?: Maybe<Scalars['String']>
-  conversionFactor: Scalars['Float']
-  description?: Maybe<Scalars['String']>
-  gwp: Scalars['Float']
-  id: Scalars['String']
-  layers?: Maybe<Array<GraphQlAssemblyLayer>>
-  lifeTime: Scalars['Float']
-  metaFields?: Maybe<Scalars['JSON']>
-  name: Scalars['String']
-  projectId: Scalars['String']
-  unit?: Maybe<AssemblyUnit>
-}
-
-export type GraphQlAssemblyGwpArgs = {
-  phases?: InputMaybe<Array<Scalars['String']>>
 }
 
 export type GraphQlAssemblyLayer = {
@@ -155,6 +151,14 @@ export type GraphQlAssemblyLayer = {
   transportDistance?: Maybe<Scalars['Float']>
   transportType?: Maybe<TransportType>
   transportUnit?: Maybe<Scalars['String']>
+}
+
+export enum GraphQlAssemblyUnit {
+  Kg = 'kg',
+  M = 'm',
+  M2 = 'm2',
+  M3 = 'm3',
+  Pcs = 'pcs',
 }
 
 export type GraphQlAssignee = {
@@ -298,10 +302,29 @@ export type GraphQlProject = {
   stages?: Maybe<Array<GraphQlProjectStage>>
 }
 
+export type GraphQlProjectAssembly = {
+  __typename?: 'GraphQLProjectAssembly'
+  category: Scalars['String']
+  conversionFactor: Scalars['Float']
+  description?: Maybe<Scalars['String']>
+  gwp: Scalars['Float']
+  id: Scalars['String']
+  layers: Array<GraphQlAssemblyLayer>
+  lifeTime: Scalars['Float']
+  metaFields?: Maybe<Scalars['JSON']>
+  name: Scalars['String']
+  projectId: Scalars['String']
+  unit: GraphQlAssemblyUnit
+}
+
+export type GraphQlProjectAssemblyGwpArgs = {
+  phases?: InputMaybe<Array<Scalars['String']>>
+}
+
 export type GraphQlProjectEpd = {
   __typename?: 'GraphQLProjectEPD'
   ap?: Maybe<GraphQlImpactCategories>
-  assemblies?: Maybe<Array<GraphQlAssembly>>
+  assemblies?: Maybe<Array<GraphQlProjectAssembly>>
   comment?: Maybe<Scalars['String']>
   conversions: Array<GraphQlConversion>
   declaredUnit?: Maybe<Scalars['String']>
@@ -406,7 +429,7 @@ export type GraphQlSchemaCategory = {
 
 export type GraphQlSchemaElement = {
   __typename?: 'GraphQLSchemaElement'
-  assembly?: Maybe<GraphQlAssembly>
+  assembly?: Maybe<GraphQlProjectAssembly>
   assemblyId?: Maybe<Scalars['String']>
   commits: Array<GraphQlCommit>
   description?: Maybe<Scalars['String']>
@@ -478,15 +501,15 @@ export type GraphQlTask = {
 }
 
 export enum GraphQlUnit {
+  Kg = 'KG',
   L = 'L',
   M = 'M',
   M2 = 'M2',
   M2R1 = 'M2R1',
   M3 = 'M3',
   Pcs = 'PCS',
-  Tones = 'Tones',
+  Tones = 'TONES',
   Unknown = 'UNKNOWN',
-  Kg = 'kg',
 }
 
 export type GraphQlUpdateSiteInput = {
@@ -517,12 +540,14 @@ export type LifeCycleStageInput = {
 
 export type Mutation = {
   __typename?: 'Mutation'
-  addAssembly: GraphQlAssembly
-  addAssemblyLayers: Array<GraphQlAssemblyLayer>
   /** Add a comment to a task */
   addComment: GraphQlComment
+  /** Add Global EPDs. */
+  addEpds: Array<GraphQlepd>
   /** Add a Project */
   addProject: GraphQlProject
+  addProjectAssemblies: Array<GraphQlProjectAssembly>
+  addProjectAssemblyLayers: Array<GraphQlAssemblyLayer>
   /** Add Global EPDs to a project. */
   addProjectEpds: Array<GraphQlProjectEpd>
   /** Add a Project Group */
@@ -561,12 +586,14 @@ export type Mutation = {
   addTask: GraphQlTask
   /** Add a new tag. */
   createTag: GraphQlTag
-  deleteAssembly: Scalars['String']
-  deleteAssemblyLayers: Array<Scalars['String']>
   /** Delete a comment */
   deleteComment: Scalars['String']
+  /** Delete a global EPD */
+  deleteEpds: Array<Scalars['String']>
   /** Delete a project */
   deleteProject: Scalars['String']
+  deleteProjectAssemblies: Array<Scalars['String']>
+  deleteProjectAssemblyLayers: Array<Scalars['String']>
   /** Delete a project EPD */
   deleteProjectEpds: Array<Scalars['String']>
   /** Delete a project group */
@@ -593,12 +620,12 @@ export type Mutation = {
   deleteTask: Scalars['String']
   /** Remove Project Members from an existing Project Group */
   removeProjectMembersFromGroup: GraphQlProjectGroup
-  updateAssembly: GraphQlAssembly
-  updateAssemblyLayers: Array<GraphQlAssemblyLayer>
   /** Update a task comment */
   updateComment: GraphQlComment
   /** Update a Project */
   updateProject: GraphQlProject
+  updateProjectAssemblies: Array<GraphQlProjectAssembly>
+  updateProjectAssemblyLayers: Array<GraphQlAssemblyLayer>
   /** Update a Project Group */
   updateProjectGroup: GraphQlProjectGroup
   /** Update a Project Source */
@@ -619,25 +646,13 @@ export type Mutation = {
   updateTask: GraphQlTask
 }
 
-export type MutationAddAssemblyArgs = {
-  category: Scalars['String']
-  conversionFactor?: InputMaybe<Scalars['Float']>
-  description?: InputMaybe<Scalars['String']>
-  lifeTime?: InputMaybe<Scalars['Float']>
-  metaFields?: InputMaybe<Scalars['JSON']>
-  name: Scalars['String']
-  projectId: Scalars['String']
-  unit: AssemblyUnit
-}
-
-export type MutationAddAssemblyLayersArgs = {
-  id: Scalars['String']
-  layers: Array<AssemblyLayerInput>
-}
-
 export type MutationAddCommentArgs = {
   taskId: Scalars['String']
   text: Scalars['String']
+}
+
+export type MutationAddEpdsArgs = {
+  epds: Array<GraphQlAddEpdInput>
 }
 
 export type MutationAddProjectArgs = {
@@ -654,6 +669,15 @@ export type MutationAddProjectArgs = {
   projectId?: InputMaybe<Scalars['String']>
   public?: InputMaybe<Scalars['Boolean']>
   stages?: InputMaybe<Array<LifeCycleStageInput>>
+}
+
+export type MutationAddProjectAssembliesArgs = {
+  assemblies: Array<ProjectAssemblyAddInput>
+}
+
+export type MutationAddProjectAssemblyLayersArgs = {
+  id: Scalars['String']
+  layers: Array<AssemblyLayerInput>
 }
 
 export type MutationAddProjectEpdsArgs = {
@@ -752,21 +776,25 @@ export type MutationCreateTagArgs = {
   name: Scalars['String']
 }
 
-export type MutationDeleteAssemblyArgs = {
-  id: Scalars['String']
-}
-
-export type MutationDeleteAssemblyLayersArgs = {
-  id: Scalars['String']
-  layers: Array<AssemblyLayerDeleteInput>
-}
-
 export type MutationDeleteCommentArgs = {
   id: Scalars['String']
 }
 
+export type MutationDeleteEpdsArgs = {
+  ids: Array<Scalars['String']>
+}
+
 export type MutationDeleteProjectArgs = {
   id: Scalars['String']
+}
+
+export type MutationDeleteProjectAssembliesArgs = {
+  ids: Array<Scalars['String']>
+}
+
+export type MutationDeleteProjectAssemblyLayersArgs = {
+  id: Scalars['String']
+  layers: Array<AssemblyLayerDeleteInput>
 }
 
 export type MutationDeleteProjectEpdsArgs = {
@@ -823,22 +851,6 @@ export type MutationRemoveProjectMembersFromGroupArgs = {
   memberIds: Array<Scalars['String']>
 }
 
-export type MutationUpdateAssemblyArgs = {
-  category?: InputMaybe<Scalars['String']>
-  conversionFactor?: InputMaybe<Scalars['Float']>
-  description?: InputMaybe<Scalars['String']>
-  id: Scalars['String']
-  lifeTime?: InputMaybe<Scalars['Float']>
-  metaFields?: InputMaybe<Scalars['JSON']>
-  name?: InputMaybe<Scalars['String']>
-  unit?: InputMaybe<AssemblyUnit>
-}
-
-export type MutationUpdateAssemblyLayersArgs = {
-  id: Scalars['String']
-  layers: Array<AssemblyLayerUpdateInput>
-}
-
 export type MutationUpdateCommentArgs = {
   id: Scalars['String']
   text: Scalars['String']
@@ -856,6 +868,15 @@ export type MutationUpdateProjectArgs = {
   name?: InputMaybe<Scalars['String']>
   projectId?: InputMaybe<Scalars['String']>
   public?: InputMaybe<Scalars['Boolean']>
+}
+
+export type MutationUpdateProjectAssembliesArgs = {
+  assemblies: Array<ProjectAssemblyUpdateInput>
+}
+
+export type MutationUpdateProjectAssemblyLayersArgs = {
+  id: Scalars['String']
+  layers: Array<AssemblyLayerUpdateInput>
 }
 
 export type MutationUpdateProjectGroupArgs = {
@@ -926,6 +947,28 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']>
 }
 
+export type ProjectAssemblyAddInput = {
+  category: Scalars['String']
+  conversionFactor?: InputMaybe<Scalars['Float']>
+  description?: InputMaybe<Scalars['String']>
+  lifeTime?: InputMaybe<Scalars['Float']>
+  metaFields?: InputMaybe<Scalars['JSON']>
+  name: Scalars['String']
+  projectId: Scalars['String']
+  unit: GraphQlAssemblyUnit
+}
+
+export type ProjectAssemblyUpdateInput = {
+  category?: InputMaybe<Scalars['String']>
+  conversionFactor?: InputMaybe<Scalars['Float']>
+  description?: InputMaybe<Scalars['String']>
+  id: Scalars['String']
+  lifeTime?: InputMaybe<Scalars['Float']>
+  metaFields?: InputMaybe<Scalars['JSON']>
+  name?: InputMaybe<Scalars['String']>
+  unit?: InputMaybe<GraphQlAssemblyUnit>
+}
+
 export enum ProjectDomain {
   Buildings = 'buildings',
   Energy = 'energy',
@@ -992,7 +1035,6 @@ export type Query = {
   __typename?: 'Query'
   /** Get current user */
   account: GraphQlUserAccount
-  assemblies: Array<GraphQlAssembly>
   /**
    * Calculates the LCA result of a project from a base 64 encoded file.
    * The project argument is a base64 encoded string of a LCAxProject.
@@ -1008,6 +1050,7 @@ export type Query = {
   exportReportingSchema: Scalars['String']
   /** Get all life cycle stages */
   lifeCycleStages: Array<GraphQlLifeCycleStage>
+  projectAssemblies: Array<GraphQlProjectAssembly>
   projectEpds: Array<GraphQlProjectEpd>
   /** Query all Project Groups */
   projectGroups: Array<GraphQlProjectGroup>
@@ -1038,10 +1081,6 @@ export type Query = {
   tasks: Array<GraphQlTask>
 }
 
-export type QueryAssembliesArgs = {
-  projectId: Scalars['String']
-}
-
 export type QueryCalculateLcaArgs = {
   project: Scalars['Base64']
 }
@@ -1066,6 +1105,10 @@ export type QueryEpdsArgs = {
 export type QueryExportReportingSchemaArgs = {
   exportFormat: ExportFormat
   reportingSchemaId: Scalars['String']
+}
+
+export type QueryProjectAssembliesArgs = {
+  projectId: Scalars['String']
 }
 
 export type QueryProjectEpdsArgs = {
@@ -1320,7 +1363,6 @@ export type ResolversTypes = {
   Float: ResolverTypeWrapper<Scalars['Float']>
   Int: ResolverTypeWrapper<Scalars['Int']>
   AssemblyLayerUpdateInput: AssemblyLayerUpdateInput
-  AssemblyUnit: AssemblyUnit
   AssigneeType: AssigneeType
   Base64: ResolverTypeWrapper<Scalars['Base64']>
   CommentFilters: CommentFilters
@@ -1331,9 +1373,10 @@ export type ResolversTypes = {
   EPDSort: EpdSort
   FilterOptions: FilterOptions
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>
+  GraphQLAddEpdInput: GraphQlAddEpdInput
   GraphQLAddSiteInput: GraphQlAddSiteInput
-  GraphQLAssembly: ResolverTypeWrapper<GraphQlAssembly>
   GraphQLAssemblyLayer: ResolverTypeWrapper<GraphQlAssemblyLayer>
+  GraphQLAssemblyUnit: GraphQlAssemblyUnit
   GraphQLAssignee: GraphQlAssignee
   GraphQLComment: ResolverTypeWrapper<GraphQlComment>
   ID: ResolverTypeWrapper<Scalars['ID']>
@@ -1346,6 +1389,7 @@ export type ResolversTypes = {
   GraphQLImpactCategories: ResolverTypeWrapper<GraphQlImpactCategories>
   GraphQLLifeCycleStage: ResolverTypeWrapper<GraphQlLifeCycleStage>
   GraphQLProject: ResolverTypeWrapper<GraphQlProject>
+  GraphQLProjectAssembly: ResolverTypeWrapper<GraphQlProjectAssembly>
   GraphQLProjectEPD: ResolverTypeWrapper<GraphQlProjectEpd>
   GraphQLProjectGroup: ResolverTypeWrapper<GraphQlProjectGroup>
   GraphQLProjectMember: ResolverTypeWrapper<GraphQlProjectMember>
@@ -1378,6 +1422,8 @@ export type ResolversTypes = {
   LifeCycleStageInput: LifeCycleStageInput
   Mutation: ResolverTypeWrapper<{}>
   PageInfo: ResolverTypeWrapper<PageInfo>
+  ProjectAssemblyAddInput: ProjectAssemblyAddInput
+  ProjectAssemblyUpdateInput: ProjectAssemblyUpdateInput
   ProjectDomain: ProjectDomain
   ProjectEPDFilters: ProjectEpdFilters
   ProjectFilters: ProjectFilters
@@ -1422,8 +1468,8 @@ export type ResolversParentTypes = {
   EPDSort: EpdSort
   FilterOptions: FilterOptions
   Boolean: Scalars['Boolean']
+  GraphQLAddEpdInput: GraphQlAddEpdInput
   GraphQLAddSiteInput: GraphQlAddSiteInput
-  GraphQLAssembly: GraphQlAssembly
   GraphQLAssemblyLayer: GraphQlAssemblyLayer
   GraphQLAssignee: GraphQlAssignee
   GraphQLComment: GraphQlComment
@@ -1437,6 +1483,7 @@ export type ResolversParentTypes = {
   GraphQLImpactCategories: GraphQlImpactCategories
   GraphQLLifeCycleStage: GraphQlLifeCycleStage
   GraphQLProject: GraphQlProject
+  GraphQLProjectAssembly: GraphQlProjectAssembly
   GraphQLProjectEPD: GraphQlProjectEpd
   GraphQLProjectGroup: GraphQlProjectGroup
   GraphQLProjectMember: GraphQlProjectMember
@@ -1466,6 +1513,8 @@ export type ResolversParentTypes = {
   LifeCycleStageInput: LifeCycleStageInput
   Mutation: {}
   PageInfo: PageInfo
+  ProjectAssemblyAddInput: ProjectAssemblyAddInput
+  ProjectAssemblyUpdateInput: ProjectAssemblyUpdateInput
   ProjectEPDFilters: ProjectEpdFilters
   ProjectFilters: ProjectFilters
   ProjectGroupFilters: ProjectGroupFilters
@@ -1507,24 +1556,6 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime'
-}
-
-export type GraphQlAssemblyResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['GraphQLAssembly'] = ResolversParentTypes['GraphQLAssembly'],
-> = {
-  category?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  conversionFactor?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  gwp?: Resolver<ResolversTypes['Float'], ParentType, ContextType, RequireFields<GraphQlAssemblyGwpArgs, 'phases'>>
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  layers?: Resolver<Maybe<Array<ResolversTypes['GraphQLAssemblyLayer']>>, ParentType, ContextType>
-  lifeTime?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
-  metaFields?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  projectId?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  unit?: Resolver<Maybe<ResolversTypes['AssemblyUnit']>, ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
 export type GraphQlAssemblyLayerResolvers<
@@ -1710,12 +1741,35 @@ export type GraphQlProjectResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
+export type GraphQlProjectAssemblyResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['GraphQLProjectAssembly'] = ResolversParentTypes['GraphQLProjectAssembly'],
+> = {
+  category?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  conversionFactor?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  gwp?: Resolver<
+    ResolversTypes['Float'],
+    ParentType,
+    ContextType,
+    RequireFields<GraphQlProjectAssemblyGwpArgs, 'phases'>
+  >
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  layers?: Resolver<Array<ResolversTypes['GraphQLAssemblyLayer']>, ParentType, ContextType>
+  lifeTime?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
+  metaFields?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  projectId?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  unit?: Resolver<ResolversTypes['GraphQLAssemblyUnit'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type GraphQlProjectEpdResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['GraphQLProjectEPD'] = ResolversParentTypes['GraphQLProjectEPD'],
 > = {
   ap?: Resolver<Maybe<ResolversTypes['GraphQLImpactCategories']>, ParentType, ContextType>
-  assemblies?: Resolver<Maybe<Array<ResolversTypes['GraphQLAssembly']>>, ParentType, ContextType>
+  assemblies?: Resolver<Maybe<Array<ResolversTypes['GraphQLProjectAssembly']>>, ParentType, ContextType>
   comment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   conversions?: Resolver<Array<ResolversTypes['GraphQLConversion']>, ParentType, ContextType>
   declaredUnit?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
@@ -1849,7 +1903,7 @@ export type GraphQlSchemaElementResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['GraphQLSchemaElement'] = ResolversParentTypes['GraphQLSchemaElement'],
 > = {
-  assembly?: Resolver<Maybe<ResolversTypes['GraphQLAssembly']>, ParentType, ContextType>
+  assembly?: Resolver<Maybe<ResolversTypes['GraphQLProjectAssembly']>, ParentType, ContextType>
   assemblyId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   commits?: Resolver<Array<ResolversTypes['GraphQLCommit']>, ParentType, ContextType>
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
@@ -1962,26 +2016,17 @@ export type MutationResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation'],
 > = {
-  addAssembly?: Resolver<
-    ResolversTypes['GraphQLAssembly'],
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationAddAssemblyArgs,
-      'category' | 'conversionFactor' | 'lifeTime' | 'metaFields' | 'name' | 'projectId' | 'unit'
-    >
-  >
-  addAssemblyLayers?: Resolver<
-    Array<ResolversTypes['GraphQLAssemblyLayer']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationAddAssemblyLayersArgs, 'id' | 'layers'>
-  >
   addComment?: Resolver<
     ResolversTypes['GraphQLComment'],
     ParentType,
     ContextType,
     RequireFields<MutationAddCommentArgs, 'taskId' | 'text'>
+  >
+  addEpds?: Resolver<
+    Array<ResolversTypes['GraphQLEPD']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationAddEpdsArgs, 'epds'>
   >
   addProject?: Resolver<
     ResolversTypes['GraphQLProject'],
@@ -2003,6 +2048,18 @@ export type MutationResolvers<
       | 'public'
       | 'stages'
     >
+  >
+  addProjectAssemblies?: Resolver<
+    Array<ResolversTypes['GraphQLProjectAssembly']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationAddProjectAssembliesArgs, 'assemblies'>
+  >
+  addProjectAssemblyLayers?: Resolver<
+    Array<ResolversTypes['GraphQLAssemblyLayer']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationAddProjectAssemblyLayersArgs, 'id' | 'layers'>
   >
   addProjectEpds?: Resolver<
     Array<ResolversTypes['GraphQLProjectEPD']>,
@@ -2103,29 +2160,35 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationCreateTagArgs, 'commitId' | 'name'>
   >
-  deleteAssembly?: Resolver<
-    ResolversTypes['String'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationDeleteAssemblyArgs, 'id'>
-  >
-  deleteAssemblyLayers?: Resolver<
-    Array<ResolversTypes['String']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationDeleteAssemblyLayersArgs, 'id' | 'layers'>
-  >
   deleteComment?: Resolver<
     ResolversTypes['String'],
     ParentType,
     ContextType,
     RequireFields<MutationDeleteCommentArgs, 'id'>
   >
+  deleteEpds?: Resolver<
+    Array<ResolversTypes['String']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteEpdsArgs, 'ids'>
+  >
   deleteProject?: Resolver<
     ResolversTypes['String'],
     ParentType,
     ContextType,
     RequireFields<MutationDeleteProjectArgs, 'id'>
+  >
+  deleteProjectAssemblies?: Resolver<
+    Array<ResolversTypes['String']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteProjectAssembliesArgs, 'ids'>
+  >
+  deleteProjectAssemblyLayers?: Resolver<
+    Array<ResolversTypes['String']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationDeleteProjectAssemblyLayersArgs, 'id' | 'layers'>
   >
   deleteProjectEpds?: Resolver<
     Array<ResolversTypes['String']>,
@@ -2195,21 +2258,6 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationRemoveProjectMembersFromGroupArgs, 'groupId' | 'memberIds'>
   >
-  updateAssembly?: Resolver<
-    ResolversTypes['GraphQLAssembly'],
-    ParentType,
-    ContextType,
-    RequireFields<
-      MutationUpdateAssemblyArgs,
-      'category' | 'conversionFactor' | 'description' | 'id' | 'lifeTime' | 'metaFields' | 'name' | 'unit'
-    >
-  >
-  updateAssemblyLayers?: Resolver<
-    Array<ResolversTypes['GraphQLAssemblyLayer']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationUpdateAssemblyLayersArgs, 'id' | 'layers'>
-  >
   updateComment?: Resolver<
     ResolversTypes['GraphQLComment'],
     ParentType,
@@ -2234,6 +2282,18 @@ export type MutationResolvers<
       | 'projectId'
       | 'public'
     >
+  >
+  updateProjectAssemblies?: Resolver<
+    Array<ResolversTypes['GraphQLProjectAssembly']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateProjectAssembliesArgs, 'assemblies'>
+  >
+  updateProjectAssemblyLayers?: Resolver<
+    Array<ResolversTypes['GraphQLAssemblyLayer']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationUpdateProjectAssemblyLayersArgs, 'id' | 'layers'>
   >
   updateProjectGroup?: Resolver<
     ResolversTypes['GraphQLProjectGroup'],
@@ -2313,12 +2373,6 @@ export type QueryResolvers<
   ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query'],
 > = {
   account?: Resolver<ResolversTypes['GraphQLUserAccount'], ParentType, ContextType>
-  assemblies?: Resolver<
-    Array<ResolversTypes['GraphQLAssembly']>,
-    ParentType,
-    ContextType,
-    RequireFields<QueryAssembliesArgs, 'projectId'>
-  >
   calculateLca?: Resolver<
     ResolversTypes['Base64'],
     ParentType,
@@ -2350,6 +2404,12 @@ export type QueryResolvers<
     RequireFields<QueryExportReportingSchemaArgs, 'exportFormat' | 'reportingSchemaId'>
   >
   lifeCycleStages?: Resolver<Array<ResolversTypes['GraphQLLifeCycleStage']>, ParentType, ContextType>
+  projectAssemblies?: Resolver<
+    Array<ResolversTypes['GraphQLProjectAssembly']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryProjectAssembliesArgs, 'projectId'>
+  >
   projectEpds?: Resolver<
     Array<ResolversTypes['GraphQLProjectEPD']>,
     ParentType,
@@ -2434,7 +2494,6 @@ export type Resolvers<ContextType = any> = {
   Base64?: GraphQLScalarType
   Date?: GraphQLScalarType
   DateTime?: GraphQLScalarType
-  GraphQLAssembly?: GraphQlAssemblyResolvers<ContextType>
   GraphQLAssemblyLayer?: GraphQlAssemblyLayerResolvers<ContextType>
   GraphQLComment?: GraphQlCommentResolvers<ContextType>
   GraphQLCommit?: GraphQlCommitResolvers<ContextType>
@@ -2446,6 +2505,7 @@ export type Resolvers<ContextType = any> = {
   GraphQLImpactCategories?: GraphQlImpactCategoriesResolvers<ContextType>
   GraphQLLifeCycleStage?: GraphQlLifeCycleStageResolvers<ContextType>
   GraphQLProject?: GraphQlProjectResolvers<ContextType>
+  GraphQLProjectAssembly?: GraphQlProjectAssemblyResolvers<ContextType>
   GraphQLProjectEPD?: GraphQlProjectEpdResolvers<ContextType>
   GraphQLProjectGroup?: GraphQlProjectGroupResolvers<ContextType>
   GraphQLProjectMember?: GraphQlProjectMemberResolvers<ContextType>
@@ -2473,25 +2533,25 @@ export type DirectiveResolvers<ContextType = any> = {
   defer?: DeferDirectiveResolver<any, any, ContextType>
 }
 
-export type GetAssembliesQueryVariables = Exact<{
+export type GetProjectAssembliesQueryVariables = Exact<{
   projectId: Scalars['String']
 }>
 
-export type GetAssembliesQuery = {
+export type GetProjectAssembliesQuery = {
   __typename?: 'Query'
-  assemblies: Array<{
-    __typename?: 'GraphQLAssembly'
+  projectAssemblies: Array<{
+    __typename?: 'GraphQLProjectAssembly'
     id: string
     name: string
-    category?: string | null
+    category: string
     gwp: number
     conversionFactor: number
     lifeTime: number
-    unit?: AssemblyUnit | null
+    unit: GraphQlAssemblyUnit
     projectId: string
     description?: string | null
     metaFields?: any | null
-    layers?: Array<{
+    layers: Array<{
       __typename?: 'GraphQLAssemblyLayer'
       id?: string | null
       name?: string | null
@@ -2502,7 +2562,7 @@ export type GetAssembliesQuery = {
       transportType?: TransportType | null
       transportDistance?: number | null
       transportUnit?: string | null
-    }> | null
+    }>
   }>
 }
 
@@ -2591,74 +2651,63 @@ export type GetprojectStagesQuery = {
   }>
 }
 
-export type AddAssemblyMutationVariables = Exact<{
-  name: Scalars['String']
-  category: Scalars['String']
-  projectId: Scalars['String']
-  description?: InputMaybe<Scalars['String']>
-  unit: AssemblyUnit
-  lifeTime?: InputMaybe<Scalars['Float']>
-  metaFields?: InputMaybe<Scalars['JSON']>
-  conversionFactor?: InputMaybe<Scalars['Float']>
+export type AddProjectAssembliesMutationVariables = Exact<{
+  assemblies: Array<ProjectAssemblyAddInput> | ProjectAssemblyAddInput
 }>
 
-export type AddAssemblyMutation = {
+export type AddProjectAssembliesMutation = {
   __typename?: 'Mutation'
-  addAssembly: { __typename?: 'GraphQLAssembly'; name: string; category?: string | null }
+  addProjectAssemblies: Array<{ __typename?: 'GraphQLProjectAssembly'; name: string; category: string }>
 }
 
-export type UpdateAssemblyMutationVariables = Exact<{
-  id: Scalars['String']
-  name: Scalars['String']
-  category: Scalars['String']
-  description?: InputMaybe<Scalars['String']>
-  unit: AssemblyUnit
-  lifeTime?: InputMaybe<Scalars['Float']>
-  metaFields?: InputMaybe<Scalars['JSON']>
-  conversionFactor?: InputMaybe<Scalars['Float']>
+export type UpdateProjectAssembliesMutationVariables = Exact<{
+  assemblies: Array<ProjectAssemblyUpdateInput> | ProjectAssemblyUpdateInput
 }>
 
-export type UpdateAssemblyMutation = {
+export type UpdateProjectAssembliesMutation = {
   __typename?: 'Mutation'
-  updateAssembly: { __typename?: 'GraphQLAssembly'; name: string }
+  updateProjectAssemblies: Array<{ __typename?: 'GraphQLProjectAssembly'; name: string }>
 }
 
-export type DeleteAssemblyMutationVariables = Exact<{
-  id: Scalars['String']
+export type DeleteProjectAssembliesMutationVariables = Exact<{
+  ids: Array<Scalars['String']> | Scalars['String']
 }>
 
-export type DeleteAssemblyMutation = { __typename?: 'Mutation'; deleteAssembly: string }
+export type DeleteProjectAssembliesMutation = { __typename?: 'Mutation'; deleteProjectAssemblies: Array<string> }
 
-export type AddAssemblyLayersMutationVariables = Exact<{
+export type AddProjectAssemblyLayersMutationVariables = Exact<{
   id: Scalars['String']
   layers: Array<AssemblyLayerInput> | AssemblyLayerInput
 }>
 
-export type AddAssemblyLayersMutation = {
+export type AddProjectAssemblyLayersMutation = {
   __typename?: 'Mutation'
-  addAssemblyLayers: Array<{ __typename?: 'GraphQLAssemblyLayer'; id?: string | null; name?: string | null }>
+  addProjectAssemblyLayers: Array<{ __typename?: 'GraphQLAssemblyLayer'; id?: string | null; name?: string | null }>
 }
 
-export type UpdateAssemblyLayersMutationVariables = Exact<{
+export type UpdateProjectAssemblyLayersMutationVariables = Exact<{
   id: Scalars['String']
   layers: Array<AssemblyLayerUpdateInput> | AssemblyLayerUpdateInput
 }>
 
-export type UpdateAssemblyLayersMutation = {
+export type UpdateProjectAssemblyLayersMutation = {
   __typename?: 'Mutation'
-  updateAssemblyLayers: Array<{ __typename?: 'GraphQLAssemblyLayer'; id?: string | null; name?: string | null }>
+  updateProjectAssemblyLayers: Array<{ __typename?: 'GraphQLAssemblyLayer'; id?: string | null; name?: string | null }>
 }
 
-export type DeleteAssemblyLayersMutationVariables = Exact<{
+export type DeleteProjectAssemblyLayersMutationVariables = Exact<{
   id: Scalars['String']
   layers: Array<AssemblyLayerDeleteInput> | AssemblyLayerDeleteInput
 }>
 
-export type DeleteAssemblyLayersMutation = { __typename?: 'Mutation'; deleteAssemblyLayers: Array<string> }
+export type DeleteProjectAssemblyLayersMutation = {
+  __typename?: 'Mutation'
+  deleteProjectAssemblyLayers: Array<string>
+}
 
-export const GetAssembliesDocument = gql`
-  query getAssemblies($projectId: String!) {
-    assemblies(projectId: $projectId) {
+export const GetProjectAssembliesDocument = gql`
+  query getProjectAssemblies($projectId: String!) {
+    projectAssemblies(projectId: $projectId) {
       id
       name
       category
@@ -2685,36 +2734,45 @@ export const GetAssembliesDocument = gql`
 `
 
 /**
- * __useGetAssembliesQuery__
+ * __useGetProjectAssembliesQuery__
  *
- * To run a query within a React component, call `useGetAssembliesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAssembliesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetProjectAssembliesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectAssembliesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetAssembliesQuery({
+ * const { data, loading, error } = useGetProjectAssembliesQuery({
  *   variables: {
  *      projectId: // value for 'projectId'
  *   },
  * });
  */
-export function useGetAssembliesQuery(
-  baseOptions: Apollo.QueryHookOptions<GetAssembliesQuery, GetAssembliesQueryVariables>,
+export function useGetProjectAssembliesQuery(
+  baseOptions: Apollo.QueryHookOptions<GetProjectAssembliesQuery, GetProjectAssembliesQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<GetAssembliesQuery, GetAssembliesQueryVariables>(GetAssembliesDocument, options)
+  return Apollo.useQuery<GetProjectAssembliesQuery, GetProjectAssembliesQueryVariables>(
+    GetProjectAssembliesDocument,
+    options,
+  )
 }
-export function useGetAssembliesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetAssembliesQuery, GetAssembliesQueryVariables>,
+export function useGetProjectAssembliesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetProjectAssembliesQuery, GetProjectAssembliesQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<GetAssembliesQuery, GetAssembliesQueryVariables>(GetAssembliesDocument, options)
+  return Apollo.useLazyQuery<GetProjectAssembliesQuery, GetProjectAssembliesQueryVariables>(
+    GetProjectAssembliesDocument,
+    options,
+  )
 }
-export type GetAssembliesQueryHookResult = ReturnType<typeof useGetAssembliesQuery>
-export type GetAssembliesLazyQueryHookResult = ReturnType<typeof useGetAssembliesLazyQuery>
-export type GetAssembliesQueryResult = Apollo.QueryResult<GetAssembliesQuery, GetAssembliesQueryVariables>
+export type GetProjectAssembliesQueryHookResult = ReturnType<typeof useGetProjectAssembliesQuery>
+export type GetProjectAssembliesLazyQueryHookResult = ReturnType<typeof useGetProjectAssembliesLazyQuery>
+export type GetProjectAssembliesQueryResult = Apollo.QueryResult<
+  GetProjectAssembliesQuery,
+  GetProjectAssembliesQueryVariables
+>
 export const GetProjectEpdsDocument = gql`
   query getProjectEpds($projectId: String!) {
     projectEpds(projectId: $projectId) {
@@ -2945,298 +3003,275 @@ export function useGetprojectStagesLazyQuery(
 export type GetprojectStagesQueryHookResult = ReturnType<typeof useGetprojectStagesQuery>
 export type GetprojectStagesLazyQueryHookResult = ReturnType<typeof useGetprojectStagesLazyQuery>
 export type GetprojectStagesQueryResult = Apollo.QueryResult<GetprojectStagesQuery, GetprojectStagesQueryVariables>
-export const AddAssemblyDocument = gql`
-  mutation addAssembly(
-    $name: String!
-    $category: String!
-    $projectId: String!
-    $description: String
-    $unit: AssemblyUnit!
-    $lifeTime: Float = 50
-    $metaFields: JSON = null
-    $conversionFactor: Float = 1
-  ) {
-    addAssembly(
-      name: $name
-      category: $category
-      projectId: $projectId
-      description: $description
-      lifeTime: $lifeTime
-      unit: $unit
-      metaFields: $metaFields
-      conversionFactor: $conversionFactor
-    ) {
+export const AddProjectAssembliesDocument = gql`
+  mutation addProjectAssemblies($assemblies: [ProjectAssemblyAddInput!]!) {
+    addProjectAssemblies(assemblies: $assemblies) {
       name
       category
     }
   }
 `
-export type AddAssemblyMutationFn = Apollo.MutationFunction<AddAssemblyMutation, AddAssemblyMutationVariables>
+export type AddProjectAssembliesMutationFn = Apollo.MutationFunction<
+  AddProjectAssembliesMutation,
+  AddProjectAssembliesMutationVariables
+>
 
 /**
- * __useAddAssemblyMutation__
+ * __useAddProjectAssembliesMutation__
  *
- * To run a mutation, you first call `useAddAssemblyMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddAssemblyMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useAddProjectAssembliesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddProjectAssembliesMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [addAssemblyMutation, { data, loading, error }] = useAddAssemblyMutation({
+ * const [addProjectAssembliesMutation, { data, loading, error }] = useAddProjectAssembliesMutation({
  *   variables: {
- *      name: // value for 'name'
- *      category: // value for 'category'
- *      projectId: // value for 'projectId'
- *      description: // value for 'description'
- *      unit: // value for 'unit'
- *      lifeTime: // value for 'lifeTime'
- *      metaFields: // value for 'metaFields'
- *      conversionFactor: // value for 'conversionFactor'
+ *      assemblies: // value for 'assemblies'
  *   },
  * });
  */
-export function useAddAssemblyMutation(
-  baseOptions?: Apollo.MutationHookOptions<AddAssemblyMutation, AddAssemblyMutationVariables>,
+export function useAddProjectAssembliesMutation(
+  baseOptions?: Apollo.MutationHookOptions<AddProjectAssembliesMutation, AddProjectAssembliesMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<AddAssemblyMutation, AddAssemblyMutationVariables>(AddAssemblyDocument, options)
+  return Apollo.useMutation<AddProjectAssembliesMutation, AddProjectAssembliesMutationVariables>(
+    AddProjectAssembliesDocument,
+    options,
+  )
 }
-export type AddAssemblyMutationHookResult = ReturnType<typeof useAddAssemblyMutation>
-export type AddAssemblyMutationResult = Apollo.MutationResult<AddAssemblyMutation>
-export type AddAssemblyMutationOptions = Apollo.BaseMutationOptions<AddAssemblyMutation, AddAssemblyMutationVariables>
-export const UpdateAssemblyDocument = gql`
-  mutation updateAssembly(
-    $id: String!
-    $name: String!
-    $category: String!
-    $description: String
-    $unit: AssemblyUnit!
-    $lifeTime: Float = 50
-    $metaFields: JSON = null
-    $conversionFactor: Float = 1
-  ) {
-    updateAssembly(
-      id: $id
-      name: $name
-      category: $category
-      description: $description
-      lifeTime: $lifeTime
-      unit: $unit
-      metaFields: $metaFields
-      conversionFactor: $conversionFactor
-    ) {
+export type AddProjectAssembliesMutationHookResult = ReturnType<typeof useAddProjectAssembliesMutation>
+export type AddProjectAssembliesMutationResult = Apollo.MutationResult<AddProjectAssembliesMutation>
+export type AddProjectAssembliesMutationOptions = Apollo.BaseMutationOptions<
+  AddProjectAssembliesMutation,
+  AddProjectAssembliesMutationVariables
+>
+export const UpdateProjectAssembliesDocument = gql`
+  mutation updateProjectAssemblies($assemblies: [ProjectAssemblyUpdateInput!]!) {
+    updateProjectAssemblies(assemblies: $assemblies) {
       name
     }
   }
 `
-export type UpdateAssemblyMutationFn = Apollo.MutationFunction<UpdateAssemblyMutation, UpdateAssemblyMutationVariables>
+export type UpdateProjectAssembliesMutationFn = Apollo.MutationFunction<
+  UpdateProjectAssembliesMutation,
+  UpdateProjectAssembliesMutationVariables
+>
 
 /**
- * __useUpdateAssemblyMutation__
+ * __useUpdateProjectAssembliesMutation__
  *
- * To run a mutation, you first call `useUpdateAssemblyMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateAssemblyMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateProjectAssembliesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProjectAssembliesMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateAssemblyMutation, { data, loading, error }] = useUpdateAssemblyMutation({
+ * const [updateProjectAssembliesMutation, { data, loading, error }] = useUpdateProjectAssembliesMutation({
  *   variables: {
- *      id: // value for 'id'
- *      name: // value for 'name'
- *      category: // value for 'category'
- *      description: // value for 'description'
- *      unit: // value for 'unit'
- *      lifeTime: // value for 'lifeTime'
- *      metaFields: // value for 'metaFields'
- *      conversionFactor: // value for 'conversionFactor'
+ *      assemblies: // value for 'assemblies'
  *   },
  * });
  */
-export function useUpdateAssemblyMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateAssemblyMutation, UpdateAssemblyMutationVariables>,
+export function useUpdateProjectAssembliesMutation(
+  baseOptions?: Apollo.MutationHookOptions<UpdateProjectAssembliesMutation, UpdateProjectAssembliesMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<UpdateAssemblyMutation, UpdateAssemblyMutationVariables>(UpdateAssemblyDocument, options)
+  return Apollo.useMutation<UpdateProjectAssembliesMutation, UpdateProjectAssembliesMutationVariables>(
+    UpdateProjectAssembliesDocument,
+    options,
+  )
 }
-export type UpdateAssemblyMutationHookResult = ReturnType<typeof useUpdateAssemblyMutation>
-export type UpdateAssemblyMutationResult = Apollo.MutationResult<UpdateAssemblyMutation>
-export type UpdateAssemblyMutationOptions = Apollo.BaseMutationOptions<
-  UpdateAssemblyMutation,
-  UpdateAssemblyMutationVariables
+export type UpdateProjectAssembliesMutationHookResult = ReturnType<typeof useUpdateProjectAssembliesMutation>
+export type UpdateProjectAssembliesMutationResult = Apollo.MutationResult<UpdateProjectAssembliesMutation>
+export type UpdateProjectAssembliesMutationOptions = Apollo.BaseMutationOptions<
+  UpdateProjectAssembliesMutation,
+  UpdateProjectAssembliesMutationVariables
 >
-export const DeleteAssemblyDocument = gql`
-  mutation deleteAssembly($id: String!) {
-    deleteAssembly(id: $id)
+export const DeleteProjectAssembliesDocument = gql`
+  mutation deleteProjectAssemblies($ids: [String!]!) {
+    deleteProjectAssemblies(ids: $ids)
   }
 `
-export type DeleteAssemblyMutationFn = Apollo.MutationFunction<DeleteAssemblyMutation, DeleteAssemblyMutationVariables>
+export type DeleteProjectAssembliesMutationFn = Apollo.MutationFunction<
+  DeleteProjectAssembliesMutation,
+  DeleteProjectAssembliesMutationVariables
+>
 
 /**
- * __useDeleteAssemblyMutation__
+ * __useDeleteProjectAssembliesMutation__
  *
- * To run a mutation, you first call `useDeleteAssemblyMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteAssemblyMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useDeleteProjectAssembliesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteProjectAssembliesMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteAssemblyMutation, { data, loading, error }] = useDeleteAssemblyMutation({
+ * const [deleteProjectAssembliesMutation, { data, loading, error }] = useDeleteProjectAssembliesMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      ids: // value for 'ids'
  *   },
  * });
  */
-export function useDeleteAssemblyMutation(
-  baseOptions?: Apollo.MutationHookOptions<DeleteAssemblyMutation, DeleteAssemblyMutationVariables>,
+export function useDeleteProjectAssembliesMutation(
+  baseOptions?: Apollo.MutationHookOptions<DeleteProjectAssembliesMutation, DeleteProjectAssembliesMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<DeleteAssemblyMutation, DeleteAssemblyMutationVariables>(DeleteAssemblyDocument, options)
+  return Apollo.useMutation<DeleteProjectAssembliesMutation, DeleteProjectAssembliesMutationVariables>(
+    DeleteProjectAssembliesDocument,
+    options,
+  )
 }
-export type DeleteAssemblyMutationHookResult = ReturnType<typeof useDeleteAssemblyMutation>
-export type DeleteAssemblyMutationResult = Apollo.MutationResult<DeleteAssemblyMutation>
-export type DeleteAssemblyMutationOptions = Apollo.BaseMutationOptions<
-  DeleteAssemblyMutation,
-  DeleteAssemblyMutationVariables
+export type DeleteProjectAssembliesMutationHookResult = ReturnType<typeof useDeleteProjectAssembliesMutation>
+export type DeleteProjectAssembliesMutationResult = Apollo.MutationResult<DeleteProjectAssembliesMutation>
+export type DeleteProjectAssembliesMutationOptions = Apollo.BaseMutationOptions<
+  DeleteProjectAssembliesMutation,
+  DeleteProjectAssembliesMutationVariables
 >
-export const AddAssemblyLayersDocument = gql`
-  mutation addAssemblyLayers($id: String!, $layers: [AssemblyLayerInput!]!) {
-    addAssemblyLayers(id: $id, layers: $layers) {
+export const AddProjectAssemblyLayersDocument = gql`
+  mutation addProjectAssemblyLayers($id: String!, $layers: [AssemblyLayerInput!]!) {
+    addProjectAssemblyLayers(id: $id, layers: $layers) {
       id
       name
     }
   }
 `
-export type AddAssemblyLayersMutationFn = Apollo.MutationFunction<
-  AddAssemblyLayersMutation,
-  AddAssemblyLayersMutationVariables
+export type AddProjectAssemblyLayersMutationFn = Apollo.MutationFunction<
+  AddProjectAssemblyLayersMutation,
+  AddProjectAssemblyLayersMutationVariables
 >
 
 /**
- * __useAddAssemblyLayersMutation__
+ * __useAddProjectAssemblyLayersMutation__
  *
- * To run a mutation, you first call `useAddAssemblyLayersMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddAssemblyLayersMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useAddProjectAssemblyLayersMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddProjectAssemblyLayersMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [addAssemblyLayersMutation, { data, loading, error }] = useAddAssemblyLayersMutation({
+ * const [addProjectAssemblyLayersMutation, { data, loading, error }] = useAddProjectAssemblyLayersMutation({
  *   variables: {
  *      id: // value for 'id'
  *      layers: // value for 'layers'
  *   },
  * });
  */
-export function useAddAssemblyLayersMutation(
-  baseOptions?: Apollo.MutationHookOptions<AddAssemblyLayersMutation, AddAssemblyLayersMutationVariables>,
+export function useAddProjectAssemblyLayersMutation(
+  baseOptions?: Apollo.MutationHookOptions<AddProjectAssemblyLayersMutation, AddProjectAssemblyLayersMutationVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<AddAssemblyLayersMutation, AddAssemblyLayersMutationVariables>(
-    AddAssemblyLayersDocument,
+  return Apollo.useMutation<AddProjectAssemblyLayersMutation, AddProjectAssemblyLayersMutationVariables>(
+    AddProjectAssemblyLayersDocument,
     options,
   )
 }
-export type AddAssemblyLayersMutationHookResult = ReturnType<typeof useAddAssemblyLayersMutation>
-export type AddAssemblyLayersMutationResult = Apollo.MutationResult<AddAssemblyLayersMutation>
-export type AddAssemblyLayersMutationOptions = Apollo.BaseMutationOptions<
-  AddAssemblyLayersMutation,
-  AddAssemblyLayersMutationVariables
+export type AddProjectAssemblyLayersMutationHookResult = ReturnType<typeof useAddProjectAssemblyLayersMutation>
+export type AddProjectAssemblyLayersMutationResult = Apollo.MutationResult<AddProjectAssemblyLayersMutation>
+export type AddProjectAssemblyLayersMutationOptions = Apollo.BaseMutationOptions<
+  AddProjectAssemblyLayersMutation,
+  AddProjectAssemblyLayersMutationVariables
 >
-export const UpdateAssemblyLayersDocument = gql`
-  mutation updateAssemblyLayers($id: String!, $layers: [AssemblyLayerUpdateInput!]!) {
-    updateAssemblyLayers(id: $id, layers: $layers) {
+export const UpdateProjectAssemblyLayersDocument = gql`
+  mutation updateProjectAssemblyLayers($id: String!, $layers: [AssemblyLayerUpdateInput!]!) {
+    updateProjectAssemblyLayers(id: $id, layers: $layers) {
       id
       name
     }
   }
 `
-export type UpdateAssemblyLayersMutationFn = Apollo.MutationFunction<
-  UpdateAssemblyLayersMutation,
-  UpdateAssemblyLayersMutationVariables
+export type UpdateProjectAssemblyLayersMutationFn = Apollo.MutationFunction<
+  UpdateProjectAssemblyLayersMutation,
+  UpdateProjectAssemblyLayersMutationVariables
 >
 
 /**
- * __useUpdateAssemblyLayersMutation__
+ * __useUpdateProjectAssemblyLayersMutation__
  *
- * To run a mutation, you first call `useUpdateAssemblyLayersMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateAssemblyLayersMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateProjectAssemblyLayersMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProjectAssemblyLayersMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateAssemblyLayersMutation, { data, loading, error }] = useUpdateAssemblyLayersMutation({
+ * const [updateProjectAssemblyLayersMutation, { data, loading, error }] = useUpdateProjectAssemblyLayersMutation({
  *   variables: {
  *      id: // value for 'id'
  *      layers: // value for 'layers'
  *   },
  * });
  */
-export function useUpdateAssemblyLayersMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateAssemblyLayersMutation, UpdateAssemblyLayersMutationVariables>,
+export function useUpdateProjectAssemblyLayersMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateProjectAssemblyLayersMutation,
+    UpdateProjectAssemblyLayersMutationVariables
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<UpdateAssemblyLayersMutation, UpdateAssemblyLayersMutationVariables>(
-    UpdateAssemblyLayersDocument,
+  return Apollo.useMutation<UpdateProjectAssemblyLayersMutation, UpdateProjectAssemblyLayersMutationVariables>(
+    UpdateProjectAssemblyLayersDocument,
     options,
   )
 }
-export type UpdateAssemblyLayersMutationHookResult = ReturnType<typeof useUpdateAssemblyLayersMutation>
-export type UpdateAssemblyLayersMutationResult = Apollo.MutationResult<UpdateAssemblyLayersMutation>
-export type UpdateAssemblyLayersMutationOptions = Apollo.BaseMutationOptions<
-  UpdateAssemblyLayersMutation,
-  UpdateAssemblyLayersMutationVariables
+export type UpdateProjectAssemblyLayersMutationHookResult = ReturnType<typeof useUpdateProjectAssemblyLayersMutation>
+export type UpdateProjectAssemblyLayersMutationResult = Apollo.MutationResult<UpdateProjectAssemblyLayersMutation>
+export type UpdateProjectAssemblyLayersMutationOptions = Apollo.BaseMutationOptions<
+  UpdateProjectAssemblyLayersMutation,
+  UpdateProjectAssemblyLayersMutationVariables
 >
-export const DeleteAssemblyLayersDocument = gql`
-  mutation deleteAssemblyLayers($id: String!, $layers: [AssemblyLayerDeleteInput!]!) {
-    deleteAssemblyLayers(id: $id, layers: $layers)
+export const DeleteProjectAssemblyLayersDocument = gql`
+  mutation deleteProjectAssemblyLayers($id: String!, $layers: [AssemblyLayerDeleteInput!]!) {
+    deleteProjectAssemblyLayers(id: $id, layers: $layers)
   }
 `
-export type DeleteAssemblyLayersMutationFn = Apollo.MutationFunction<
-  DeleteAssemblyLayersMutation,
-  DeleteAssemblyLayersMutationVariables
+export type DeleteProjectAssemblyLayersMutationFn = Apollo.MutationFunction<
+  DeleteProjectAssemblyLayersMutation,
+  DeleteProjectAssemblyLayersMutationVariables
 >
 
 /**
- * __useDeleteAssemblyLayersMutation__
+ * __useDeleteProjectAssemblyLayersMutation__
  *
- * To run a mutation, you first call `useDeleteAssemblyLayersMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteAssemblyLayersMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useDeleteProjectAssemblyLayersMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteProjectAssemblyLayersMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteAssemblyLayersMutation, { data, loading, error }] = useDeleteAssemblyLayersMutation({
+ * const [deleteProjectAssemblyLayersMutation, { data, loading, error }] = useDeleteProjectAssemblyLayersMutation({
  *   variables: {
  *      id: // value for 'id'
  *      layers: // value for 'layers'
  *   },
  * });
  */
-export function useDeleteAssemblyLayersMutation(
-  baseOptions?: Apollo.MutationHookOptions<DeleteAssemblyLayersMutation, DeleteAssemblyLayersMutationVariables>,
+export function useDeleteProjectAssemblyLayersMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteProjectAssemblyLayersMutation,
+    DeleteProjectAssemblyLayersMutationVariables
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<DeleteAssemblyLayersMutation, DeleteAssemblyLayersMutationVariables>(
-    DeleteAssemblyLayersDocument,
+  return Apollo.useMutation<DeleteProjectAssemblyLayersMutation, DeleteProjectAssemblyLayersMutationVariables>(
+    DeleteProjectAssemblyLayersDocument,
     options,
   )
 }
-export type DeleteAssemblyLayersMutationHookResult = ReturnType<typeof useDeleteAssemblyLayersMutation>
-export type DeleteAssemblyLayersMutationResult = Apollo.MutationResult<DeleteAssemblyLayersMutation>
-export type DeleteAssemblyLayersMutationOptions = Apollo.BaseMutationOptions<
-  DeleteAssemblyLayersMutation,
-  DeleteAssemblyLayersMutationVariables
+export type DeleteProjectAssemblyLayersMutationHookResult = ReturnType<typeof useDeleteProjectAssemblyLayersMutation>
+export type DeleteProjectAssemblyLayersMutationResult = Apollo.MutationResult<DeleteProjectAssemblyLayersMutation>
+export type DeleteProjectAssemblyLayersMutationOptions = Apollo.BaseMutationOptions<
+  DeleteProjectAssemblyLayersMutation,
+  DeleteProjectAssemblyLayersMutationVariables
 >

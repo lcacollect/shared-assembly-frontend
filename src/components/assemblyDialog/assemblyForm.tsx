@@ -1,5 +1,5 @@
 import { Grid, TextField, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
-import { AssemblyUnit } from '../../dataAccess'
+import { GraphQlAssemblyUnit } from '../../dataAccess'
 import React, { Dispatch, SetStateAction } from 'react'
 
 interface AssemblyFormProps {
@@ -11,14 +11,10 @@ interface AssemblyFormProps {
   setDescription: Dispatch<SetStateAction<string | null | undefined>>
   lifeTime: number
   setLifeTime: Dispatch<SetStateAction<number>>
-  metaFields: string
-  setMetaFields: Dispatch<SetStateAction<string>>
   conversionFactor: number
   setConversionFactor: Dispatch<SetStateAction<number>>
-  unit: AssemblyUnit
-  setUnit: Dispatch<SetStateAction<AssemblyUnit | null | undefined>>
-  error: boolean
-  setError: Dispatch<SetStateAction<boolean>>
+  unit: GraphQlAssemblyUnit
+  setUnit: Dispatch<SetStateAction<GraphQlAssemblyUnit | null | undefined>>
 }
 export const AssemblyForm: React.FC<AssemblyFormProps> = (props) => {
   const {
@@ -30,17 +26,13 @@ export const AssemblyForm: React.FC<AssemblyFormProps> = (props) => {
     setDescription,
     lifeTime,
     setLifeTime,
-    metaFields,
-    setMetaFields,
     conversionFactor,
     setConversionFactor,
     unit,
     setUnit,
-    error,
-    setError,
   } = props
 
-  const unitMenuItems = Object.values(AssemblyUnit).map((value, index) => {
+  const unitMenuItems = Object.values(GraphQlAssemblyUnit).map((value, index) => {
     return (
       <MenuItem value={value} key={index} data-testid={value}>
         {value.toUpperCase()}
@@ -100,36 +92,12 @@ export const AssemblyForm: React.FC<AssemblyFormProps> = (props) => {
             data-testid='unit-type'
             value={unit}
             label='Unit'
-            onChange={(event) => setUnit(event.target.value as AssemblyUnit)}
+            onChange={(event) => setUnit(event.target.value as GraphQlAssemblyUnit)}
           >
             {unitMenuItems}
           </Select>
         </FormControl>
       </Grid>
-      {/* <Grid item xs={true}>
-        <TextField
-          error={error}
-          data-testid='assembly-metaFields'
-          onChange={(event) => {
-            setMetaFields(event.target.value)
-          }}
-          value={metaFields}
-          label='Meta Fields'
-          helperText='{"fieldName": "fieldValue"}'
-          onBlur={(event) => {
-            if (event.target.value) {
-              try {
-                JSON.parse(event.target.value)
-                setError(false)
-              } catch (e) {
-                setError(true)
-              }
-            } else {
-              setError(false)
-            }
-          }}
-        />
-      </Grid> */}
       <Grid item xs={true}>
         <TextField
           data-testid='assembly-conversionFactor'

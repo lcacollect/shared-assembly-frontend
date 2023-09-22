@@ -11,37 +11,28 @@ import {
   Tooltip,
 } from '@mui/material'
 import React, { useState, Dispatch, SetStateAction } from 'react'
-import { useDeleteAssemblyMutation, GraphQlAssembly } from '../../dataAccess'
+import { useDeleteProjectAssembliesMutation, GraphQlProjectAssembly } from '../../dataAccess'
 
 interface AssemblyDeleteDialogProps {
   openDialog: boolean
   handleDialogClose: () => void
-  projectId: string
   refetchAssemblies: () => void
-  assembly: GraphQlAssembly | null
-  setSelectedAssembly: Dispatch<SetStateAction<GraphQlAssembly | null>>
+  assembly: GraphQlProjectAssembly | null
+  setSelectedAssembly: Dispatch<SetStateAction<GraphQlProjectAssembly | null>>
   isMemberOfProject: boolean | undefined
 }
 
 export const AssemblyDeleteDialog: React.FC<AssemblyDeleteDialogProps> = (props) => {
-  const {
-    openDialog,
-    handleDialogClose,
-    projectId,
-    refetchAssemblies,
-    assembly,
-    setSelectedAssembly,
-    isMemberOfProject,
-  } = props
+  const { openDialog, handleDialogClose, refetchAssemblies, assembly, setSelectedAssembly, isMemberOfProject } = props
 
   const [snackbar, setSnackbar] = useState<Pick<AlertProps, 'children' | 'severity'> | null>(null)
 
-  const [deleteAssemblyMutation] = useDeleteAssemblyMutation()
+  const [deleteAssembliesMutation] = useDeleteProjectAssembliesMutation()
 
-  const deleteAssembly = async (assembly: GraphQlAssembly) => {
-    const response = await deleteAssemblyMutation({
+  const deleteAssembly = async (assembly: GraphQlProjectAssembly) => {
+    const response = await deleteAssembliesMutation({
       variables: {
-        id: assembly.id,
+        ids: [assembly.id],
       },
     })
     if (response?.errors) {
@@ -76,7 +67,7 @@ export const AssemblyDeleteDialog: React.FC<AssemblyDeleteDialogProps> = (props)
               <LcaButton
                 disabled={!isMemberOfProject}
                 onClick={() => {
-                  deleteAssembly(assembly as GraphQlAssembly)
+                  deleteAssembly(assembly as GraphQlProjectAssembly)
                 }}
                 data-testid='add-project-assembly-button'
               >
