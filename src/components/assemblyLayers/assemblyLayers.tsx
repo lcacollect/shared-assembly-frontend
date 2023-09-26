@@ -38,6 +38,9 @@ interface AssemblyLayersProps {
   isTransportStage: boolean
   epds: EpdForAssemblyLayer[]
   sx?: SxProps
+  addMutation?: any
+  updateMutation?: any
+  deleteMutation?: any
 }
 
 export type EpdForAssemblyLayer = Pick<GraphQlProjectEpd, 'id' | 'name' | 'declaredUnit' | 'referenceServiceLife'>
@@ -63,14 +66,24 @@ export type TransportTypeOptions = {
 }
 
 export const AssemblyLayers = (props: AssemblyLayersProps) => {
-  const { loading, assembly, isMemberOfProject, isTransportStage, sx, epds } = props
+  const {
+    loading,
+    assembly,
+    isMemberOfProject,
+    isTransportStage,
+    sx,
+    epds,
+    addMutation = useAddProjectAssemblyLayersMutation,
+    updateMutation = useUpdateProjectAssemblyLayersMutation,
+    deleteMutation = useDeleteProjectAssemblyLayersMutation,
+  } = props
   const [rows, setRows] = useState<GridRowModel<AssemblyLayer[]>>([])
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
   const [snackbar, setSnackbar] = useState<Pick<AlertProps, 'children' | 'severity'> | null>(null)
 
-  const [addAssemblyLayer] = useAddProjectAssemblyLayersMutation()
-  const [updateAssemblyLayer] = useUpdateProjectAssemblyLayersMutation()
-  const [deleteAssemblyLayer] = useDeleteProjectAssemblyLayersMutation()
+  const [addAssemblyLayer] = addMutation()
+  const [updateAssemblyLayer] = updateMutation()
+  const [deleteAssemblyLayer] = deleteMutation()
 
   const transportTypeOptions: TransportTypeOptions = {
     [TransportType.Plane]: 'plane',
@@ -130,16 +143,14 @@ export const AssemblyLayers = (props: AssemblyLayersProps) => {
       const { errors } = await deleteAssemblyLayer({
         variables: {
           id: assembly?.id as string,
-          layers: [
-            {
-              id: id as string,
-            },
-          ],
+          layers: [id as string],
         },
       })
       if (errors) {
-        errors.forEach((error) => console.error(error))
-        setSnackbar({ children: errors[0].message, severity: 'error' })
+        errors.forEach((error: { message: string }) => {
+          console.error(error)
+          setSnackbar({ children: error.message, severity: 'error' })
+        })
       }
     },
     [rows],
@@ -193,22 +204,30 @@ export const AssemblyLayers = (props: AssemblyLayersProps) => {
     })
     if (errors) {
       throw new Error(errors[0].message)
-    }
-    let addedRow = {}
-    let layerId = ''
-    if (data?.addProjectAssemblyLayers?.length) {
-      layerId = data?.addProjectAssemblyLayers[0].id as string
-      addedRow = { ...newRow, id: layerId }
-    }
+    } else {
+      let addedRow = {}
+      let layerId = ''
+      // eslint-disable-next-line no-prototype-builtins
+      if (data.hasOwnProperty('addProjectAssemblyLayers')) {
+        layerId = data?.addProjectAssemblyLayers[0].id as string
+        addedRow = { ...newRow, id: layerId }
+        // eslint-disable-next-line no-prototype-builtins
+      } else if (data.hasOwnProperty('addAssemblyLayers')) {
+        layerId = data?.addAssemblyLayers[0].id as string
+        addedRow = { ...newRow, id: layerId }
+      } else {
+        throw new Error(`No return data when adding assembly layer: ${data}`)
+      }
 
-    setRows((rows) => rows.map((row) => (row.id == '' ? (addedRow as AssemblyLayer) : row)))
-    const newRowModes = {
-      ...rowModesModel,
-      [layerId]: { mode: GridRowModes.View },
+      setRows((rows) => rows.map((row) => (row.id == '' ? (addedRow as AssemblyLayer) : row)))
+      const newRowModes = {
+        ...rowModesModel,
+        [layerId]: { mode: GridRowModes.View },
+      }
+      delete newRowModes['']
+      setRowModesModel(newRowModes)
+      return addedRow
     }
-    delete newRowModes['']
-    setRowModesModel(newRowModes)
-    return addedRow
   }
 
   const updateRow = async (newRow: AssemblyLayer, oldRow: GridRowModel) => {
@@ -234,17 +253,17 @@ export const AssemblyLayers = (props: AssemblyLayersProps) => {
     })
     if (errors) {
       throw new Error(errors[0].message)
+    } else {
+      const updatedRow = { ...newRow }
+      setRows((rows) => rows.map((row) => (row.id === updatedRow.id ? updatedRow : row)))
+      const newRowModes = {
+        ...rowModesModel,
+        [newRow.id]: { mode: GridRowModes.View },
+      }
+      delete newRowModes['']
+      setRowModesModel(newRowModes)
+      return updatedRow
     }
-
-    const updatedRow = { ...newRow }
-    setRows((rows) => rows.map((row) => (row.id === updatedRow.id ? updatedRow : row)))
-    const newRowModes = {
-      ...rowModesModel,
-      [newRow.id]: { mode: GridRowModes.View },
-    }
-    delete newRowModes['']
-    setRowModesModel(newRowModes)
-    return updatedRow
   }
 
   const handleRowEditStart = (params: GridRowParams, event: MuiEvent<SyntheticEvent>) => {
@@ -265,7 +284,10 @@ export const AssemblyLayers = (props: AssemblyLayersProps) => {
 
     const handleValueChange = async (
       event: MuiEvent<SyntheticEvent>,
-      value: { value: string; label: string } | null,
+      value: {
+        value: string
+        label: string
+      } | null,
     ) => {
       const epd = epds.find((epd) => epd.id === value?.value)
 

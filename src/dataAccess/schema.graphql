@@ -110,7 +110,7 @@ mutation updateProjectAssemblies($assemblies: [ProjectAssemblyUpdateInput!]!) {
   }
 }
 
-mutation deleteProjectAssemblies($ids: [String!]!) {
+mutation deleteProjectAssemblies($ids: [ID!]!) {
   deleteProjectAssemblies(ids: $ids)
 }
 
@@ -145,24 +145,20 @@ input AssemblyLayerUpdateInput {
   transportUnit: String
 }
 
-input AssemblyLayerDeleteInput {
-  id: String!
-}
-
-mutation addProjectAssemblyLayers($id: String!, $layers: [AssemblyLayerInput!]!) {
+mutation addProjectAssemblyLayers($id: ID!, $layers: [AssemblyLayerInput!]!) {
   addProjectAssemblyLayers(id: $id, layers: $layers) {
     id
     name
   }
 }
 
-mutation updateProjectAssemblyLayers($id: String!, $layers: [AssemblyLayerUpdateInput!]!) {
+mutation updateProjectAssemblyLayers($id: ID!, $layers: [AssemblyLayerUpdateInput!]!) {
   updateProjectAssemblyLayers(id: $id, layers: $layers) {
     id
     name
   }
 }
 
-mutation deleteProjectAssemblyLayers($id: String!, $layers: [AssemblyLayerDeleteInput!]!) {
+mutation deleteProjectAssemblyLayers($id: ID!, $layers: [ID!]!) {
   deleteProjectAssemblyLayers(id: $id, layers: $layers)
 }
