@@ -1,17 +1,16 @@
 import { InnerPaper } from '@lcacollect/components'
 import { Stack, Typography } from '@mui/material'
 import { Dispatch, SetStateAction, useMemo, useState } from 'react'
-import { GraphQlAssembly } from '../../dataAccess'
+import { GraphQlProjectAssembly } from '../../dataAccess'
 import { AssemblyListItem } from '../assemblyListItem'
 import { SearchPanel } from '../../components'
 
 interface AssemblyListProps {
-  assemblies?: GraphQlAssembly[] | null | undefined
-  setSelectedAssembly: Dispatch<SetStateAction<GraphQlAssembly | null>>
+  assemblies?: GraphQlProjectAssembly[] | null | undefined
+  setSelectedAssembly: Dispatch<SetStateAction<GraphQlProjectAssembly | null>>
   handleEditAssembly: () => void
-  projectId: string
   refetchAssemblies: () => void
-  selectedAssembly: GraphQlAssembly | null | undefined
+  selectedAssembly: GraphQlProjectAssembly | null | undefined
   isMemberOfProject: boolean | undefined
 }
 
@@ -20,7 +19,6 @@ export const AssemblyList = (props: AssemblyListProps) => {
     assemblies,
     setSelectedAssembly,
     handleEditAssembly,
-    projectId,
     refetchAssemblies,
     selectedAssembly,
     isMemberOfProject,
@@ -47,7 +45,6 @@ export const AssemblyList = (props: AssemblyListProps) => {
                 key={index}
                 setSelectedAssembly={setSelectedAssembly}
                 handleEditAssembly={handleEditAssembly}
-                projectId={projectId}
                 refetchAssemblies={refetchAssemblies}
                 selectedAssembly={selectedAssembly}
                 isMemberOfProject={isMemberOfProject}

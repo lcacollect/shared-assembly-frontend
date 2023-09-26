@@ -1,30 +1,22 @@
 import { Dispatch, SetStateAction, useState } from 'react'
-import { GraphQlAssembly } from '../../dataAccess'
+import { GraphQlProjectAssembly } from '../../dataAccess'
 import EditOutlined from '@mui/icons-material/EditOutlined'
 import DeleteOutlined from '@mui/icons-material/DeleteOutlined'
 import { AssemblyDeleteDialog } from '../../components'
 import { Box, IconButton, Typography } from '@mui/material'
 
 interface AssemblyListItemProps {
-  assembly: GraphQlAssembly
+  assembly: GraphQlProjectAssembly
   handleEditAssembly: () => void
-  setSelectedAssembly: Dispatch<SetStateAction<GraphQlAssembly | null>>
-  projectId: string
+  setSelectedAssembly: Dispatch<SetStateAction<GraphQlProjectAssembly | null>>
   refetchAssemblies: () => void
-  selectedAssembly: GraphQlAssembly | null | undefined
+  selectedAssembly: GraphQlProjectAssembly | null | undefined
   isMemberOfProject: boolean | undefined
 }
 
 export const AssemblyListItem = (props: AssemblyListItemProps) => {
-  const {
-    assembly,
-    handleEditAssembly,
-    setSelectedAssembly,
-    projectId,
-    refetchAssemblies,
-    selectedAssembly,
-    isMemberOfProject,
-  } = props
+  const { assembly, handleEditAssembly, setSelectedAssembly, refetchAssemblies, selectedAssembly, isMemberOfProject } =
+    props
 
   const [openAssemblyDialog, setOpenAssemblyDialog] = useState<boolean>(false)
 
@@ -87,7 +79,6 @@ export const AssemblyListItem = (props: AssemblyListItemProps) => {
       <AssemblyDeleteDialog
         openDialog={openAssemblyDialog}
         handleDialogClose={handleAssemblyDialogClose}
-        projectId={projectId as string}
         refetchAssemblies={refetchAssemblies}
         assembly={assembly}
         setSelectedAssembly={setSelectedAssembly}

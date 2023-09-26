@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import {
-  useGetAssembliesQuery,
-  GraphQlAssembly,
+  useGetProjectAssembliesQuery,
+  GraphQlProjectAssembly,
   useGetAccountQuery,
   useGetProjectMembersQuery,
   useGetprojectStagesQuery,
@@ -14,7 +14,7 @@ import { AssemblyList, AssemblyDialog, AssemblyDetail } from '../../components'
 export const AssemblyPage = () => {
   const { projectId } = useParams()
 
-  const [selectedAssembly, setSelectedAssembly] = useState<GraphQlAssembly | null>(null)
+  const [selectedAssembly, setSelectedAssembly] = useState<GraphQlProjectAssembly | null>(null)
   const [openAssemblyDialog, setOpenAssemblyDialog] = useState(false)
   const [isMemberOfProject, setIsMemberOfProject] = useState<boolean>()
 
@@ -23,7 +23,7 @@ export const AssemblyPage = () => {
     loading,
     error,
     refetch: retfetchAssemblies,
-  } = useGetAssembliesQuery({
+  } = useGetProjectAssembliesQuery({
     variables: { projectId: projectId as string },
     skip: !projectId,
   })
@@ -58,10 +58,10 @@ export const AssemblyPage = () => {
     }
   }, [accountData, projectMemberData])
 
-  const assemblies = data?.assemblies
+  const assemblies = data?.projectAssemblies
 
   useEffect(() => {
-    if (assemblies && assemblies.length) setSelectedAssembly(assemblies[0] as GraphQlAssembly)
+    if (assemblies && assemblies.length) setSelectedAssembly(assemblies[0] as GraphQlProjectAssembly)
   }, [assemblies])
 
   const handleAddAssembly = () => {
@@ -92,11 +92,10 @@ export const AssemblyPage = () => {
         <Grid container spacing={2}>
           <Grid item md={5} lg={3}>
             <AssemblyList
-              assemblies={assemblies as GraphQlAssembly[]}
+              assemblies={assemblies as GraphQlProjectAssembly[]}
               setSelectedAssembly={setSelectedAssembly}
               selectedAssembly={selectedAssembly}
               handleEditAssembly={handleEditAssembly}
-              projectId={projectId as string}
               refetchAssemblies={retfetchAssemblies}
               isMemberOfProject={isMemberOfProject}
             />

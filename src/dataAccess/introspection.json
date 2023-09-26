@@ -6,12 +6,12 @@
     "types": [
       {
         "kind": "INPUT_OBJECT",
-        "name": "AssemblyLayerDeleteInput",
+        "name": "AssemblyAddInput",
         "description": null,
         "fields": null,
         "inputFields": [
           {
-            "name": "id",
+            "name": "category",
             "description": null,
             "type": {
               "kind": "NON_NULL",
@@ -19,6 +19,113 @@
               "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
             },
             "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "conversionFactor",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "Float", "ofType": null },
+            "defaultValue": "1",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "description",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "lifeTime",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "Float", "ofType": null },
+            "defaultValue": "50",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "metaFields",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "JSON", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "unit",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "ENUM", "name": "GraphQLAssemblyUnit", "ofType": null }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "AssemblyFilters",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "category",
+            "description": null,
+            "type": { "kind": "INPUT_OBJECT", "name": "FilterOptions", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "description",
+            "description": null,
+            "type": { "kind": "INPUT_OBJECT", "name": "FilterOptions", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "type": { "kind": "INPUT_OBJECT", "name": "FilterOptions", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "lifeTime",
+            "description": null,
+            "type": { "kind": "INPUT_OBJECT", "name": "FilterOptions", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": null,
+            "type": { "kind": "INPUT_OBJECT", "name": "FilterOptions", "ofType": null },
+            "defaultValue": "null",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -206,19 +313,82 @@
         "possibleTypes": null
       },
       {
-        "kind": "ENUM",
-        "name": "AssemblyUnit",
+        "kind": "INPUT_OBJECT",
+        "name": "AssemblyUpdateInput",
         "description": null,
         "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          { "name": "kg", "description": null, "isDeprecated": false, "deprecationReason": null },
-          { "name": "m", "description": null, "isDeprecated": false, "deprecationReason": null },
-          { "name": "m2", "description": null, "isDeprecated": false, "deprecationReason": null },
-          { "name": "m3", "description": null, "isDeprecated": false, "deprecationReason": null },
-          { "name": "pcs", "description": null, "isDeprecated": false, "deprecationReason": null }
+        "inputFields": [
+          {
+            "name": "category",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "conversionFactor",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "Float", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "description",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "lifeTime",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "Float", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "metaFields",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "JSON", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "unit",
+            "description": null,
+            "type": { "kind": "ENUM", "name": "GraphQLAssemblyUnit", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
         ],
+        "interfaces": null,
+        "enumValues": null,
         "possibleTypes": null
       },
       {
@@ -582,6 +752,209 @@
       },
       {
         "kind": "INPUT_OBJECT",
+        "name": "GraphQLAddEpdInput",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "ap",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "JSON", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "comment",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "conversions",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "JSON", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "declaredUnit",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "ENUM", "name": "GraphQLUnit", "ofType": null }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ep",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "JSON", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "gwp",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "JSON", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "location",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "metaFields",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "JSON", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "odp",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "JSON", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "penre",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "JSON", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "pere",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "JSON", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "pocp",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "JSON", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "publishedDate",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "Date", "ofType": null }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "referenceServiceLife",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "Int", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "source",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "JSON", "ofType": null }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "subtype",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "validUntil",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "Date", "ofType": null }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "version",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
         "name": "GraphQLAddSiteInput",
         "description": null,
         "fields": null,
@@ -692,7 +1065,11 @@
             "name": "category",
             "description": null,
             "args": [],
-            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -762,10 +1139,10 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "LIST",
+              "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "NON_NULL",
+                "kind": "LIST",
                 "name": null,
                 "ofType": { "kind": "OBJECT", "name": "GraphQLAssemblyLayer", "ofType": null }
               }
@@ -806,22 +1183,14 @@
             "deprecationReason": null
           },
           {
-            "name": "projectId",
+            "name": "unit",
             "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
-              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+              "ofType": { "kind": "ENUM", "name": "GraphQLAssemblyUnit", "ofType": null }
             },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "unit",
-            "description": null,
-            "args": [],
-            "type": { "kind": "ENUM", "name": "AssemblyUnit", "ofType": null },
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -928,6 +1297,22 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "GraphQLAssemblyUnit",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          { "name": "kg", "description": null, "isDeprecated": false, "deprecationReason": null },
+          { "name": "m", "description": null, "isDeprecated": false, "deprecationReason": null },
+          { "name": "m2", "description": null, "isDeprecated": false, "deprecationReason": null },
+          { "name": "m3", "description": null, "isDeprecated": false, "deprecationReason": null },
+          { "name": "pcs", "description": null, "isDeprecated": false, "deprecationReason": null }
+        ],
         "possibleTypes": null
       },
       {
@@ -2085,6 +2470,166 @@
       },
       {
         "kind": "OBJECT",
+        "name": "GraphQLProjectAssembly",
+        "description": null,
+        "fields": [
+          {
+            "name": "category",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "conversionFactor",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "Float", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "description",
+            "description": null,
+            "args": [],
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "gwp",
+            "description": null,
+            "args": [
+              {
+                "name": "phases",
+                "description": null,
+                "type": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+                  }
+                },
+                "defaultValue": "null",
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "Float", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "layers",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "OBJECT", "name": "GraphQLAssemblyLayer", "ofType": null }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "lifeTime",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "Float", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "metaFields",
+            "description": null,
+            "args": [],
+            "type": { "kind": "SCALAR", "name": "JSON", "ofType": null },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "unit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "ENUM", "name": "GraphQLAssemblyUnit", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "GraphQLProjectEPD",
         "description": null,
         "fields": [
@@ -2106,7 +2651,7 @@
               "ofType": {
                 "kind": "NON_NULL",
                 "name": null,
-                "ofType": { "kind": "OBJECT", "name": "GraphQLAssembly", "ofType": null }
+                "ofType": { "kind": "OBJECT", "name": "GraphQLProjectAssembly", "ofType": null }
               }
             },
             "isDeprecated": false,
@@ -2989,7 +3534,7 @@
             "name": "assembly",
             "description": null,
             "args": [],
-            "type": { "kind": "OBJECT", "name": "GraphQLAssembly", "ofType": null },
+            "type": { "kind": "OBJECT", "name": "GraphQLProjectAssembly", "ofType": null },
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -3604,6 +4149,61 @@
         "possibleTypes": null
       },
       {
+        "kind": "OBJECT",
+        "name": "GraphQLTypeCodeElement",
+        "description": null,
+        "fields": [
+          {
+            "name": "code",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "level",
+            "description": null,
+            "args": [],
+            "type": { "kind": "NON_NULL", "name": null, "ofType": { "kind": "SCALAR", "name": "Int", "ofType": null } },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "ENUM",
         "name": "GraphQLUnit",
         "description": null,
@@ -3611,15 +4211,15 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
+          { "name": "KG", "description": null, "isDeprecated": false, "deprecationReason": null },
           { "name": "L", "description": null, "isDeprecated": false, "deprecationReason": null },
           { "name": "M", "description": null, "isDeprecated": false, "deprecationReason": null },
           { "name": "M2", "description": null, "isDeprecated": false, "deprecationReason": null },
           { "name": "M2R1", "description": null, "isDeprecated": false, "deprecationReason": null },
           { "name": "M3", "description": null, "isDeprecated": false, "deprecationReason": null },
           { "name": "PCS", "description": null, "isDeprecated": false, "deprecationReason": null },
-          { "name": "Tones", "description": null, "isDeprecated": false, "deprecationReason": null },
-          { "name": "UNKNOWN", "description": null, "isDeprecated": false, "deprecationReason": null },
-          { "name": "kg", "description": null, "isDeprecated": false, "deprecationReason": null }
+          { "name": "TONES", "description": null, "isDeprecated": false, "deprecationReason": null },
+          { "name": "UNKNOWN", "description": null, "isDeprecated": false, "deprecationReason": null }
         ],
         "possibleTypes": null
       },
@@ -3864,84 +4464,24 @@
         "description": null,
         "fields": [
           {
-            "name": "addAssembly",
-            "description": null,
+            "name": "addAssemblies",
+            "description": "Add Assemblies",
             "args": [
               {
-                "name": "category",
+                "name": "assemblies",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
-                  "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "conversionFactor",
-                "description": null,
-                "type": { "kind": "SCALAR", "name": "Float", "ofType": null },
-                "defaultValue": "1",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "description",
-                "description": null,
-                "type": { "kind": "SCALAR", "name": "String", "ofType": null },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "lifeTime",
-                "description": null,
-                "type": { "kind": "SCALAR", "name": "Float", "ofType": null },
-                "defaultValue": "50",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "metaFields",
-                "description": null,
-                "type": { "kind": "SCALAR", "name": "JSON", "ofType": null },
-                "defaultValue": "null",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "name",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "projectId",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "unit",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": { "kind": "ENUM", "name": "AssemblyUnit", "ofType": null }
+                  "ofType": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": { "kind": "INPUT_OBJECT", "name": "AssemblyAddInput", "ofType": null }
+                    }
+                  }
                 },
                 "defaultValue": null,
                 "isDeprecated": false,
@@ -3951,14 +4491,22 @@
             "type": {
               "kind": "NON_NULL",
               "name": null,
-              "ofType": { "kind": "OBJECT", "name": "GraphQLAssembly", "ofType": null }
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "OBJECT", "name": "GraphQLAssembly", "ofType": null }
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "addAssemblyLayers",
-            "description": null,
+            "description": "Add layers to an Assembly",
             "args": [
               {
                 "name": "id",
@@ -3966,7 +4514,7 @@
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
-                  "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+                  "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null }
                 },
                 "defaultValue": null,
                 "isDeprecated": false,
@@ -4042,6 +4590,47 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": { "kind": "OBJECT", "name": "GraphQLComment", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "addEpds",
+            "description": "Add Global EPDs.",
+            "args": [
+              {
+                "name": "epds",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": { "kind": "INPUT_OBJECT", "name": "GraphQLAddEpdInput", "ofType": null }
+                    }
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "OBJECT", "name": "GraphQLEPD", "ofType": null }
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -4187,6 +4776,153 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": { "kind": "OBJECT", "name": "GraphQLProject", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "addProjectAssemblies",
+            "description": "Add Project Assemblies",
+            "args": [
+              {
+                "name": "assemblies",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": { "kind": "INPUT_OBJECT", "name": "ProjectAssemblyAddInput", "ofType": null }
+                    }
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "OBJECT", "name": "GraphQLProjectAssembly", "ofType": null }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "addProjectAssembliesFromAssemblies",
+            "description": "Add Project Assemblies from Assemblies",
+            "args": [
+              {
+                "name": "assemblies",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null }
+                    }
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "projectId",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "OBJECT", "name": "GraphQLProjectAssembly", "ofType": null }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "addProjectAssemblyLayers",
+            "description": "Add layers to an Assembly",
+            "args": [
+              {
+                "name": "id",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "layers",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": { "kind": "INPUT_OBJECT", "name": "AssemblyLayerInput", "ofType": null }
+                    }
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "OBJECT", "name": "GraphQLAssemblyLayer", "ofType": null }
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -5035,11 +5771,35 @@
             "deprecationReason": null
           },
           {
-            "name": "deleteAssembly",
-            "description": null,
+            "name": "createTypeCodeElement",
+            "description": "Add a new typeCodeElement",
             "args": [
               {
-                "name": "id",
+                "name": "code",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "level",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "SCALAR", "name": "Int", "ofType": null }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "name",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
@@ -5054,14 +5814,80 @@
             "type": {
               "kind": "NON_NULL",
               "name": null,
-              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+              "ofType": { "kind": "OBJECT", "name": "GraphQLTypeCodeElement", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "createTypeCodeElementFromSource",
+            "description": "Add a new typeCodeElement from csv file",
+            "args": [
+              {
+                "name": "file",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "OBJECT", "name": "GraphQLTypeCodeElement", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "deleteAssemblies",
+            "description": "Delete Assemblies",
+            "args": [
+              {
+                "name": "ids",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null }
+                    }
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null }
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "deleteAssemblyLayers",
-            "description": null,
+            "description": "Delete layers from an Assembly",
             "args": [
               {
                 "name": "id",
@@ -5069,7 +5895,7 @@
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
-                  "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+                  "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null }
                 },
                 "defaultValue": null,
                 "isDeprecated": false,
@@ -5087,7 +5913,7 @@
                     "ofType": {
                       "kind": "NON_NULL",
                       "name": null,
-                      "ofType": { "kind": "INPUT_OBJECT", "name": "AssemblyLayerDeleteInput", "ofType": null }
+                      "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null }
                     }
                   }
                 },
@@ -5138,6 +5964,47 @@
             "deprecationReason": null
           },
           {
+            "name": "deleteEpds",
+            "description": "Delete a global EPD",
+            "args": [
+              {
+                "name": "ids",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+                    }
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "deleteProject",
             "description": "Delete a project",
             "args": [
@@ -5158,6 +6025,100 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "deleteProjectAssemblies",
+            "description": "Delete Project Assemblies",
+            "args": [
+              {
+                "name": "ids",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null }
+                    }
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "deleteProjectAssemblyLayers",
+            "description": "Delete layers from an Assembly",
+            "args": [
+              {
+                "name": "id",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "layers",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null }
+                    }
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -5507,6 +6468,31 @@
             "deprecationReason": null
           },
           {
+            "name": "deleteTypeCodeElement",
+            "description": "Delete a TypeCodeElement",
+            "args": [
+              {
+                "name": "id",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "removeProjectMembersFromGroup",
             "description": "Remove Project Members from an existing Project Group",
             "args": [
@@ -5552,74 +6538,26 @@
             "deprecationReason": null
           },
           {
-            "name": "updateAssembly",
-            "description": null,
+            "name": "updateAssemblies",
+            "description": "Update Assemblies",
             "args": [
               {
-                "name": "category",
-                "description": null,
-                "type": { "kind": "SCALAR", "name": "String", "ofType": null },
-                "defaultValue": "null",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "conversionFactor",
-                "description": null,
-                "type": { "kind": "SCALAR", "name": "Float", "ofType": null },
-                "defaultValue": "null",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "description",
-                "description": null,
-                "type": { "kind": "SCALAR", "name": "String", "ofType": null },
-                "defaultValue": "null",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "id",
+                "name": "assemblies",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
-                  "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+                  "ofType": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": { "kind": "INPUT_OBJECT", "name": "AssemblyUpdateInput", "ofType": null }
+                    }
+                  }
                 },
                 "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "lifeTime",
-                "description": null,
-                "type": { "kind": "SCALAR", "name": "Float", "ofType": null },
-                "defaultValue": "null",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "metaFields",
-                "description": null,
-                "type": { "kind": "SCALAR", "name": "JSON", "ofType": null },
-                "defaultValue": "null",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "name",
-                "description": null,
-                "type": { "kind": "SCALAR", "name": "String", "ofType": null },
-                "defaultValue": "null",
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "unit",
-                "description": null,
-                "type": { "kind": "ENUM", "name": "AssemblyUnit", "ofType": null },
-                "defaultValue": "null",
                 "isDeprecated": false,
                 "deprecationReason": null
               }
@@ -5627,7 +6565,15 @@
             "type": {
               "kind": "NON_NULL",
               "name": null,
-              "ofType": { "kind": "OBJECT", "name": "GraphQLAssembly", "ofType": null }
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "OBJECT", "name": "GraphQLAssembly", "ofType": null }
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -5642,7 +6588,7 @@
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
-                  "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+                  "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null }
                 },
                 "defaultValue": null,
                 "isDeprecated": false,
@@ -5823,6 +6769,100 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": { "kind": "OBJECT", "name": "GraphQLProject", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "updateProjectAssemblies",
+            "description": "Update Project Assemblies",
+            "args": [
+              {
+                "name": "assemblies",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": { "kind": "INPUT_OBJECT", "name": "ProjectAssemblyUpdateInput", "ofType": null }
+                    }
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "OBJECT", "name": "GraphQLProjectAssembly", "ofType": null }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "updateProjectAssemblyLayers",
+            "description": null,
+            "args": [
+              {
+                "name": "id",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "SCALAR", "name": "ID", "ofType": null }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "layers",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": { "kind": "INPUT_OBJECT", "name": "AssemblyLayerUpdateInput", "ofType": null }
+                    }
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "OBJECT", "name": "GraphQLAssemblyLayer", "ofType": null }
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -6275,6 +7315,55 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "updateTypeCodeElement",
+            "description": "update typeCodeElement",
+            "args": [
+              {
+                "name": "code",
+                "description": null,
+                "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+                "defaultValue": "null",
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "id",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "level",
+                "description": null,
+                "type": { "kind": "SCALAR", "name": "Int", "ofType": null },
+                "defaultValue": "null",
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "name",
+                "description": null,
+                "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+                "defaultValue": "null",
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "OBJECT", "name": "GraphQLTypeCodeElement", "ofType": null }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -6330,6 +7419,176 @@
         ],
         "inputFields": null,
         "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "ProjectAssemblyAddInput",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "category",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "conversionFactor",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "Float", "ofType": null },
+            "defaultValue": "1",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "description",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "lifeTime",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "Float", "ofType": null },
+            "defaultValue": "50",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "metaFields",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "JSON", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectId",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "unit",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "ENUM", "name": "GraphQLAssemblyUnit", "ofType": null }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "ProjectAssemblyUpdateInput",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "category",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "conversionFactor",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "Float", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "description",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "lifeTime",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "Float", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "metaFields",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "JSON", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": null,
+            "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "unit",
+            "description": null,
+            "type": { "kind": "ENUM", "name": "GraphQLAssemblyUnit", "ofType": null },
+            "defaultValue": "null",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
         "enumValues": null,
         "possibleTypes": null
       },
@@ -6698,17 +7957,13 @@
           },
           {
             "name": "assemblies",
-            "description": null,
+            "description": "Get assemblies",
             "args": [
               {
-                "name": "projectId",
+                "name": "filters",
                 "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
-                },
-                "defaultValue": null,
+                "type": { "kind": "INPUT_OBJECT", "name": "AssemblyFilters", "ofType": null },
+                "defaultValue": "null",
                 "isDeprecated": false,
                 "deprecationReason": null
               }
@@ -6936,6 +8191,47 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": { "kind": "OBJECT", "name": "GraphQLLifeCycleStage", "ofType": null }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectAssemblies",
+            "description": "Get project assemblies",
+            "args": [
+              {
+                "name": "filters",
+                "description": null,
+                "type": { "kind": "INPUT_OBJECT", "name": "AssemblyFilters", "ofType": null },
+                "defaultValue": "null",
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "projectId",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "SCALAR", "name": "String", "ofType": null }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "OBJECT", "name": "GraphQLProjectAssembly", "ofType": null }
                 }
               }
             },
@@ -7465,6 +8761,51 @@
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": { "kind": "OBJECT", "name": "GraphQLTask", "ofType": null }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "typeCodeElements",
+            "description": "Get typeCodeElements",
+            "args": [
+              {
+                "name": "code",
+                "description": null,
+                "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "id",
+                "description": null,
+                "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "name",
+                "description": null,
+                "type": { "kind": "SCALAR", "name": "String", "ofType": null },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": { "kind": "OBJECT", "name": "GraphQLTypeCodeElement", "ofType": null }
                 }
               }
             },

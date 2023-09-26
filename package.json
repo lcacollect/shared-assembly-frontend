@@ -1,6 +1,6 @@
 {
   "name": "@lcacollect/assembly",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "description": "A shared library for assembly related components and pages",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -16,7 +16,8 @@
     "lint:fix": "eslint --fix src/**/*.{tsx,ts}",
     "format:fix": "prettier --write src/",
     "format": "prettier --check src/",
-    "fix": "npm run lint:fix && npm run format:fix"
+    "ts": "tsc --noEmit",
+    "fix": "npm run lint:fix && npm run format:fix && npm run ts"
   },
   "repository": {
     "type": "git",
