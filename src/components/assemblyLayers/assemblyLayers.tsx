@@ -14,7 +14,7 @@ import {
 } from '@mui/x-data-grid-pro'
 import { Alert, AlertProps, Autocomplete, Box, LinearProgress, Snackbar, SxProps, TextField } from '@mui/material'
 import { NoRowsOverlay } from '@lcacollect/components'
-import { SyntheticEvent, useCallback, useEffect, useState } from 'react'
+import { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import {
   GraphQlProjectAssembly,
   GraphQlProjectEpd,
@@ -280,6 +280,7 @@ export const AssemblyLayers = (props: AssemblyLayersProps) => {
   }, [])
 
   const CustomTypeEditComponent = (props: GridEditSingleSelectCellProps) => {
+    const [search, setSearch] = useState(props.valueLabel || '')
     const apiRef = useGridApiContext()
 
     const handleValueChange = async (
@@ -308,15 +309,22 @@ export const AssemblyLayers = (props: AssemblyLayersProps) => {
       })
     }
 
+    const epdName = useMemo(() => epds.find((epd) => epd.id === props.value)?.name || '', [props.value])
+
     return (
       <Autocomplete
-        value={props.value || ''}
-        inputValue={props.valueLabel || ''}
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        value={epdName}
+        inputValue={search}
+        onInputChange={(event, newInputValue) => {
+          setSearch(newInputValue)
+        }}
         id='EPD box'
         options={epds.map((epd) => ({ value: epd.id, label: epd.name }))}
         fullWidth
         onChange={handleValueChange}
-        renderInput={(params) => <TextField {...params} label='EPD' />}
+        renderInput={(params) => <TextField {...params} label='EPD' sx={{ marginTop: 1 }} />}
       />
     )
   }

@@ -34,6 +34,7 @@ export type AssemblyAddInput = {
   lifeTime?: InputMaybe<Scalars['Float']>
   metaFields?: InputMaybe<Scalars['JSON']>
   name: Scalars['String']
+  source?: InputMaybe<Scalars['String']>
   unit: GraphQlAssemblyUnit
 }
 
@@ -43,6 +44,7 @@ export type AssemblyFilters = {
   id?: InputMaybe<FilterOptions>
   lifeTime?: InputMaybe<FilterOptions>
   name?: InputMaybe<FilterOptions>
+  source?: InputMaybe<FilterOptions>
 }
 
 export type AssemblyLayerInput = {
@@ -77,6 +79,7 @@ export type AssemblyUpdateInput = {
   lifeTime?: InputMaybe<Scalars['Float']>
   metaFields?: InputMaybe<Scalars['JSON']>
   name?: InputMaybe<Scalars['String']>
+  source?: InputMaybe<Scalars['String']>
   unit?: InputMaybe<GraphQlAssemblyUnit>
 }
 
@@ -175,6 +178,7 @@ export type GraphQlAssembly = {
   lifeTime: Scalars['Float']
   metaFields?: Maybe<Scalars['JSON']>
   name: Scalars['String']
+  source: Scalars['String']
   unit: GraphQlAssemblyUnit
 }
 
@@ -1236,7 +1240,7 @@ export type QueryCommitsArgs = {
 
 export type QueryEpdsArgs = {
   after?: InputMaybe<Scalars['String']>
-  count?: Scalars['Int']
+  count?: InputMaybe<Scalars['Int']>
   filters?: InputMaybe<EpdFilters>
   sortBy?: InputMaybe<EpdSort>
 }
@@ -1725,6 +1729,7 @@ export type GraphQlAssemblyResolvers<
   lifeTime?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
   metaFields?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  source?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   unit?: Resolver<ResolversTypes['GraphQLAssemblyUnit'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
