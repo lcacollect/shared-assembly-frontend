@@ -15,17 +15,21 @@ query getProjectAssemblies($projectId: String!) {
       description
       conversionFactor
       referenceServiceLife
-      transportType
+      transportEpd {
+        id
+        name
+        declaredUnit
+      }
       transportDistance
-      transportUnit
+      transportConversionFactor
     }
     description
     metaFields
   }
 }
 
-query getProjectEpds($projectId: String!) {
-  projectEpds(projectId: $projectId) {
+query getProjectEpds($projectId: String!, $filters: ProjectEPDFilters) {
+  projectEpds(projectId: $projectId, filters: $filters) {
     id
     name
     declaredUnit
@@ -33,16 +37,45 @@ query getProjectEpds($projectId: String!) {
   }
 }
 
-query getProjectEpd($projectId: String!, $epdId: String!) {
+query getProjectEpd(
+  $projectId: String!
+  $epdId: String!
+  $a1a3: Boolean = false
+  $a4: Boolean = false
+  $a5: Boolean = false
+  $b1: Boolean = false
+  $b2: Boolean = false
+  $b3: Boolean = false
+  $b4: Boolean = false
+  $b5: Boolean = false
+  $b6: Boolean = false
+  $b7: Boolean = false
+  $c1: Boolean = false
+  $c2: Boolean = false
+  $c3: Boolean = false
+  $c4: Boolean = false
+  $d: Boolean = false
+) {
   projectEpds(projectId: $projectId, filters: { id: { equal: $epdId } }) {
     id
     name
     source
     gwp {
-      a1a3
-      c3
-      c4
-      d
+      a1a3 @include(if: $a1a3)
+      a4 @include(if: $a4)
+      a5 @include(if: $a5)
+      b1 @include(if: $b1)
+      b2 @include(if: $b2)
+      b3 @include(if: $b3)
+      b4 @include(if: $b4)
+      b5 @include(if: $b5)
+      b6 @include(if: $b6)
+      b7 @include(if: $b7)
+      c1 @include(if: $c1)
+      c2 @include(if: $c2)
+      c3 @include(if: $c3)
+      c4 @include(if: $c4)
+      d @include(if: $d)
     }
     version
     validUntil
@@ -50,6 +83,7 @@ query getProjectEpd($projectId: String!, $epdId: String!) {
     location
     declaredUnit
     subtype
+    isTransport
   }
 }
 
@@ -112,13 +146,6 @@ mutation updateProjectAssemblies($assemblies: [ProjectAssemblyUpdateInput!]!) {
 
 mutation deleteProjectAssemblies($ids: [ID!]!) {
   deleteProjectAssemblies(ids: $ids)
-}
-
-enum TransportType {
-  truck
-  train
-  ship
-  plane
 }
 
 input AssemblyLayerInput {

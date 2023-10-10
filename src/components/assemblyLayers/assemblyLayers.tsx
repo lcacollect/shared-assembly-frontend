@@ -9,6 +9,8 @@ import {
   GridRowModes,
   GridRowModesModel,
   GridRowParams,
+  GridValueGetterParams,
+  GridValueSetterParams,
   MuiEvent,
   useGridApiContext,
 } from '@mui/x-data-grid-pro'
@@ -18,7 +20,6 @@ import { SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react
 import {
   GraphQlProjectAssembly,
   GraphQlProjectEpd,
-  TransportType,
   useAddProjectAssemblyLayersMutation,
   useDeleteProjectAssemblyLayersMutation,
   useUpdateProjectAssemblyLayersMutation,
@@ -37,6 +38,7 @@ interface AssemblyLayersProps {
   isMemberOfProject: boolean
   isTransportStage: boolean
   epds: EpdForAssemblyLayer[]
+  transportEpds?: TransportEpd[]
   sx?: SxProps
   addMutation?: any
   updateMutation?: any
@@ -44,6 +46,7 @@ interface AssemblyLayersProps {
 }
 
 export type EpdForAssemblyLayer = Pick<GraphQlProjectEpd, 'id' | 'name' | 'declaredUnit' | 'referenceServiceLife'>
+export type TransportEpd = Pick<GraphQlProjectEpd, 'id' | 'name' | 'declaredUnit'>
 
 interface AssemblyLayer {
   id: string
@@ -53,16 +56,13 @@ interface AssemblyLayer {
   epdId: string
   referenceServiceLife: number | null
   description: string
-  transportType: TransportType | null
-  transportUnit: string | null
+  transportEpd: {
+    id: string
+    name: string
+    declaredUnit: string
+  }
+  transportConversionFactor: number
   transportDistance: number | null
-}
-
-export type TransportTypeOptions = {
-  [TransportType.Plane]: string
-  [TransportType.Ship]: string
-  [TransportType.Train]: string
-  [TransportType.Truck]: string
 }
 
 export const AssemblyLayers = (props: AssemblyLayersProps) => {
@@ -73,6 +73,7 @@ export const AssemblyLayers = (props: AssemblyLayersProps) => {
     isTransportStage,
     sx,
     epds,
+    transportEpds = [],
     addMutation = useAddProjectAssemblyLayersMutation,
     updateMutation = useUpdateProjectAssemblyLayersMutation,
     deleteMutation = useDeleteProjectAssemblyLayersMutation,
@@ -84,13 +85,6 @@ export const AssemblyLayers = (props: AssemblyLayersProps) => {
   const [addAssemblyLayer] = addMutation()
   const [updateAssemblyLayer] = updateMutation()
   const [deleteAssemblyLayer] = deleteMutation()
-
-  const transportTypeOptions: TransportTypeOptions = {
-    [TransportType.Plane]: 'plane',
-    [TransportType.Ship]: 'ship',
-    [TransportType.Train]: 'train',
-    [TransportType.Truck]: 'truck',
-  }
 
   useEffect(() => {
     if (assembly && assembly.layers) setRows(assembly.layers as unknown as AssemblyLayer[])
@@ -112,9 +106,9 @@ export const AssemblyLayers = (props: AssemblyLayersProps) => {
         epdId: '',
         referenceServiceLife: null,
         description: '',
-        transportType: null,
-        transportUnit: 'km',
+        transportEpd: { id: '', name: '', declaredUnit: '' },
         transportDistance: null,
+        transportConversionFactor: 1.0,
       } as AssemblyLayer,
     ])
     setRowModesModel((oldModel) => ({
@@ -195,9 +189,9 @@ export const AssemblyLayers = (props: AssemblyLayersProps) => {
             epdId: newRow.epdId,
             referenceServiceLife: newRow.referenceServiceLife,
             description: newRow.description,
-            transportType: newRow.transportType,
-            transportUnit: newRow.transportUnit,
+            transportEpdId: newRow.transportEpd.id,
             transportDistance: newRow.transportDistance,
+            transportConversionFactor: newRow.transportConversionFactor,
           },
         ],
       },
@@ -238,6 +232,7 @@ export const AssemblyLayers = (props: AssemblyLayersProps) => {
 
     const changeObject = getDifference(oldRow, newRow)
     delete changeObject.conversion
+    delete changeObject.transportEpd
 
     const { errors } = await updateAssemblyLayer({
       variables: {
@@ -247,6 +242,7 @@ export const AssemblyLayers = (props: AssemblyLayersProps) => {
             ...changeObject,
             id: oldRow.id,
             epdId: newRow.epdId,
+            transportEpdId: newRow.transportEpd.id,
           },
         ],
       },
@@ -377,12 +373,26 @@ export const AssemblyLayers = (props: AssemblyLayersProps) => {
       renderEditCell: (params) => <EditTextArea {...params} />,
     },
     {
-      field: 'transportType',
+      field: 'transportEpd.id',
       headerName: 'Transport Type',
       flex: 1.0,
       editable: true,
       type: 'singleSelect',
-      valueOptions: Object.entries(transportTypeOptions).map(([key, value]) => ({ value: key, label: value })),
+      valueOptions: transportEpds.map((epd) => ({ value: epd.id, label: epd.name })),
+      valueGetter: (params: GridValueGetterParams) => params.row.transportEpd?.id,
+      valueFormatter: (params) => transportEpds.find((epd) => epd.id === params.value)?.name,
+      valueSetter: (params: GridValueSetterParams) => {
+        const epd = transportEpds.find((epd) => epd.id === params.value)
+        return {
+          ...params.row,
+          transportEpd: {
+            ...params.row.transportEpd,
+            id: params.value,
+            name: epd?.name,
+            declaredUnit: epd?.declaredUnit,
+          },
+        }
+      },
     },
     {
       field: 'transportDistance',
@@ -395,11 +405,19 @@ export const AssemblyLayers = (props: AssemblyLayersProps) => {
       },
     },
     {
-      field: 'transportUnit',
+      field: 'transportEpd.declaredUnit',
       headerName: 'Transport Unit',
       flex: 0.5,
       editable: false,
       type: 'string',
+      valueGetter: (params) => (params.row.transportEpd ? params.row.transportEpd.declaredUnit : ''),
+    },
+    {
+      field: 'transportConversionFactor',
+      headerName: 'Transport Conversion Factor',
+      flex: 0.5,
+      editable: true,
+      type: 'number',
     },
     {
       field: 'actions',
@@ -471,9 +489,10 @@ export const AssemblyLayers = (props: AssemblyLayersProps) => {
         }}
         columnVisibilityModel={{
           id: false,
-          transportUnit: false,
+          'transportEpd.declaredUnit': isTransportStage,
           transportDistance: isTransportStage,
-          transportType: isTransportStage,
+          transportConversionFactor: isTransportStage,
+          'transportEpd.id': isTransportStage,
         }}
         experimentalFeatures={{ newEditingApi: true }}
         onRowEditStart={handleRowEditStart}

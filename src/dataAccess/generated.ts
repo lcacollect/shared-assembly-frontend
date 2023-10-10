@@ -54,9 +54,9 @@ export type AssemblyLayerInput = {
   id?: InputMaybe<Scalars['String']>
   name?: InputMaybe<Scalars['String']>
   referenceServiceLife?: InputMaybe<Scalars['Int']>
+  transportConversionFactor?: InputMaybe<Scalars['Float']>
   transportDistance?: InputMaybe<Scalars['Float']>
-  transportType?: InputMaybe<TransportType>
-  transportUnit?: InputMaybe<Scalars['String']>
+  transportEpdId?: InputMaybe<Scalars['String']>
 }
 
 export type AssemblyLayerUpdateInput = {
@@ -66,9 +66,9 @@ export type AssemblyLayerUpdateInput = {
   id: Scalars['String']
   name?: InputMaybe<Scalars['String']>
   referenceServiceLife?: InputMaybe<Scalars['Int']>
+  transportConversionFactor?: InputMaybe<Scalars['Float']>
   transportDistance?: InputMaybe<Scalars['Float']>
-  transportType?: InputMaybe<TransportType>
-  transportUnit?: InputMaybe<Scalars['String']>
+  transportEpdId?: InputMaybe<Scalars['String']>
 }
 
 export type AssemblyUpdateInput = {
@@ -104,6 +104,7 @@ export type CommitFilters = {
 export type EpdFilters = {
   category?: InputMaybe<FilterOptions>
   id?: InputMaybe<FilterOptions>
+  isTransport?: InputMaybe<FilterOptions>
   name?: InputMaybe<FilterOptions>
   owner?: InputMaybe<FilterOptions>
   region?: InputMaybe<FilterOptions>
@@ -114,6 +115,7 @@ export type EpdFilters = {
 
 export type EpdSort = {
   category?: InputMaybe<SortOptions>
+  isTransport?: InputMaybe<SortOptions>
   name?: InputMaybe<SortOptions>
   owner?: InputMaybe<SortOptions>
   region?: InputMaybe<SortOptions>
@@ -129,6 +131,7 @@ export type FilterOptions = {
   isAnyOf?: InputMaybe<Array<Scalars['String']>>
   isEmpty?: InputMaybe<Scalars['Boolean']>
   isNotEmpty?: InputMaybe<Scalars['Boolean']>
+  isTrue?: InputMaybe<Scalars['Boolean']>
   jsonContains?: InputMaybe<Scalars['String']>
   startsWith?: InputMaybe<Scalars['String']>
 }
@@ -142,7 +145,7 @@ export type GraphQlAddEpdInput = {
   gwp?: InputMaybe<Scalars['JSON']>
   id?: InputMaybe<Scalars['String']>
   location: Scalars['String']
-  metaFields?: InputMaybe<Scalars['JSON']>
+  metaData?: InputMaybe<Scalars['JSON']>
   name: Scalars['String']
   odp?: InputMaybe<Scalars['JSON']>
   penre?: InputMaybe<Scalars['JSON']>
@@ -195,9 +198,9 @@ export type GraphQlAssemblyLayer = {
   id?: Maybe<Scalars['String']>
   name?: Maybe<Scalars['String']>
   referenceServiceLife?: Maybe<Scalars['Int']>
+  transportConversionFactor: Scalars['Float']
   transportDistance?: Maybe<Scalars['Float']>
-  transportType?: Maybe<TransportType>
-  transportUnit?: Maybe<Scalars['String']>
+  transportEpd?: Maybe<GraphQlProjectEpd>
 }
 
 export enum GraphQlAssemblyUnit {
@@ -253,7 +256,9 @@ export type GraphQlepd = {
   ep?: Maybe<GraphQlImpactCategories>
   gwp?: Maybe<GraphQlImpactCategories>
   id: Scalars['String']
+  isTransport: Scalars['Boolean']
   location: Scalars['String']
+  metaFields?: Maybe<Scalars['JSON']>
   name: Scalars['String']
   odp?: Maybe<GraphQlImpactCategories>
   originId?: Maybe<Scalars['String']>
@@ -277,7 +282,9 @@ export type GraphQlepdBase = {
   ep?: Maybe<GraphQlImpactCategories>
   gwp?: Maybe<GraphQlImpactCategories>
   id: Scalars['String']
+  isTransport: Scalars['Boolean']
   location: Scalars['String']
+  metaFields?: Maybe<Scalars['JSON']>
   name: Scalars['String']
   odp?: Maybe<GraphQlImpactCategories>
   penre?: Maybe<GraphQlImpactCategories>
@@ -378,7 +385,9 @@ export type GraphQlProjectEpd = {
   ep?: Maybe<GraphQlImpactCategories>
   gwp?: Maybe<GraphQlImpactCategories>
   id: Scalars['String']
+  isTransport: Scalars['Boolean']
   location: Scalars['String']
+  metaFields?: Maybe<Scalars['JSON']>
   name: Scalars['String']
   odp?: Maybe<GraphQlImpactCategories>
   originId: Scalars['String']
@@ -1113,6 +1122,7 @@ export enum ProjectDomain {
 export type ProjectEpdFilters = {
   category?: InputMaybe<FilterOptions>
   id?: InputMaybe<FilterOptions>
+  isTransport?: InputMaybe<FilterOptions>
   name?: InputMaybe<FilterOptions>
   owner?: InputMaybe<FilterOptions>
   projectId?: InputMaybe<FilterOptions>
@@ -1408,13 +1418,6 @@ export enum TaskStatus {
   Pending = 'PENDING',
 }
 
-export enum TransportType {
-  Plane = 'plane',
-  Ship = 'ship',
-  Train = 'train',
-  Truck = 'truck',
-}
-
 export enum Unit {
   Kg = 'KG',
   M = 'M',
@@ -1599,7 +1602,6 @@ export type ResolversTypes = {
   TaskFilters: TaskFilters
   TaskItemType: TaskItemType
   TaskStatus: TaskStatus
-  TransportType: TransportType
   Unit: Unit
   exportFormat: ExportFormat
   taskItem: TaskItem
@@ -1745,9 +1747,9 @@ export type GraphQlAssemblyLayerResolvers<
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   referenceServiceLife?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
+  transportConversionFactor?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
   transportDistance?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>
-  transportType?: Resolver<Maybe<ResolversTypes['TransportType']>, ParentType, ContextType>
-  transportUnit?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  transportEpd?: Resolver<Maybe<ResolversTypes['GraphQLProjectEPD']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -1802,7 +1804,9 @@ export type GraphQlepdResolvers<
   ep?: Resolver<Maybe<ResolversTypes['GraphQLImpactCategories']>, ParentType, ContextType>
   gwp?: Resolver<Maybe<ResolversTypes['GraphQLImpactCategories']>, ParentType, ContextType>
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  isTransport?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   location?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  metaFields?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   odp?: Resolver<Maybe<ResolversTypes['GraphQLImpactCategories']>, ParentType, ContextType>
   originId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
@@ -1829,7 +1833,9 @@ export type GraphQlepdBaseResolvers<
   ep?: Resolver<Maybe<ResolversTypes['GraphQLImpactCategories']>, ParentType, ContextType>
   gwp?: Resolver<Maybe<ResolversTypes['GraphQLImpactCategories']>, ParentType, ContextType>
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  isTransport?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   location?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  metaFields?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   odp?: Resolver<Maybe<ResolversTypes['GraphQLImpactCategories']>, ParentType, ContextType>
   penre?: Resolver<Maybe<ResolversTypes['GraphQLImpactCategories']>, ParentType, ContextType>
@@ -1952,7 +1958,9 @@ export type GraphQlProjectEpdResolvers<
   ep?: Resolver<Maybe<ResolversTypes['GraphQLImpactCategories']>, ParentType, ContextType>
   gwp?: Resolver<Maybe<ResolversTypes['GraphQLImpactCategories']>, ParentType, ContextType>
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  isTransport?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   location?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  metaFields?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   odp?: Resolver<Maybe<ResolversTypes['GraphQLImpactCategories']>, ParentType, ContextType>
   originId?: Resolver<ResolversTypes['String'], ParentType, ContextType>
@@ -2826,15 +2834,16 @@ export type GetProjectAssembliesQuery = {
       description?: string | null
       conversionFactor?: number | null
       referenceServiceLife?: number | null
-      transportType?: TransportType | null
       transportDistance?: number | null
-      transportUnit?: string | null
+      transportConversionFactor: number
+      transportEpd?: { __typename?: 'GraphQLProjectEPD'; id: string; name: string; declaredUnit?: string | null } | null
     }>
   }>
 }
 
 export type GetProjectEpdsQueryVariables = Exact<{
   projectId: Scalars['String']
+  filters?: InputMaybe<ProjectEpdFilters>
 }>
 
 export type GetProjectEpdsQuery = {
@@ -2851,6 +2860,21 @@ export type GetProjectEpdsQuery = {
 export type GetProjectEpdQueryVariables = Exact<{
   projectId: Scalars['String']
   epdId: Scalars['String']
+  a1a3?: InputMaybe<Scalars['Boolean']>
+  a4?: InputMaybe<Scalars['Boolean']>
+  a5?: InputMaybe<Scalars['Boolean']>
+  b1?: InputMaybe<Scalars['Boolean']>
+  b2?: InputMaybe<Scalars['Boolean']>
+  b3?: InputMaybe<Scalars['Boolean']>
+  b4?: InputMaybe<Scalars['Boolean']>
+  b5?: InputMaybe<Scalars['Boolean']>
+  b6?: InputMaybe<Scalars['Boolean']>
+  b7?: InputMaybe<Scalars['Boolean']>
+  c1?: InputMaybe<Scalars['Boolean']>
+  c2?: InputMaybe<Scalars['Boolean']>
+  c3?: InputMaybe<Scalars['Boolean']>
+  c4?: InputMaybe<Scalars['Boolean']>
+  d?: InputMaybe<Scalars['Boolean']>
 }>
 
 export type GetProjectEpdQuery = {
@@ -2866,9 +2890,21 @@ export type GetProjectEpdQuery = {
     location: string
     declaredUnit?: string | null
     subtype: string
+    isTransport: boolean
     gwp?: {
       __typename?: 'GraphQLImpactCategories'
       a1a3?: number | null
+      a4?: number | null
+      a5?: number | null
+      b1?: number | null
+      b2?: number | null
+      b3?: number | null
+      b4?: number | null
+      b5?: number | null
+      b6?: number | null
+      b7?: number | null
+      c1?: number | null
+      c2?: number | null
       c3?: number | null
       c4?: number | null
       d?: number | null
@@ -2990,9 +3026,13 @@ export const GetProjectAssembliesDocument = gql`
         description
         conversionFactor
         referenceServiceLife
-        transportType
+        transportEpd {
+          id
+          name
+          declaredUnit
+        }
         transportDistance
-        transportUnit
+        transportConversionFactor
       }
       description
       metaFields
@@ -3041,8 +3081,8 @@ export type GetProjectAssembliesQueryResult = Apollo.QueryResult<
   GetProjectAssembliesQueryVariables
 >
 export const GetProjectEpdsDocument = gql`
-  query getProjectEpds($projectId: String!) {
-    projectEpds(projectId: $projectId) {
+  query getProjectEpds($projectId: String!, $filters: ProjectEPDFilters) {
+    projectEpds(projectId: $projectId, filters: $filters) {
       id
       name
       declaredUnit
@@ -3064,6 +3104,7 @@ export const GetProjectEpdsDocument = gql`
  * const { data, loading, error } = useGetProjectEpdsQuery({
  *   variables: {
  *      projectId: // value for 'projectId'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
@@ -3083,16 +3124,45 @@ export type GetProjectEpdsQueryHookResult = ReturnType<typeof useGetProjectEpdsQ
 export type GetProjectEpdsLazyQueryHookResult = ReturnType<typeof useGetProjectEpdsLazyQuery>
 export type GetProjectEpdsQueryResult = Apollo.QueryResult<GetProjectEpdsQuery, GetProjectEpdsQueryVariables>
 export const GetProjectEpdDocument = gql`
-  query getProjectEpd($projectId: String!, $epdId: String!) {
+  query getProjectEpd(
+    $projectId: String!
+    $epdId: String!
+    $a1a3: Boolean = false
+    $a4: Boolean = false
+    $a5: Boolean = false
+    $b1: Boolean = false
+    $b2: Boolean = false
+    $b3: Boolean = false
+    $b4: Boolean = false
+    $b5: Boolean = false
+    $b6: Boolean = false
+    $b7: Boolean = false
+    $c1: Boolean = false
+    $c2: Boolean = false
+    $c3: Boolean = false
+    $c4: Boolean = false
+    $d: Boolean = false
+  ) {
     projectEpds(projectId: $projectId, filters: { id: { equal: $epdId } }) {
       id
       name
       source
       gwp {
-        a1a3
-        c3
-        c4
-        d
+        a1a3 @include(if: $a1a3)
+        a4 @include(if: $a4)
+        a5 @include(if: $a5)
+        b1 @include(if: $b1)
+        b2 @include(if: $b2)
+        b3 @include(if: $b3)
+        b4 @include(if: $b4)
+        b5 @include(if: $b5)
+        b6 @include(if: $b6)
+        b7 @include(if: $b7)
+        c1 @include(if: $c1)
+        c2 @include(if: $c2)
+        c3 @include(if: $c3)
+        c4 @include(if: $c4)
+        d @include(if: $d)
       }
       version
       validUntil
@@ -3100,6 +3170,7 @@ export const GetProjectEpdDocument = gql`
       location
       declaredUnit
       subtype
+      isTransport
     }
   }
 `
@@ -3118,6 +3189,21 @@ export const GetProjectEpdDocument = gql`
  *   variables: {
  *      projectId: // value for 'projectId'
  *      epdId: // value for 'epdId'
+ *      a1a3: // value for 'a1a3'
+ *      a4: // value for 'a4'
+ *      a5: // value for 'a5'
+ *      b1: // value for 'b1'
+ *      b2: // value for 'b2'
+ *      b3: // value for 'b3'
+ *      b4: // value for 'b4'
+ *      b5: // value for 'b5'
+ *      b6: // value for 'b6'
+ *      b7: // value for 'b7'
+ *      c1: // value for 'c1'
+ *      c2: // value for 'c2'
+ *      c3: // value for 'c3'
+ *      c4: // value for 'c4'
+ *      d: // value for 'd'
  *   },
  * });
  */
