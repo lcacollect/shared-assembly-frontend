@@ -18,6 +18,7 @@ export const EpdInfoGrid = (props: EpdListItemProps) => {
     'location',
     'declaredUnit',
     'subtype',
+    'isTransport',
   ] as (keyof Omit<GraphQlProjectEpd, 'originId' | 'conversions'>)[]
 
   if (!epd) {
@@ -28,7 +29,7 @@ export const EpdInfoGrid = (props: EpdListItemProps) => {
       {keys.map((key) => (
         <Grid key={key} item xs={4}>
           <Typography variant='subtitle2'>{formatTextFieldLabel(key)}:</Typography>
-          <Typography>{epd[key]}</Typography>
+          <Typography>{`${epd[key]}`}</Typography>
         </Grid>
       ))}
     </Grid>

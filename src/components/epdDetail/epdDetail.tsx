@@ -9,13 +9,14 @@ interface EpdDetailProps {
   show: boolean
   projectId: string
   epdId?: string | null
+  phases: { [key: string]: boolean }
 }
 
 export const EpdDetail = (props: EpdDetailProps) => {
-  const { show, epdId, projectId } = props
+  const { show, epdId, projectId, phases } = props
 
   const { data, loading, error } = useGetProjectEpdQuery({
-    variables: { projectId, epdId: epdId as string },
+    variables: { projectId, epdId: epdId as string, ...phases },
     skip: !epdId,
   })
 
