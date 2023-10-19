@@ -1,6 +1,6 @@
 {
   "name": "@lcacollect/assembly",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "A shared library for assembly related components and pages",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",

@@ -34,7 +34,7 @@ import { AssemblyLayerToolbar } from './assemblyLayerToolbar'
 
 interface AssemblyLayersProps {
   loading: boolean
-  assembly: GraphQlProjectAssembly | null
+  assembly: AssemblyForAssemblyLayers | null
   isMemberOfProject: boolean
   isTransportStage: boolean
   epds: EpdForAssemblyLayer[]
@@ -47,6 +47,7 @@ interface AssemblyLayersProps {
 
 export type EpdForAssemblyLayer = Pick<GraphQlProjectEpd, 'id' | 'name' | 'declaredUnit' | 'referenceServiceLife'>
 export type TransportEpd = Pick<GraphQlProjectEpd, 'id' | 'name' | 'declaredUnit'>
+export type AssemblyForAssemblyLayers = Pick<GraphQlProjectAssembly, 'layers' | 'id' | 'unit'>
 
 interface AssemblyLayer {
   id: string
